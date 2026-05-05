@@ -190,5 +190,29 @@
       }
     ],
     "status": "complete"
+  },
+  {
+    "id": "CTL-002",
+    "title": "Tool-output and context provenance",
+    "domain": "runtime",
+    "status": "stub"
+  },
+  {
+    "id": "CTL-003",
+    "title": "Action verification at high-impact boundaries",
+    "domain": "governance",
+    "status": "stub"
+  },
+  {
+    "id": "CTL-004",
+    "title": "Authorization-aware output filtering",
+    "domain": "data",
+    "status": "stub"
+  },
+  {
+    "id": "CTL-005",
+    "title": "End-to-end audit and accountability",
+    "domain": "audit_accountability",
+    "status": "stub"
   }
 ]
