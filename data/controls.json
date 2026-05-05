@@ -1,1 +1,194 @@
-[]
+[
+  {
+    "id": "CTL-001",
+    "title": "Identity and Authorization Context Propagation",
+    "domain": "identity",
+    "function": ["preventive"],
+    "maturity": "emerging",
+    "description": "An AI agent's effective authorization for any action must be derived from both its own service authorization and the authorization of the user it is currently serving. The agent does not act with its full service-level privileges; it acts with the intersection of its privileges and the originating user's. Identity and authorization claims about the user are propagated through every downstream call the agent makes, and downstream systems verify against the user's identity rather than the agent's alone.",
+    "implementation_pattern": "At the agent runtime layer, every user request is associated with an authorization context that includes the user's verified identity, applicable claims (roles, group memberships, tenant), and any constraints derived from the session (time-bound, scope-bound). When the agent invokes a tool or downstream service, the request includes this context as structured data, typically as an OAuth 2.0 Token Exchange (RFC 8693) on-behalf-of token, a SPIFFE workload identity bound to the user session, or a custom signed claims envelope. Downstream services authorize the action against the user identity, not the agent identity, using their existing authorization infrastructure. The agent identity is used only for the agent-to-service authentication leg; the action authorization is a separate decision based on the propagated user context. Where a downstream service does not natively support user-context-aware authorization, the agent must restrict its actions on that service to the narrowest scope acceptable to all users it serves, or refuse to integrate with that service for sensitive operations. For multi-tenant deployments, tenant identity is part of the propagated context and must be enforced at every layer. For multi-step delegation chains, the user context is forwarded explicitly at each step; the chain breaks if any step strips or replaces it.",
+    "operational_considerations": [
+      {
+        "consideration": "Latency",
+        "description": "Token issuance and verification at each downstream call adds latency, typically 10 to 50 ms per hop; cumulative across delegation chains"
+      },
+      {
+        "consideration": "Caching complexity",
+        "description": "Per-user authorization scoping reduces the value of shared caches; caches must be partitioned by user, or invalidated on authorization changes"
+      },
+      {
+        "consideration": "Legacy integration",
+        "description": "Many enterprise systems do not support user-context-aware authorization; the agent must either widen its trust to those systems or exclude them from sensitive operations"
+      },
+      {
+        "consideration": "Token lifetime tuning",
+        "description": "Short-lived tokens improve security but increase issuance load; long-lived tokens reduce load but expand the window of compromise; typical compromise: minutes-scale lifetime with refresh"
+      },
+      {
+        "consideration": "Audit volume",
+        "description": "Per-user authorization decisions increase audit log volume substantially; storage and SIEM ingestion costs grow accordingly"
+      }
+    ],
+    "common_failure_modes": [
+      {
+        "failure_mode": "Service account fallback",
+        "description": "Under integration pressure, the agent is configured to call a particular service with its own identity rather than the user's; the agent retains broad privileges and the user-context model is bypassed for that integration"
+      },
+      {
+        "failure_mode": "Token scope drift",
+        "description": "Initial deployment uses correctly scoped tokens; over time, scopes expand to accommodate new use cases without re-evaluating the original constraints"
+      },
+      {
+        "failure_mode": "Caching across users",
+        "description": "A naive cache of tool outputs is queried by all users; one user's authorized retrieval becomes accessible to other users via the cache"
+      },
+      {
+        "failure_mode": "Delegation chain context loss",
+        "description": "An agent invokes a sub-agent or external service that does not preserve the user context; the chain continues with the agent's identity rather than the user's"
+      },
+      {
+        "failure_mode": "Static configuration vs dynamic context",
+        "description": "The agent's authorization model is configured once at deployment; runtime changes to user permissions are not reflected in the agent's effective authorization"
+      }
+    ],
+    "threats_addressed": [
+      {
+        "threat_id": "AGT-002",
+        "relationship": "primary"
+      },
+      {
+        "threat_id": "AGT-001",
+        "relationship": "secondary",
+        "rationale": "By limiting blast radius"
+      },
+      {
+        "threat_id": "AGT-005",
+        "relationship": "secondary",
+        "rationale": "By enabling cleaner attribution"
+      }
+    ],
+    "regulatory_basis": [
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 14",
+        "relevance": "Human oversight; authorization scoping is a structural prerequisite for meaningful oversight"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 15",
+        "relevance": "Cybersecurity; resilience to unauthorized use requires user-context enforcement"
+      },
+      {
+        "regulation": "NIS2",
+        "article_or_section": "Art. 21",
+        "relevance": "Access control policies; agents are critical assets requiring proportionate authorization controls"
+      },
+      {
+        "regulation": "DORA",
+        "article_or_section": "Art. 9",
+        "relevance": "Identity management; financial entities must maintain robust identity and access controls"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 5(1)(f)",
+        "relevance": "Integrity and confidentiality; user-context propagation prevents cross-user data exposure"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 25",
+        "relevance": "Data protection by design; user-scoped authorization is a design-level control"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 32",
+        "relevance": "Security of processing; technical measures including access control"
+      }
+    ],
+    "existing_standard_mappings": [
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "AC-3 (Access Enforcement)",
+        "relationship": "refinement",
+        "notes": "AC-3 establishes the principle; CTL-001 extends to agent-mediated authorization specifically"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "AC-6 (Least Privilege)",
+        "relationship": "refinement",
+        "notes": "Least privilege applied to the agent-user composition"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "IA-9 (Service Identification and Authentication)",
+        "relationship": "refinement",
+        "notes": "IA-9 covers service-to-service authentication; CTL-001 extends to user-context propagation through services"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.5.15 (Access control)",
+        "relationship": "refinement",
+        "notes": "Extends to agent-mediated access"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.8.2 (Privileged access rights)",
+        "relationship": "refinement",
+        "notes": "Privileged access scoping for agents"
+      },
+      {
+        "standard": "BSI grundschutz",
+        "control_id": "ORP.4 (Identitäts- und Berechtigungsmanagement)",
+        "relationship": "refinement",
+        "notes": "Identity and authorization management extended to agent context"
+      }
+    ],
+    "related_controls": [
+      {
+        "control_id": "CTL-003",
+        "relationship": "complementary",
+        "notes": "Where CTL-001 cannot fully scope authorization, CTL-003 provides a fallback"
+      },
+      {
+        "control_id": "CTL-004",
+        "relationship": "complementary",
+        "notes": "CTL-001 controls what data is retrieved; CTL-004 controls what is delivered to the user"
+      },
+      {
+        "control_id": "CTL-005",
+        "relationship": "dependent",
+        "notes": "Audit traceability requires the user-context propagation that CTL-001 provides"
+      }
+    ],
+    "references": [
+      {
+        "category": "primary",
+        "citation": "NIST SP 800-53 Rev. 5, Access Control family (AC-3, AC-6, IA-9)"
+      },
+      {
+        "category": "primary",
+        "citation": "NIST SP 800-207, Zero Trust Architecture"
+      },
+      {
+        "category": "primary",
+        "citation": "IETF RFC 8693, OAuth 2.0 Token Exchange"
+      },
+      {
+        "category": "primary",
+        "citation": "IETF RFC 9068, JSON Web Token Profile for OAuth 2.0 Access Tokens"
+      },
+      {
+        "category": "primary",
+        "citation": "BSI IT-Grundschutz-Kompendium, Baustein ORP.4 Identitäts- und Berechtigungsmanagement"
+      },
+      {
+        "category": "primary",
+        "citation": "ISO/IEC 27001:2022, Annex A controls A.5.15 and A.8.2"
+      },
+      {
+        "category": "practitioner_research",
+        "citation": "SPIFFE / SPIRE specifications for workload identity (foundational for agent identity scenarios)"
+      }
+    ],
+    "status": "complete"
+  }
+]
