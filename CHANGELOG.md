@@ -25,6 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added AGT-001 entry to `docs/sections/05-threat-model.md` immediately before AGT-002, following the same template as AGT-002.
 - Added PROJECT_STATUS.md at repository root: living checklist of project scope, status, decisions, and next-session options. Reflects current state including AGT-001 and AGT-002 committed, control library v1 with CTL-001 populated, and the pending v2 framework reframe.
 
-### Deferred
+### Changed
 
-- v2 threat model framework reframe (positioning the 10 named threats as exemplars within the attack surface taxonomy, plus an `exemplar_role` field on threat entries) is not yet applied. AGT-001 already includes the `exemplar_role` text in its source markdown and threats.json entry; AGT-002 still needs the field backfilled when the v2 reframe is applied.
+- Reframed threat model framework (v2): 10 named threats are now positioned as exemplars within the attack surface taxonomy, not as an exhaustive enumeration. The reframe addresses the methodological concern that threats are infinite and any catalog will be incomplete. No threat content changes; the framework's introduction, scope, and methodology sections are updated. Section 5 of the practitioner guide is renamed from "Agent-Specific Threat Model" to "Agent Threat Patterns and Exemplars". Added `exemplar_role` field to threat entries in `data/threats.json` (and to `data/threats.schema.json`); AGT-001 and AGT-002 populated. PROJECT_BRIEF.md and PROJECT_STATUS.md updated to reflect the exemplar status of the catalog.
