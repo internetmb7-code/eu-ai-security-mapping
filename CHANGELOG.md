@@ -19,7 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Replaced retired control IDs in `data/mappings.json` `control_mitigates_threat`. Replaced the legacy `control_placeholders` entries with stub markers for CTL-002 through CTL-005.
 - Added section 6 (Recommended Controls and Patterns) to the canonical document `docs/main-document/EU-AI-Security-Mapping.md` with introductory paragraph and the CTL-001 reference entry. CTL-002 through CTL-005 listed as forthcoming stubs.
 
+- Added AGT-001 (Prompt Injection via Tool Outputs) as fully populated threat entry. Covers the indirect injection vector where adversarial instructions reach the agent through legitimate tool outputs (retrieval, web fetch, document, knowledge base, inter-agent communication). Source markdown placed at `docs/sections/05-threat-model/AGT-001.md`. References v1 controls CTL-002 (primary), CTL-003 (primary), CTL-001 (secondary), CTL-005 (secondary). Includes `exemplar_role` text anticipating the v2 threat model reframe.
+- Populated AGT-001 entry in `data/threats.json` with consolidated v1 controls. Entry placed as the first array element so AGT-001 precedes AGT-002 in document order.
+- Added AGT-001 mappings in `data/mappings.json`: 7 `threat_addresses_requirement` entries (EU AI Act Art. 9, 14, 15; NIS2 Art. 21; DORA Art. 6 to 8; GDPR Art. 22, 32), 4 `control_mitigates_threat` entries (CTL-002 primary, CTL-003 primary, CTL-001 secondary, CTL-005 secondary), and 5 outgoing `threat_related_to_threat` entries (AGT-002, AGT-003, AGT-006, AGT-008, AGT-009). The pre-existing AGT-002 to AGT-001 reverse relationship is retained.
+- Added AGT-001 entry to `docs/sections/05-threat-model.md` immediately before AGT-002, following the same template as AGT-002.
+
 ### Deferred
 
-- AGT-001 (Prompt injection via tool outputs) is not yet ported. The v1 control library work assumed AGT-001 was committed; prerequisite was unmet, so AGT-001-touching steps from the original control library prompt (source markdown update, threats.json entry update) were skipped. To be addressed in a subsequent session.
-- v2 threat model framework reframe (positioning the 10 named threats as exemplars within the attack surface taxonomy, plus an `exemplar_role` field on threat entries) is not yet applied. To be addressed after AGT-001 is ported.
+- v2 threat model framework reframe (positioning the 10 named threats as exemplars within the attack surface taxonomy, plus an `exemplar_role` field on threat entries) is not yet applied. AGT-001 already includes the `exemplar_role` text in its source markdown and threats.json entry; AGT-002 still needs the field backfilled when the v2 reframe is applied.
+- `PROJECT_STATUS.md` is not present in the repository as of this session. The AGT-001 port prompt included a step to update it; that step was skipped and reported as a deviation.
