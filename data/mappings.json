@@ -3,6 +3,55 @@
   "control_to_threats": [],
   "threat_addresses_requirement": [
     {
+      "threat_id": "AGT-001",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 9 (Risk management)",
+      "rationale": "Risk management for high-risk AI systems must address foreseeable misuse, including manipulation through input channels; indirect prompt injection is a foreseeable manipulation vector",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Where automated decisions can cause significant harm, human oversight is required; prompt injection is a primary mechanism by which oversight is bypassed because the agent appears to be operating normally",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Accuracy, robustness, cybersecurity)",
+      "rationale": "Cybersecurity requirements for high-risk AI systems explicitly include resilience to attempts by unauthorized third parties to alter the system's use, outputs, or performance; indirect prompt injection is exactly this pattern",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Cybersecurity risk-management measures)",
+      "rationale": "Includes policies on the security of network and information systems and incident handling; agent runtimes processing variable-trust content are in scope",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 8 (ICT risk-management framework)",
+      "rationale": "Operational resilience requirements applicable to financial entities, including resilience of ICT systems to manipulation through tool-output channels",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 22 (Automated individual decision-making)",
+      "rationale": "Agent actions taken under prompt injection may constitute unauthorized automated processing affecting data subjects",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 32 (Security of processing)",
+      "rationale": "Appropriate technical measures including resilience to manipulation are required; isolation of tool-output content from authoritative instructions is such a technical measure",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
       "threat_id": "AGT-002",
       "regulation": "EU AI Act",
       "article_or_section": "Art. 14 (Human oversight)",
@@ -68,6 +117,30 @@
   ],
   "control_mitigates_threat": [
     {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-001",
+      "relationship": "primary",
+      "rationale": "Tool-output and context provenance: tag and isolate content returned by tools so injected instructions cannot blend with the agent's working context as authoritative"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-001",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: require explicit verification before state-changing or high-impact actions, even when the agent's reasoning suggests them, so injected instructions cannot trigger consequential actions without review"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-001",
+      "relationship": "secondary",
+      "rationale": "Identity and authorization context propagation: limits blast radius by ensuring injected instructions cannot exceed the originating user's authorization, even when they successfully manipulate the agent's reasoning"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-001",
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: enables post-incident attribution, forensic analysis, and detection of injection-driven actions through reasoning provenance"
+    },
+    {
       "control_id": "CTL-001",
       "threat_id": "AGT-002",
       "relationship": "primary",
@@ -93,6 +166,31 @@
     }
   ],
   "threat_related_to_threat": [
+    {
+      "from_threat_id": "AGT-001",
+      "to_threat_id": "AGT-002",
+      "relationship": "Common amplifier: prompt injection becomes more dangerous when combined with broad agent authorization. AGT-001 is the input mechanism; AGT-002 is the structural condition that makes the input mechanism harmful"
+    },
+    {
+      "from_threat_id": "AGT-001",
+      "to_threat_id": "AGT-003",
+      "relationship": "Prompt injection often drives the chain composition; the injected instruction can direct the agent through a sequence of legitimately authorized tool calls"
+    },
+    {
+      "from_threat_id": "AGT-001",
+      "to_threat_id": "AGT-006",
+      "relationship": "Persisted content can be the vehicle for injection across sessions; injection that persists to memory becomes a long-term influence on agent behavior"
+    },
+    {
+      "from_threat_id": "AGT-001",
+      "to_threat_id": "AGT-008",
+      "relationship": "Injection received from one source can be reflected into output that injects another consuming system; AGT-001 is content entering the agent, AGT-008 is content leaving the agent"
+    },
+    {
+      "from_threat_id": "AGT-001",
+      "to_threat_id": "AGT-009",
+      "relationship": "Prompt injection is one mechanism by which goal subversion occurs, but goal subversion can also occur without explicit injection"
+    },
     {
       "from_threat_id": "AGT-002",
       "to_threat_id": "AGT-001",
