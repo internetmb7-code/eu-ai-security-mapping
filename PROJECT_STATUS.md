@@ -53,19 +53,19 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Item | Status |
 |---|---|
 | `PROJECT_BRIEF.md` (Option D platform model, public + product-agnostic) | Done |
-| `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` | Done (v2 reframe pending application) |
+| `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` | Done (v2 reframe applied) |
 | `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md` | Done |
 | `docs/frameworks/VENDOR_MAPPING_FRAMEWORK.md` | Deferred until controls library is more mature |
 | `docs/frameworks/REGULATORY_MAPPING_FRAMEWORK.md` | Not yet |
 
 ### Threat model (10 threats total)
 
-> **Note on framing**: As of the v2 framework reframe (pending application), these 10 threats are positioned as **exemplars** within the attack surface taxonomy, not as an exhaustive enumeration. Coverage of all 10 does not mean coverage of all agent threats. See `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` for methodology on discovering threats specific to a deployment.
+> **Note on framing**: As of the v2 framework reframe, these 10 threats are positioned as **exemplars** within the attack surface taxonomy, not as an exhaustive enumeration. Coverage of all 10 does not mean coverage of all agent threats. See `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` for methodology on discovering threats specific to a deployment.
 
 | ID | Title | Status |
 |---|---|---|
 | AGT-001 | Prompt injection via tool outputs | Fully populated, committed (standalone source markdown and JSON entry) |
-| AGT-002 | Authorization confusion (deputy problem) | Fully populated, committed (exemplar_role field pending v2 reframe) |
+| AGT-002 | Authorization confusion (deputy problem) | Fully populated, committed (exemplar_role field backfilled per v2 reframe) |
 | AGT-003 | Tool-chain abuse | Compressed draft ready, not yet committed |
 | AGT-004 | Data exfiltration via legitimate channels | Compressed draft ready, not yet committed |
 | AGT-005 | Audit and provenance failure | Compressed draft ready, not yet committed |
@@ -93,7 +93,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | 2. Scope and disclaimer | Not started |
 | 3. Regulatory landscape | Not started |
 | 4. Common-control crosswalk | Not started |
-| 5. Threat model (renamed to "Agent Threat Patterns and Exemplars" pending v2 reframe) | Placeholder; AGT-001 and AGT-002 referenced; AGT-003 to AGT-010 not yet integrated |
+| 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Placeholder; AGT-001 and AGT-002 referenced; AGT-003 to AGT-010 not yet integrated |
 | 6. Recommended controls | Partially populated (CTL-001 referenced; CTL-002 to CTL-005 not yet) |
 | 7. Implementation considerations | Not started |
 | 8. Gaps and open problems | Not started |
@@ -163,7 +163,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Foundation | Solid: framework documents done, 2 threats fully populated and committed, 1 control fully populated |
 | Threat catalog completeness | 2 of 10 fully populated and committed; 8 of 10 compressed drafts ready but not yet committed |
 | Control library completeness | 1 of 5 fully populated, 4 stubs |
-| v2 framework reframe | Pending application |
+| v2 framework reframe | Applied |
 | Document drafting | Not started |
 | Web tool | Not started |
 | Public visibility | Deferred until foundation is more mature |
@@ -176,10 +176,10 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Option | What it produces | Recommendation |
 |---|---|---|
-| A. Apply the v2 framework reframe | Threat catalog reframed as exemplars within taxonomy; AGT-002 gets `exemplar_role` backfilled | Recommended next: closes the most important methodological loop |
-| B. Commit AGT-003 through AGT-010 compressed drafts | Threat catalog populated at structural level | Defer until after the reframe |
-| C. Populate CTL-002 through CTL-005 fully | v1 control library complete | Defer until after the reframe |
-| D. Write executive summary and gaps section | Framing for the entire document | Strong second next step after the reframe |
+| A. Commit AGT-003 through AGT-010 compressed drafts | Threat catalog populated at structural level | Recommended next: closes the threat catalog at the exemplar level |
+| B. Populate CTL-002 through CTL-005 fully | v1 control library complete | Strong second next step |
+| C. Write executive summary and gaps section | Framing for the entire document | Defer until threat and control catalogs are at structural completeness |
+| D. Begin regulatory mapping framework | Surfaces the regulatory crosswalk as a primary artifact | Defer until controls library is more mature |
 
 ## How to use this document
 
