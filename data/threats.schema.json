@@ -74,6 +74,10 @@
       "references": {
         "type": ["array", "null"],
         "items": { "type": "string", "format": "uri" }
+      },
+      "exemplar_role": {
+        "type": "string",
+        "description": "Brief note (1 to 2 sentences) on what threat pattern this exemplar illustrates and at which surface. Required as of the v2 framework reframe."
       }
     }
   }

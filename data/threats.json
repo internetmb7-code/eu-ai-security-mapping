@@ -180,7 +180,7 @@
         "relationship": "Prompt injection is one mechanism by which goal subversion occurs, but goal subversion can also occur without explicit injection."
       }
     ],
-    "exemplar_role": "Illustrates the input attack surface, specifically the pattern of adversarial content entering the agent's context indirectly through tool outputs. Exemplifies how content channels that are legitimate by design can carry adversarial instructions that the model processes as authoritative.",
+    "exemplar_role": "Illustrates the input attack surface, specifically the pattern of adversarial content entering the agent's context indirectly through tool outputs. Exemplifies how content channels that are legitimate by design can carry adversarial instructions.",
     "status": "complete"
   },
   {
@@ -374,6 +374,7 @@
         "relationship": "The delegation-ambiguity sub-pattern within AGT-002 connects directly to AGT-007 when the delegated entity is another agent rather than a tool"
       }
     ],
+    "exemplar_role": "Illustrates the tool-use attack surface, specifically the structural pattern of agent authorization being decoupled from user authorization. Exemplifies how harm can occur even when no traditional control is bypassed and all individual actions are within authorization scope.",
     "status": "complete"
   }
 ]
