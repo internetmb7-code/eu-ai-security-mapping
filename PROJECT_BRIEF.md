@@ -6,7 +6,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 Produce three interlinked artifacts:
 
-1. **Practitioner Guide** (primary output): A 25 to 40 page technical document mapping EU regulatory requirements (EU AI Act, NIS2, DORA, relevant GDPR articles) to concrete, vendor-neutral security controls for enterprise AI and agent deployments. Includes an agent-specific threat model and implementation patterns.
+1. **Practitioner Guide** (primary output): A 25 to 40 page technical document mapping EU regulatory requirements (EU AI Act, NIS2, DORA, relevant GDPR articles) to concrete, vendor-neutral security controls for enterprise AI and agent deployments. Includes an attack surface taxonomy with exemplar threat patterns and implementation patterns.
 2. **Interactive Web Tool** (supporting output): A multi-entry-point web interface allowing CISOs and security architects to navigate the framework starting from any layer (regulation, threat, attack surface, or control). Hosted publicly via GitHub.
 3. **Vendor Mapping Contribution Interface** (platform output): A documented schema and process by which vendors and community contributors can submit mappings of their products to the framework's control library. Mappings live alongside the framework but are clearly attributed to their contributors.
 
@@ -39,7 +39,7 @@ Vendor mappings, when present, are contributor-attested representations of how a
 - NIS2 Directive, focusing on technical security obligations relevant to AI systems
 - DORA, focusing on ICT risk management and third-party risk for financial services
 - GDPR Article 22 (automated decision-making) where it intersects with AI agent autonomy
-- Agent-specific threat model covering risks not adequately addressed by traditional security controls
+- An attack surface taxonomy for AI agents, illustrated by ten exemplar threat patterns, covering risks not adequately addressed by traditional security controls
 - Operational controls and implementation patterns for enterprise security programs
 
 ### Out of scope
@@ -60,7 +60,7 @@ The crosswalk approach (multiple regulations, common controls, agent-specific th
 | 2. Scope and disclaimer | What is and isn't covered, guideline-not-legal-advice framing | 1 page |
 | 3. Regulatory landscape | Overview of EU AI Act, NIS2, DORA, GDPR Art. 22 with focus on technical security obligations | 4 to 6 pages |
 | 4. Common-control crosswalk | Where the regulations overlap on actual security requirements | 3 to 4 pages |
-| 5. Agent-specific threat model | Risk classes traditional controls don't fully address: prompt injection via tool outputs, authorization confusion, tool-chain abuse, data exfiltration via legitimate channels, audit and provenance, memory and persistence | 4 to 6 pages |
+| 5. Agent Threat Patterns and Exemplars | An attack surface taxonomy plus methodology, illustrated by ten exemplar threat patterns at each surface (prompt injection via tool outputs, authorization confusion, tool-chain abuse, data exfiltration via legitimate channels, audit and provenance, memory and persistence). The exemplars are not an exhaustive enumeration; they illustrate the patterns. | 4 to 6 pages |
 | 6. Recommended controls and patterns | Concrete control recommendations mapped to threats and regulatory requirements | 6 to 10 pages |
 | 7. Implementation considerations | What this looks like in practice, including reference architecture sketches | 4 to 6 pages |
 | 8. Gaps and open problems | Honest discussion of where regulations are unclear or inadequate, and where industry practice is still evolving | 2 to 3 pages |
@@ -244,7 +244,7 @@ This phase is deliberately deferred until the threat model and controls library 
 | Citations | Every regulatory claim cites the specific article, recital, or paragraph. NIST, BSI, ENISA references include document number and version. |
 | Voice | First-person practitioner perspective. Avoid passive voice and corporate filler. The reader should feel they're learning from someone who has actually done this work. |
 | Disclaimer | Each major section that touches legal interpretation includes a brief reminder that this is a guideline, not legal advice. |
-| Threat model rigor | Each threat includes: description, attack scenario, affected components, traditional controls (and why insufficient), recommended controls, residual risk |
+| Threat exemplar rigor | Each exemplar includes: description, attack scenario, affected components, traditional controls (and why insufficient), recommended controls, residual risk, and an explicit note on what threat pattern it illustrates within the attack surface taxonomy |
 | Control recommendations | Each control includes: regulatory basis, threats addressed, implementation pattern, operational considerations, common failure modes |
 | Examples | Wherever possible, include concrete examples from realistic enterprise scenarios. Avoid abstraction without illustration. |
 | Length discipline | Section length budgets in the structure table are firm targets. If a section is running long, ruthlessly cut. |
@@ -253,7 +253,7 @@ This phase is deliberately deferred until the threat model and controls library 
 
 | Convention | Rule |
 |---|---|
-| No em dashes (—) anywhere in the document | Use commas, semicolons, periods, or parentheses instead |
+| No em dashes anywhere in the document | Use commas, semicolons, periods, or parentheses instead |
 | Tables over bullet points | Default to tables for any list of three or more comparable items |
 | Cite primary sources | Regulation texts, NIST publications, BSI grundschutz, ENISA guidance, original research |
 | Acknowledge uncertainty | If something is contested, evolving, or unclear in the regulation, say so rather than feigning certainty |
