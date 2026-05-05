@@ -46,13 +46,10 @@
       }
     ],
     "recommended_controls": [
-      "CTL-008",
-      "CTL-009",
-      "CTL-011",
-      "CTL-016",
-      "CTL-022",
-      "CTL-029",
-      "CTL-031"
+      "CTL-001",
+      "CTL-004",
+      "CTL-005",
+      "CTL-003"
     ],
     "residual_risk": {
       "summary": "User-context propagation and on-behalf-of models reduce but do not eliminate the threat. Several residual risks remain even with full implementation of recommended controls.",
