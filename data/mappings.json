@@ -68,39 +68,28 @@
   ],
   "control_mitigates_threat": [
     {
-      "control_id": "CTL-008",
+      "control_id": "CTL-001",
       "threat_id": "AGT-002",
-      "rationale": "User-context propagation: pass user identity and authorization claims through the agent to downstream systems, rather than relying on the agent's identity alone"
+      "relationship": "primary",
+      "rationale": "Identity and authorization context propagation: consolidates user-context propagation, on-behalf-of authorization, tenant boundary enforcement, delegation-context preservation, and per-user authorization scoping. Addresses the structural cause of the deputy problem"
     },
     {
-      "control_id": "CTL-009",
+      "control_id": "CTL-004",
       "threat_id": "AGT-002",
-      "rationale": "On-behalf-of authorization model: agent's effective authorization for any action is the intersection of its own authorization and the user's, not the union"
+      "relationship": "primary",
+      "rationale": "Authorization-aware output filtering: even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see"
     },
     {
-      "control_id": "CTL-011",
+      "control_id": "CTL-005",
       "threat_id": "AGT-002",
-      "rationale": "Tenant boundary enforcement at the agent layer: agents operating in multi-tenant contexts must include tenant identity in every downstream call, with refusal to cross tenant boundaries"
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: every agent action must be traceable to the originating user, the agent involved, the delegation chain, and the authorization basis"
     },
     {
-      "control_id": "CTL-016",
+      "control_id": "CTL-003",
       "threat_id": "AGT-002",
-      "rationale": "Delegation-context preservation: when an agent invokes another agent or a tool, the original user identity and authorization claims must be carried forward and verified at each step"
-    },
-    {
-      "control_id": "CTL-022",
-      "threat_id": "AGT-002",
-      "rationale": "Per-user agent instances or per-request authorization scoping: where feasible, agents are instantiated or authorized per user rather than as shared service accounts"
-    },
-    {
-      "control_id": "CTL-029",
-      "threat_id": "AGT-002",
-      "rationale": "End-to-end audit traceability: every agent action must be traceable to the originating user, the agent involved, the delegation chain, and the authorization basis"
-    },
-    {
-      "control_id": "CTL-031",
-      "threat_id": "AGT-002",
-      "rationale": "Authorization-based output filtering: even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see"
+      "relationship": "secondary",
+      "rationale": "Action verification at high-impact boundaries: where authorization scoping is impractical or imperfect, human verification at the action boundary is the reliable fallback"
     }
   ],
   "threat_related_to_threat": [
@@ -127,32 +116,24 @@
   ],
   "control_placeholders": [
     {
-      "control_id": "CTL-008",
-      "status": "referenced_but_not_yet_defined"
+      "control_id": "CTL-002",
+      "status": "stub",
+      "note": "Tool-output and context provenance; full population deferred to a later session"
     },
     {
-      "control_id": "CTL-009",
-      "status": "referenced_but_not_yet_defined"
+      "control_id": "CTL-003",
+      "status": "stub",
+      "note": "Action verification at high-impact boundaries; full population deferred to a later session"
     },
     {
-      "control_id": "CTL-011",
-      "status": "referenced_but_not_yet_defined"
+      "control_id": "CTL-004",
+      "status": "stub",
+      "note": "Authorization-aware output filtering; full population deferred to a later session"
     },
     {
-      "control_id": "CTL-016",
-      "status": "referenced_but_not_yet_defined"
-    },
-    {
-      "control_id": "CTL-022",
-      "status": "referenced_but_not_yet_defined"
-    },
-    {
-      "control_id": "CTL-029",
-      "status": "referenced_but_not_yet_defined"
-    },
-    {
-      "control_id": "CTL-031",
-      "status": "referenced_but_not_yet_defined"
+      "control_id": "CTL-005",
+      "status": "stub",
+      "note": "End-to-end audit and accountability; full population deferred to a later session"
     }
   ]
 }
