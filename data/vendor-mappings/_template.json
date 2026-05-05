@@ -1,0 +1,16 @@
+{
+  "$comment": "Placeholder template for vendor mapping submissions. The full schema will be defined in Phase 5, after the controls library is mature. Do not submit mappings against this placeholder.",
+  "vendor": "",
+  "product": "",
+  "product_version": "",
+  "framework_version": "",
+  "submitted_by": {
+    "name": "",
+    "affiliation": "",
+    "contact": ""
+  },
+  "submission_type": "vendor | community",
+  "last_reviewed": "YYYY-MM-DD",
+  "scope": "",
+  "mappings": []
+}

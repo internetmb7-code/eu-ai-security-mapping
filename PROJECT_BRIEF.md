@@ -1,21 +1,36 @@
 # EU AI Security Mapping Project
 
-A practitioner's mapping of EU AI Act, NIS2, and DORA security requirements to operational controls for enterprise AI agent deployments.
+A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA security requirements to operational controls for enterprise AI agent deployments. Includes a defined contribution interface for vendor-specific control mappings.
 
 ## Project Goal
 
-Produce two interlinked artifacts:
+Produce three interlinked artifacts:
 
-1. **Practitioner Guide** (primary output): A 25 to 40 page technical document mapping EU regulatory requirements (EU AI Act, NIS2, DORA, relevant GDPR articles) to concrete security controls for enterprise AI and agent deployments. Includes an agent-specific threat model and implementation patterns.
-2. **Interactive Web Tool** (supporting output): A searchable web interface that exposes the regulatory mapping, control library, and threat model as a queryable, filterable, exportable resource. Hosted publicly via GitHub.
+1. **Practitioner Guide** (primary output): A 25 to 40 page technical document mapping EU regulatory requirements (EU AI Act, NIS2, DORA, relevant GDPR articles) to concrete, vendor-neutral security controls for enterprise AI and agent deployments. Includes an agent-specific threat model and implementation patterns.
+2. **Interactive Web Tool** (supporting output): A multi-entry-point web interface allowing CISOs and security architects to navigate the framework starting from any layer (regulation, threat, attack surface, or control). Hosted publicly via GitHub.
+3. **Vendor Mapping Contribution Interface** (platform output): A documented schema and process by which vendors and community contributors can submit mappings of their products to the framework's control library. Mappings live alongside the framework but are clearly attributed to their contributors.
 
-The combined output positions the author as a credible practitioner voice in DACH AI security advisory, suitable for conference talks, customer engagements, and senior advisory roles at AI labs, hyperscalers, regulators, or client-side CISO functions.
+The combined output positions the author as a credible practitioner voice in DACH AI security advisory, suitable for conference talks, customer engagements, and senior advisory roles at AI labs, hyperscalers, regulators, or client-side CISO functions. The platform-style contribution model differentiates the work from single-author practitioner documents and creates a reusable infrastructure for the field.
+
+## Positioning and Audience
+
+The framework is the author's independent practitioner work. It is product-agnostic in its core deliverables. Vendor-specific content lives in the separated mapping layer, contributed by vendors or community members, not authored by the framework maintainer.
+
+| Aspect | Position |
+|---|---|
+| Core framework | Vendor-neutral. No vendor names, products, or branding in threat model, controls library, or main document. |
+| Vendor mappings | Welcomed via explicit contribution interface; clearly attributed to contributors; not the author's deliverable. |
+| Author affiliation disclosure | The author works at ServiceNow. This is stated transparently in the README. The author recuses from reviewing any ServiceNow-submitted mapping; independent review will be arranged at that time. |
+| External credibility | Maximum. The framework can be defended as independent practitioner work in any external context including AI labs, regulators, and conferences. |
+| Internal usefulness | Indirect. Colleagues benefit by reading the framework and applying it; ServiceNow may choose to contribute a mapping through the standard contribution process. |
 
 ## Author's Perspective and Disclaimer
 
 Written from the perspective of a senior security practitioner with 14 years of operational security experience, including current customer-facing advisory work in the DACH region.
 
 The document is a guideline based on the author's interpretation of public regulatory texts and operational security experience. It is **not legal advice**. Readers should consult qualified legal counsel for compliance determinations. Primary sources are cited extensively so readers can follow the reasoning chain and form their own conclusions.
+
+Vendor mappings, when present, are contributor-attested representations of how a specific product implements framework controls. They are not framework-verified. Readers evaluating a specific vendor product should verify mapping claims against current vendor documentation.
 
 ## Scope
 
@@ -65,6 +80,8 @@ The repository is the single source of truth. Local files should always be synce
 eu-ai-security-mapping/
 ├── README.md                          # Project overview, status, how to contribute
 ├── PROJECT_BRIEF.md                   # This file: scope, goals, methodology
+├── CONTRIBUTING.md                    # Vendor mapping contribution interface (created in later phase)
+├── CODE_OF_CONDUCT.md                 # Standard contributor expectations
 ├── LICENSE                            # CC BY 4.0 for document, MIT for code
 ├── CHANGELOG.md                       # Version history of the document
 ├── .gitignore
@@ -82,15 +99,23 @@ eu-ai-security-mapping/
 │   │   ├── 07-implementation.md
 │   │   ├── 08-gaps.md
 │   │   └── 09-references.md
+│   ├── frameworks/                    # Methodology reference documents (not part of published guide)
+│   │   ├── THREAT_MODEL_FRAMEWORK.md
+│   │   ├── CONTROL_LIBRARY_FRAMEWORK.md       # To be authored
+│   │   ├── REGULATORY_MAPPING_FRAMEWORK.md    # To be authored
+│   │   └── VENDOR_MAPPING_FRAMEWORK.md        # To be authored after controls library is mature
 │   ├── diagrams/                      # Reference architecture, threat model diagrams (mermaid or SVG)
 │   └── exports/                       # Generated outputs (PDF, DOCX, HTML), not hand-edited
 │
 ├── data/
 │   ├── regulations/                   # Source regulation texts (EU AI Act, NIS2, DORA, GDPR)
 │   ├── requirements.json              # Structured database of requirements extracted from regulations
-│   ├── controls.json                  # Control library with mappings
+│   ├── controls.json                  # Vendor-neutral control library
 │   ├── threats.json                   # Agent-specific threat catalog
-│   └── mappings.json                  # Cross-references: regulation → control → threat
+│   ├── mappings.json                  # Cross-references: regulation → control → threat
+│   └── vendor-mappings/               # Contributed vendor-specific mappings (one file per vendor)
+│       ├── README.md                  # Index of accepted mappings, contribution status
+│       └── _template.json             # Schema template for new mapping submissions
 │
 ├── tool/                              # Web GUI (built in Phase 4)
 │   ├── README.md
@@ -102,14 +127,21 @@ eu-ai-security-mapping/
 ├── scripts/                           # Helper scripts
 │   ├── extract-requirements.py        # Parse regulation texts into structured data
 │   ├── validate-citations.py          # Check citation integrity
+│   ├── validate-vendor-mapping.py     # Validate submitted vendor mapping against schema
 │   ├── build-document.sh              # Compile sections into canonical document
 │   └── export-formats.sh              # Generate PDF, DOCX, HTML
 │
 └── .github/
     ├── workflows/
-    │   ├── validate.yml               # CI: validate JSON schemas, check citations
+    │   ├── validate.yml               # CI: validate JSON schemas, check citations, validate vendor mappings
     │   └── build.yml                  # CI: build exports on tag
+    ├── PULL_REQUEST_TEMPLATE/
+    │   ├── default.md                 # Standard PR template
+    │   └── vendor-mapping.md          # Specialized template for vendor mapping submissions
     └── ISSUE_TEMPLATE/
+        ├── bug.md
+        ├── content-suggestion.md
+        └── vendor-mapping-question.md
 ```
 
 ## Phased Workflow
@@ -148,30 +180,62 @@ The work is split across Claude.ai chat (strategic and writing dialogue) and Cla
 
 ### Phase 4: Web Tool (Claude Code)
 
+The web tool is a multi-entry-point navigator. Users can enter the framework starting from any layer and traverse outward to related entities. The pattern is hybrid: search-and-filter for fast discovery, graph traversal for deep exploration.
+
 | Feature | Priority |
 |---|---|
-| Searchable regulation requirements database (filter by regulation, article, security domain, control type) | High |
-| Control mapping view (requirement → control → threat) | High |
+| Multi-entry-point navigation (regulation, threat, attack surface, control) | High |
+| Detail view per entity with one-click expansion to related entities | High |
+| Searchable regulation requirements database with facets (regulation, article, security domain, control type) | High |
+| Control mapping view (requirement → control → threat, bidirectional) | High |
 | Threat model browser (agent-specific threats linked to controls and regulations) | High |
-| Coverage dashboard (visualize how a security program maps to regulatory requirements) | Medium |
+| Vendor mapping browser (filter mappings by vendor, product, framework version) | Medium (depends on contributions existing) |
+| Coverage dashboard (visualize where regulations have controls vs gaps) | Medium |
 | Export filtered reports | Medium |
 | Update mechanism for regulation changes | Low (post-launch) |
 
 **Suggested stack** (subject to confirmation in Phase 4):
 - Frontend: SvelteKit or Next.js
-- Data: SQLite or static JSON (the dataset is not large)
-- Hosting: Vercel, Cloudflare Pages, or GitHub Pages (free tier sufficient)
-- No backend required initially; fully static is fine
+- Data: Static JSON loaded at build time (the dataset is not large)
+- Search: Client-side (Fuse.js, MiniSearch, or Pagefind)
+- Graph traversal: Computed at build time from mappings.json
+- Hosting: GitHub Pages, Vercel, or Cloudflare Pages (free tier sufficient)
+- No backend required; fully static is fine
 
-### Phase 5: Publication and Distribution
+### Phase 5: Vendor Mapping Contribution Interface (Claude.ai chat + Claude Code)
+
+This phase is deliberately deferred until the threat model and controls library are mature. Defining a contribution interface for mapping to controls before the controls are stable risks early contributors mapping to control IDs that get renamed or restructured.
+
+| Task | Tool | Triggered when |
+|---|---|---|
+| Author `docs/frameworks/VENDOR_MAPPING_FRAMEWORK.md` | Claude.ai chat | Threat model fully populated, controls library has 15+ entries |
+| Define vendor mapping JSON schema | Claude.ai chat + Claude Code | After framework document is approved |
+| Author `CONTRIBUTING.md` (contributor-facing) | Claude.ai chat | After framework document |
+| Build vendor mapping validation script | Claude Code | After schema is defined |
+| Set up GitHub PR template for vendor mappings | Claude Code | Before announcing the contribution interface |
+| Add vendor mapping browser to web tool | Claude Code | After at least one mapping has been contributed |
+| Document recusal policy for ServiceNow-submitted mappings | Claude.ai chat | Part of framework document |
+
+**Contribution model summary**:
+
+| Aspect | Position |
+|---|---|
+| Eligibility | Vendor-submitted mappings preferred; community-submitted mappings accepted with disclosure |
+| Schema compliance | Mandatory; validated automatically via CI |
+| Quality criteria | Must reference framework control IDs, cite vendor documentation, declare scope, include last-reviewed date |
+| Independence safeguards | Author recuses from reviewing ServiceNow mappings; independent reviewer arranged at submission time |
+| Currency | Mappings marked stale after 12 months without review; archived after 24 months |
+| Conflict resolution | Vendor mappings take precedence over third-party mappings for the same product |
+
+### Phase 6: Publication and Distribution
 
 | Channel | Action |
 |---|---|
-| GitHub | Public repository with all artifacts |
+| GitHub | Public repository with all artifacts; clear README explaining the framework + contribution model |
 | LinkedIn | Long-form post announcing the work |
 | Conferences | Submit talks to BSI events, IAPP DACH, heise security conferences, RSA EU, Black Hat EU |
-| Blog | Companion blog post explaining the methodology |
-| ServiceNow internal | Share with OCISO leadership and account teams covering DACH regulated enterprises |
+| Blog | Companion blog post explaining the methodology and the contribution model |
+| Vendor outreach | After Phase 5, direct outreach to major vendors (hyperscalers, AI labs, enterprise platforms) inviting contributions |
 
 ## Quality Standards
 
@@ -271,10 +335,11 @@ After the initial setup, do not start writing content. Confirm the structure is 
 The project is successful if:
 
 1. The practitioner guide is published on GitHub with full text, references, and exports (PDF, DOCX, HTML)
-2. The web tool is publicly accessible and demonstrably useful for navigating the regulatory mapping
-3. At least one conference talk or substantial public presentation is delivered based on the work
-4. The artifact is referenced or shared by at least three independent practitioners or organizations within six months of publication
-5. The author can defend every claim in the document and every architectural decision in the tool against expert questioning
+2. The web tool is publicly accessible and demonstrably useful for navigating the regulatory mapping from any entry point
+3. The vendor mapping contribution interface is documented and at least one external mapping has been contributed within 12 months of the contribution interface launch
+4. At least one conference talk or substantial public presentation is delivered based on the work
+5. The artifact is referenced or shared by at least three independent practitioners or organizations within six months of publication
+6. The author can defend every claim in the document, every architectural decision in the tool, and the contribution model against expert questioning
 
 ## Out of Scope for This Brief
 
