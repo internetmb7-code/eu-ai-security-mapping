@@ -14,7 +14,7 @@ A practitioner's mapping of EU AI Act, NIS2, and DORA security requirements to o
 2. [Scope and Disclaimer](#2-scope-and-disclaimer)
 3. [Regulatory Landscape](#3-regulatory-landscape)
 4. [Common-Control Crosswalk](#4-common-control-crosswalk)
-5. [Agent-Specific Threat Model](#5-agent-specific-threat-model)
+5. [Agent Threat Patterns and Exemplars](#5-agent-threat-patterns-and-exemplars)
 6. [Recommended Controls and Patterns](#6-recommended-controls-and-patterns)
 7. [Implementation Considerations](#7-implementation-considerations)
 8. [Gaps and Open Problems](#8-gaps-and-open-problems)
@@ -43,10 +43,21 @@ _Placeholder._
 <!-- Source: docs/sections/04-crosswalk.md (3-4 pages) -->
 _Placeholder._
 
-## 5. Agent-Specific Threat Model
+## 5. Agent Threat Patterns and Exemplars
 
 <!-- Source: docs/sections/05-threat-model.md (4-6 pages) -->
-_Placeholder._
+
+This section presents the framework's view of agent-specific threats. It is structured in three layers, each playing a distinct role.
+
+The first layer is an attack surface taxonomy. Agents have a bounded set of attack surfaces (input, model, tool-use, output, memory and persistence, audit and provenance), and each surface produces recognizable threat patterns. The taxonomy is the durable structural claim of the framework: it is finite, derived from the architectural components every agent has, and stable across deployments.
+
+The second layer is a set of ten named threat exemplars (AGT-001 through AGT-010), one or two illustrative threats per attack surface. Each exemplar is documented with an attack scenario, an analysis of why traditional controls are insufficient, recommended controls from the v1 library, residual risk, detection and mitigation maturity, regulatory hooks, and MITRE ATLAS mappings. The exemplars are not an exhaustive enumeration of agent threats. They illustrate patterns concretely enough that practitioners can recognize variants in their own deployments.
+
+The third layer is methodology for discovering threats specific to a deployment that may not match the named exemplars. The methodology is essential: threats are infinite, no catalog can be complete, and the framework's value lies in the taxonomy and the structured way of thinking, not in the specific list of named threats. The methodology is documented in `docs/frameworks/THREAT_MODEL_FRAMEWORK.md`; this section references it rather than restating it.
+
+Practitioners using this section should not interpret coverage of the ten exemplars as completion of agent threat work. Coverage of the exemplars is necessary but not sufficient. The actual security work is in applying the taxonomy and methodology to the specific deployment, complemented by external catalogs (MITRE ATLAS, OWASP LLM Top 10, MITRE ATT&CK) for technique-level detail.
+
+_The exemplar entries (AGT-001 through AGT-010) will be merged from the section drafts during document drafting (Phase 4). AGT-001 and AGT-002 are the populated exemplars to date; AGT-003 through AGT-010 are drafted but not yet committed._
 
 ## 6. Recommended Controls and Patterns
 
