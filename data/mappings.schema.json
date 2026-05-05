@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/eu-ai-security-mapping/mappings.schema.json",
+  "title": "Cross-References",
+  "description": "Many-to-many cross references between requirements, controls, and threats. Used by the web tool to power the navigation views.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requirement_to_controls", "control_to_threats"],
+  "properties": {
+    "requirement_to_controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["requirement_id", "control_ids"],
+        "properties": {
+          "requirement_id": {
+            "type": "string",
+            "description": "Foreign key to requirements.json"
+          },
+          "control_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Foreign keys to controls.json"
+          },
+          "rationale": {
+            "type": ["string", "null"],
+            "description": "Optional explanation of why these controls satisfy the requirement."
+          }
+        }
+      }
+    },
+    "control_to_threats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control_id", "threat_ids"],
+        "properties": {
+          "control_id": { "type": "string" },
+          "threat_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "rationale": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    }
+  }
+}

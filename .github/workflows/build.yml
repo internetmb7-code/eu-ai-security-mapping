@@ -1,0 +1,13 @@
+# TODO: build PDF/DOCX/HTML exports from the canonical markdown on tag.
+# Placeholder workflow; no real build runs yet.
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "build workflow placeholder; implement in Phase 3"

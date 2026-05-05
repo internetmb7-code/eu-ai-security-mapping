@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/eu-ai-security-mapping/threats.schema.json",
+  "title": "Agent-Specific Threat",
+  "description": "An entry in the agent-specific threat catalog.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "name",
+      "description",
+      "attack_scenario",
+      "affected_components",
+      "traditional_controls",
+      "why_insufficient",
+      "recommended_controls",
+      "residual_risk"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^THR-[A-Z0-9]+(-[A-Z0-9]+)+$",
+        "description": "Stable identifier, e.g. 'THR-PROMPT-INJECTION-TOOL-OUTPUT'."
+      },
+      "name": { "type": "string" },
+      "category": {
+        "type": "string",
+        "enum": [
+          "prompt_injection",
+          "authorization_confusion",
+          "tool_chain_abuse",
+          "data_exfiltration",
+          "audit_provenance",
+          "memory_persistence",
+          "supply_chain",
+          "model_integrity"
+        ]
+      },
+      "description": { "type": "string" },
+      "attack_scenario": {
+        "type": "string",
+        "description": "Concrete narrative of how the threat manifests in an enterprise deployment."
+      },
+      "affected_components": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "examples": ["agent_runtime", "tool_gateway", "vector_store", "model_endpoint", "identity_provider", "audit_log_pipeline"]
+        },
+        "minItems": 1
+      },
+      "traditional_controls": {
+        "type": "string",
+        "description": "What classical security controls would normally apply here."
+      },
+      "why_insufficient": {
+        "type": "string",
+        "description": "Why classical controls do not fully address this threat in an agent context."
+      },
+      "recommended_controls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Control IDs from controls.json."
+        },
+        "minItems": 1
+      },
+      "residual_risk": {
+        "type": "string",
+        "description": "Realistic statement of what risk remains after applying the recommended controls."
+      },
+      "references": {
+        "type": ["array", "null"],
+        "items": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}

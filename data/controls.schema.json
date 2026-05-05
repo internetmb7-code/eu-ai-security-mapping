@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/eu-ai-security-mapping/controls.schema.json",
+  "title": "Security Control",
+  "description": "An operational control recommended in the practitioner guide.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "description", "control_family", "regulatory_basis", "threats_addressed", "implementation_pattern"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Stable identifier, e.g. 'CTL-INPUT-VALIDATION-01'.",
+        "pattern": "^CTL-[A-Z0-9]+(-[A-Z0-9]+)+$"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string",
+        "description": "What the control does, in practitioner language."
+      },
+      "control_family": {
+        "type": "string",
+        "enum": [
+          "access_control",
+          "input_output_validation",
+          "secrets_management",
+          "logging_monitoring",
+          "incident_response",
+          "supply_chain",
+          "data_governance",
+          "human_oversight",
+          "model_lifecycle",
+          "agent_authorization",
+          "tool_chain_security",
+          "memory_persistence",
+          "audit_provenance"
+        ]
+      },
+      "regulatory_basis": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Requirement IDs from requirements.json that this control helps satisfy."
+        },
+        "minItems": 1
+      },
+      "threats_addressed": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Threat IDs from threats.json that this control mitigates."
+        }
+      },
+      "implementation_pattern": {
+        "type": "string",
+        "description": "Concrete implementation guidance, neutral of any specific vendor."
+      },
+      "operational_considerations": {
+        "type": ["string", "null"],
+        "description": "Cost, performance, or organisational considerations."
+      },
+      "common_failure_modes": {
+        "type": ["array", "null"],
+        "items": { "type": "string" },
+        "description": "Typical ways this control fails in practice."
+      },
+      "servicenow_mapping": {
+        "type": ["object", "null"],
+        "description": "Optional, non-canonical overlay used by Appendix A. Maps the control to ServiceNow products. Leaving this null keeps the entry vendor-neutral.",
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "examples": ["IRM", "GRC", "SecOps", "AI Control Tower", "Now Assist Guardian"]
+            }
+          },
+          "modules_or_features": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# TODO: validate JSON schemas (requirements/controls/threats/mappings) and check citation integrity.
+# Placeholder workflow; no real validation runs yet.
+name: validate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "validate workflow placeholder; implement in Phase 2"

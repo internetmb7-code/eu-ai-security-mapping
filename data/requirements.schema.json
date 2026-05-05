@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/eu-ai-security-mapping/requirements.schema.json",
+  "title": "Regulatory Requirement",
+  "description": "A single security-relevant requirement extracted from a primary regulatory text.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "regulation", "article", "text", "security_domain", "source_url", "last_verified"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Stable identifier, e.g. 'AIACT-ART15-P1' or 'NIS2-ART21-2-A'.",
+        "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)+$"
+      },
+      "regulation": {
+        "type": "string",
+        "enum": ["EU_AI_ACT", "NIS2", "DORA", "GDPR"],
+        "description": "Source regulation."
+      },
+      "article": {
+        "type": "string",
+        "description": "Article number as printed in the OJ, e.g. '15' or '21'."
+      },
+      "paragraph": {
+        "type": ["string", "null"],
+        "description": "Paragraph or sub-paragraph reference if applicable."
+      },
+      "recital": {
+        "type": ["string", "null"],
+        "description": "Optional recital reference if the requirement is illuminated by a specific recital."
+      },
+      "text": {
+        "type": "string",
+        "description": "Verbatim or near-verbatim quotation of the operative requirement."
+      },
+      "security_domain": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "risk_management",
+            "data_governance",
+            "human_oversight",
+            "accuracy_robustness",
+            "cybersecurity",
+            "incident_response",
+            "third_party_risk",
+            "logging_monitoring",
+            "access_control",
+            "transparency",
+            "automated_decision_making"
+          ]
+        },
+        "minItems": 1,
+        "description": "Tags grouping requirements by operational security domain."
+      },
+      "source_url": {
+        "type": "string",
+        "format": "uri",
+        "description": "EUR-Lex URL to the consolidated version where possible."
+      },
+      "last_verified": {
+        "type": "string",
+        "format": "date",
+        "description": "Date the citation was last reconciled against the source text."
+      },
+      "notes": {
+        "type": ["string", "null"],
+        "description": "Editorial note, e.g. 'corrigendum applied' or 'see also Annex IV'."
+      }
+    }
+  }
+}

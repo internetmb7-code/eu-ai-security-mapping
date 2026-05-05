@@ -1,0 +1,7 @@
+Licensing for this repository (final license text to be added before public push):
+
+- Document content under `docs/`: Creative Commons Attribution 4.0 International (CC BY 4.0).
+  https://creativecommons.org/licenses/by/4.0/
+- Code under `tool/`, `scripts/`, and `.github/`: MIT License.
+
+Full license texts will replace this placeholder before the repository is published.
