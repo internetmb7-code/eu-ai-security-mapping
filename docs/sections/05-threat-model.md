@@ -55,15 +55,12 @@ The same scenario generalizes. In a cross-tenant variant, the agent serves custo
 
 **Recommended controls**:
 
-| Control ID | Brief description |
-|---|---|
-| CTL-008 | User-context propagation: pass user identity and authorization claims through the agent to downstream systems, rather than relying on the agent's identity alone |
-| CTL-009 | On-behalf-of authorization model: agent's effective authorization for any action is the intersection of its own authorization and the user's, not the union |
-| CTL-011 | Tenant boundary enforcement at the agent layer: agents operating in multi-tenant contexts must include tenant identity in every downstream call, with refusal to cross tenant boundaries |
-| CTL-016 | Delegation-context preservation: when an agent invokes another agent or a tool, the original user identity and authorization claims must be carried forward and verified at each step |
-| CTL-022 | Per-user agent instances or per-request authorization scoping: where feasible, agents are instantiated or authorized per user rather than as shared service accounts |
-| CTL-029 | End-to-end audit traceability: every agent action must be traceable to the originating user, the agent involved, the delegation chain, and the authorization basis |
-| CTL-031 | Authorization-based output filtering: even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see |
+| Control ID | Role for this threat | Brief description in the AGT-002 context |
+|---|---|---|
+| CTL-001 (Identity and authorization context propagation) | Primary | Consolidates user-context propagation, on-behalf-of authorization, tenant boundary enforcement, delegation-context preservation, and per-user authorization scoping. Addresses the root structural cause of the deputy problem by ensuring the agent acts with the intersection of its own authorization and the originating user's |
+| CTL-004 (Authorization-aware output filtering) | Primary | Even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see |
+| CTL-005 (End-to-end audit and accountability) | Primary | Every agent action is traceable to the originating user, the agent involved, the delegation chain, and the authorization basis |
+| CTL-003 (Action verification at high-impact boundaries) | Secondary | Where authorization scoping is impractical or imperfect, human verification at the action boundary is the reliable fallback |
 
 **Residual risk**: User-context propagation and on-behalf-of models reduce but do not eliminate the threat. Several residual risks remain even with full implementation of recommended controls:
 
