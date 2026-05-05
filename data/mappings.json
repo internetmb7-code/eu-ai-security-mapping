@@ -1,4 +1,158 @@
 {
   "requirement_to_controls": [],
-  "control_to_threats": []
+  "control_to_threats": [],
+  "threat_addresses_requirement": [
+    {
+      "threat_id": "AGT-002",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Where automated decisions can cause significant harm, human oversight is required; agents acting outside the user's authorization are operating without the oversight the regulation assumes",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Accuracy, robustness, cybersecurity)",
+      "rationale": "Cybersecurity requirements for high-risk AI systems include resilience to unauthorized use; structural authorization confusion is a form of unauthorized use even when no traditional control is bypassed",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Cybersecurity risk-management measures)",
+      "rationale": "Includes access control policies and asset management; broad-authority agents are critical assets requiring proportionate controls",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 8 (ICT risk-management framework)",
+      "rationale": "Operational resilience and ICT risk management requirements applicable to financial entities, including identity and access management",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "DORA",
+      "article_or_section": "Art. 9 (Identification and classification of ICT supported business functions)",
+      "rationale": "Agents serving multiple business functions across tenants or units must be classified and risk-assessed accordingly",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(f) (Integrity and confidentiality)",
+      "rationale": "Personal data must be processed in a manner that ensures appropriate security; cross-user or cross-tenant data exposure via agent deputy patterns violates this principle",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 22 (Automated individual decision-making)",
+      "rationale": "Agent actions taken outside the data subject's authorization context may constitute unauthorized automated processing",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 25 (Data protection by design and by default)",
+      "rationale": "Agents that retrieve more data than the user is authorized for, even if filtered before output, may fail the data minimization requirement",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 32 (Security of processing)",
+      "rationale": "Appropriate technical measures including pseudonymization and access control are required; broad-authority agents bypassing per-user access control fail this standard",
+      "requirement_status": "referenced_but_not_yet_defined"
+    }
+  ],
+  "control_mitigates_threat": [
+    {
+      "control_id": "CTL-008",
+      "threat_id": "AGT-002",
+      "rationale": "User-context propagation: pass user identity and authorization claims through the agent to downstream systems, rather than relying on the agent's identity alone"
+    },
+    {
+      "control_id": "CTL-009",
+      "threat_id": "AGT-002",
+      "rationale": "On-behalf-of authorization model: agent's effective authorization for any action is the intersection of its own authorization and the user's, not the union"
+    },
+    {
+      "control_id": "CTL-011",
+      "threat_id": "AGT-002",
+      "rationale": "Tenant boundary enforcement at the agent layer: agents operating in multi-tenant contexts must include tenant identity in every downstream call, with refusal to cross tenant boundaries"
+    },
+    {
+      "control_id": "CTL-016",
+      "threat_id": "AGT-002",
+      "rationale": "Delegation-context preservation: when an agent invokes another agent or a tool, the original user identity and authorization claims must be carried forward and verified at each step"
+    },
+    {
+      "control_id": "CTL-022",
+      "threat_id": "AGT-002",
+      "rationale": "Per-user agent instances or per-request authorization scoping: where feasible, agents are instantiated or authorized per user rather than as shared service accounts"
+    },
+    {
+      "control_id": "CTL-029",
+      "threat_id": "AGT-002",
+      "rationale": "End-to-end audit traceability: every agent action must be traceable to the originating user, the agent involved, the delegation chain, and the authorization basis"
+    },
+    {
+      "control_id": "CTL-031",
+      "threat_id": "AGT-002",
+      "rationale": "Authorization-based output filtering: even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see"
+    }
+  ],
+  "threat_related_to_threat": [
+    {
+      "from_threat_id": "AGT-002",
+      "to_threat_id": "AGT-001",
+      "relationship": "Common attack vector that exploits AGT-002; AGT-001 is the input mechanism, AGT-002 is the structural condition"
+    },
+    {
+      "from_threat_id": "AGT-002",
+      "to_threat_id": "AGT-003",
+      "relationship": "AGT-003 (tool-chain abuse) often depends on the agent having broader authorization than the user, which is AGT-002"
+    },
+    {
+      "from_threat_id": "AGT-002",
+      "to_threat_id": "AGT-005",
+      "relationship": "One consequence of AGT-002 is that audit trails do not cleanly attribute actions to originating users; AGT-005 compounds AGT-002"
+    },
+    {
+      "from_threat_id": "AGT-002",
+      "to_threat_id": "AGT-007",
+      "relationship": "The delegation-ambiguity sub-pattern within AGT-002 connects directly to AGT-007 when the delegated entity is another agent rather than a tool"
+    }
+  ],
+  "control_placeholders": [
+    {
+      "control_id": "CTL-008",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-009",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-011",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-016",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-022",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-029",
+      "status": "referenced_but_not_yet_defined"
+    },
+    {
+      "control_id": "CTL-031",
+      "status": "referenced_but_not_yet_defined"
+    }
+  ]
 }
