@@ -67,7 +67,7 @@ This section presents a coarse-grained v1 control library of 10 to 15 controls o
 
 The methodology, per-control template, taxonomy, and consolidation rules are documented in `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md`. That framework is the authoritative reference for how the library is structured and how new controls are added or refined. This section presents the controls themselves; the framework explains why they look the way they do.
 
-The current v1 library status: CTL-001 is fully populated as the reference entry (presented below). CTL-002 through CTL-005 are reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
+The current v1 library status: CTL-001 and CTL-002 are fully populated (presented below). CTL-003 through CTL-005 are reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
 
 ### CTL-001: Identity and Authorization Context Propagation
 
@@ -146,13 +146,101 @@ For multi-tenant deployments, tenant identity is part of the propagated context 
 - ISO/IEC 27001:2022, Annex A controls A.5.15 and A.8.2
 - SPIFFE / SPIRE specifications for workload identity
 
-### CTL-002 through CTL-005: forthcoming
+### CTL-002: Tool-Output and Context Provenance
+
+**Domain**: Runtime
+**Function**: Preventive, Detective
+**Maturity**: Emerging
+
+**Description**: Content returned by tools is structurally distinguished from instructions the agent should follow. The control creates an architectural boundary between data the agent processes and instructions the agent treats as authoritative. Without this boundary, adversarial content embedded in tool outputs (documents, web pages, retrieval results, sub-agent responses) can override the agent's original task. With it, the agent runtime maintains provenance metadata that prevents content from being elevated to instruction status.
+
+The control exists because LLMs do not natively distinguish between content and instruction. Both arrive in the same context window as text. The distinction must be enforced at the runtime layer, not relied upon as a model behavior.
+
+**Implementation pattern**: Tool outputs are wrapped in a structured envelope before entering the agent context. The envelope preserves provenance metadata: source tool identity, retrieval timestamp, source URL or document identifier, content type, and trust level (e.g., internal-trusted, internal-untrusted, external). The agent runtime processes wrapped content as data, not as authoritative instruction.
+
+Three implementation styles are common:
+
+| Style | How it works |
+|---|---|
+| Tagged context | Tool outputs are inserted into the agent context with explicit markers (e.g., `<tool_output source="web_fetch" trust="external">`); the system prompt instructs the model to treat content within these markers as data, not instruction |
+| Structured envelope | Tool outputs are passed to the agent as structured objects (JSON, typed records) with provenance fields; the agent reasoning operates over the structure, not raw text |
+| Runtime mediation | A runtime layer between the model and tool calls inspects outputs and either rejects, transforms, or annotates them before they reach the model context |
+
+The strongest implementations combine all three: structured envelopes at the runtime level, tagged context within the model prompt, and active runtime mediation for high-trust environments. For high-stakes deployments, the control extends to memory and persistence (memory writes carry provenance), to delegation chains (sub-agent outputs preserve their provenance through the chain), and to output channels (provenance metadata is referenced in audit logs).
+
+**Operational considerations**:
+
+| Consideration | Description |
+|---|---|
+| Performance overhead | Envelope wrapping and provenance tracking add per-call overhead, typically 5 to 15 ms per tool invocation; cumulative across multi-tool workflows |
+| Complexity of cross-tool aggregation | When the agent reasons across outputs from multiple tools, provenance must be preserved through aggregation; naive transformation strips it |
+| Trust level definition | Defining what counts as internal-trusted versus external requires policy work; over-broad trust labels weaken the control |
+| Model cooperation | Tagged-context approaches depend on the model respecting the markers; current LLMs do this imperfectly, especially under adversarial pressure |
+| Audit volume | Provenance-rich logs are larger than traditional tool-call logs; storage and SIEM costs grow accordingly |
+| Backward compatibility | Existing agent integrations may not pass provenance through; integration retrofits are real work |
+
+**Common failure modes**:
+
+| Failure mode | Description |
+|---|---|
+| Envelope stripping during transformation | The agent summarizes, translates, or otherwise transforms tool output, and the transformation removes provenance metadata; downstream the content is treated as agent-generated rather than tool-retrieved |
+| Provenance loss across delegation chains | A sub-agent receives content with provenance, processes it, and emits output without preserving the original source attribution |
+| Reliance on model self-discipline | Implementations that depend on model instructions to treat retrieved content as data rather than instruction without runtime enforcement; models comply most of the time but not adversarially |
+| Trust label drift | Initial deployment labels external content as untrusted; over time, internal sources are added that should also be untrusted but are labeled as internal-trusted |
+| Inconsistent envelope formats | Different tools wrap output differently; the agent runtime must normalize, and normalization can introduce errors |
+| Memory bypass | Provenance is enforced at retrieval but stripped before content is written to memory; persisted content loses its provenance and is later retrieved as agent-authored |
+
+**Threats addressed**: AGT-001 (primary), AGT-006 (primary), AGT-008 (secondary), AGT-009 (secondary).
+
+**Regulatory basis**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 15 | Cybersecurity; resilience to manipulation through tool-output channels requires runtime-level provenance |
+| EU AI Act | Art. 14 | Human oversight; provenance metadata supports the reviewability that meaningful oversight requires |
+| EU AI Act | Art. 10 | Data and data governance; provenance is a data-quality control extended to runtime context |
+| NIS2 | Art. 21 | Cybersecurity risk-management measures; agent runtimes processing variable-trust content fall within the directive's scope |
+| DORA | Art. 6 to 8 | ICT risk management; operational resilience for financial entities including resilience to runtime manipulation |
+| GDPR | Art. 32 | Security of processing; technical measures including resilience to manipulation of context content |
+| GDPR | Art. 5(1)(d) | Accuracy; provenance is a precondition for assessing and maintaining accuracy of content the agent operates over |
+
+**Existing standard mappings**:
+
+| Standard | Control ID | Relationship |
+|---|---|---|
+| NIST SP 800-53 Rev. 5 | SC-8 (Transmission Confidentiality and Integrity) | Refinement: SC-8 establishes integrity protection for transmissions; CTL-002 extends to integrity-of-attribution for tool outputs within agent runtimes |
+| NIST SP 800-53 Rev. 5 | SI-10 (Information Input Validation) | Refinement: SI-10 covers input validation generally; CTL-002 extends to the specific case of tool outputs as inputs to model reasoning |
+| NIST SP 800-53 Rev. 5 | SI-15 (Information Output Filtering) | Adjacent: SI-15 addresses output filtering; CTL-002 addresses input handling but uses similar provenance principles |
+| ISO 27001 Annex A | A.8.26 (Application security requirements) | Refinement: application security extended to agent runtime requirements |
+| ISO 27001 Annex A | A.8.28 (Secure coding) | Adjacent: secure coding principles applied to agent runtime envelope handling |
+| BSI grundschutz | CON.10 (Webanwendungen und Webservices) | Adjacent: web application security extended to retrieval-tool integrations |
+| BSI grundschutz | OPS.1.2.4 (Schutz vor Schadprogrammen) | Refinement: extended to agent-context-level content evaluation |
+
+**Related controls**:
+
+| Control | Relationship |
+|---|---|
+| CTL-001 (Identity and authorization context propagation) | Complementary: provenance addresses what content is; identity propagation addresses who the action is for |
+| CTL-003 (Action verification at high-impact boundaries) | Complementary: when provenance flags untrusted content as influencing a high-impact action, action verification provides a checkpoint |
+| CTL-005 (End-to-end audit and accountability) | Dependent: forensic review of injection-driven actions requires the provenance metadata that CTL-002 produces |
+
+**References**:
+
+- NIST SP 800-53 Rev. 5, controls SC-8, SI-10, SI-15
+- NIST SP 800-218 (Secure Software Development Framework), relevant for runtime input handling
+- ISO/IEC 27001:2022, Annex A controls A.8.26 and A.8.28
+- BSI IT-Grundschutz-Kompendium, Bausteine CON.10 and OPS.1.2.4
+- IETF RFC 9421 (HTTP Message Signatures), relevant pattern for verifiable provenance metadata
+- OWASP Top 10 for LLM Applications, LLM01 (Prompt Injection) and LLM03 (Training Data Poisoning) for context on the threat landscape
+- MITRE ATLAS, AML.T0070 (Indirect Prompt Injection)
+- Greshake et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" (2023)
+
+### CTL-003 through CTL-005: forthcoming
 
 The following entries are reserved with title and domain assigned. Full population is deferred to subsequent sessions.
 
 | ID | Title | Domain | Function | Status |
 |---|---|---|---|---|
-| CTL-002 | Tool-output and context provenance | Runtime | Preventive, Detective | Stub |
 | CTL-003 | Action verification at high-impact boundaries | Governance | Preventive | Stub |
 | CTL-004 | Authorization-aware output filtering | Data | Preventive | Stub |
 | CTL-005 | End-to-end audit and accountability | Audit and accountability | Detective | Stub |
