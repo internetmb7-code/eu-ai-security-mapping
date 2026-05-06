@@ -27,7 +27,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Phase | Description | Status |
 |---|---|---|
 | Phase 1: Strategy and scaffolding | Define scope, audience, structure, set up repository | Done |
-| Phase 2: Threat model | Frame threats, draft all 10 entries | In progress (2 of 10 fully populated and committed) |
+| Phase 2: Threat model | Frame threats, draft all 10 entries | In progress (2 of 10 fully populated, 8 of 10 compressed drafts committed; realistic examples deferred) |
 | Phase 3: Control library | Frame v1 library, draft entries | In progress (1 of 5 fully populated, 4 stubs) |
 | Phase 4: Document drafting | Write all 9 sections of the practitioner guide | Not started |
 | Phase 5: Regulatory crosswalk | Surface the regulatory mapping as a primary artifact | Partial (regulatory hooks accumulated through threats and controls) |
@@ -66,14 +66,14 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 |---|---|---|
 | AGT-001 | Prompt injection via tool outputs | Fully populated, committed (standalone source markdown and JSON entry) |
 | AGT-002 | Authorization confusion (deputy problem) | Fully populated, committed (exemplar_role field backfilled per v2 reframe) |
-| AGT-003 | Tool-chain abuse | Compressed draft ready, not yet committed |
-| AGT-004 | Data exfiltration via legitimate channels | Compressed draft ready, not yet committed |
-| AGT-005 | Audit and provenance failure | Compressed draft ready, not yet committed |
-| AGT-006 | Memory and persistence poisoning | Compressed draft ready, not yet committed |
-| AGT-007 | Inter-agent trust and delegation abuse | Compressed draft ready, not yet committed |
-| AGT-008 | Output-channel injection | Compressed draft ready, not yet committed |
-| AGT-009 | Goal subversion via context manipulation | Compressed draft ready, not yet committed |
-| AGT-010 | Resource exhaustion via agent loops | Compressed draft ready, not yet committed |
+| AGT-003 | Tool-chain abuse | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-004 | Data exfiltration via legitimate channels | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-005 | Audit and provenance failure | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-006 | Memory and persistence poisoning | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-007 | Inter-agent trust and delegation abuse | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-008 | Output-channel injection | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-009 | Goal subversion via context manipulation | Compressed draft committed (schema-faithful; realistic example deferred) |
+| AGT-010 | Resource exhaustion via agent loops | Compressed draft committed (schema-faithful; realistic example deferred) |
 
 ### Control library (v1: 5 controls total)
 
@@ -93,7 +93,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | 2. Scope and disclaimer | Not started |
 | 3. Regulatory landscape | Not started |
 | 4. Common-control crosswalk | Not started |
-| 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Placeholder; AGT-001 and AGT-002 referenced; AGT-003 to AGT-010 not yet integrated |
+| 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
 | 6. Recommended controls | Partially populated (CTL-001 referenced; CTL-002 to CTL-005 not yet) |
 | 7. Implementation considerations | Not started |
 | 8. Gaps and open problems | Not started |
@@ -103,9 +103,9 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | File | Status |
 |---|---|
-| `data/threats.json` | AGT-001 and AGT-002 populated; AGT-003 to AGT-010 not yet present |
+| `data/threats.json` | All 10 threats present: AGT-001 and AGT-002 fully populated; AGT-003 through AGT-010 as compressed drafts (status: `compressed_draft`, `realistic_example_status: to_be_populated`) |
 | `data/controls.json` | CTL-001 populated; CTL-002 to CTL-005 as stubs |
-| `data/mappings.json` | Bidirectional mappings between AGT-001/AGT-002 and CTL-001 to CTL-005 |
+| `data/mappings.json` | Bidirectional mappings for all 10 threats against CTL-001 to CTL-005 (56 threat-to-requirement entries, 33 control-to-threat entries, 25 threat-to-threat entries) |
 | `data/regulations/` | Source regulation texts not yet collected |
 | `data/vendor-mappings/` | Folder structure exists; no contributions yet (deferred) |
 
@@ -160,8 +160,8 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Element | Status |
 |---|---|
-| Foundation | Solid: framework documents done, 2 threats fully populated and committed, 1 control fully populated |
-| Threat catalog completeness | 2 of 10 fully populated and committed; 8 of 10 compressed drafts ready but not yet committed |
+| Foundation | Solid: framework documents done, 2 threats fully populated, 8 threats committed as compressed drafts, 1 control fully populated |
+| Threat catalog completeness | 2 of 10 fully populated; 8 of 10 committed as compressed drafts (realistic examples deferred); structural completeness reached at the exemplar level |
 | Control library completeness | 1 of 5 fully populated, 4 stubs |
 | v2 framework reframe | Applied |
 | Document drafting | Not started |
@@ -176,10 +176,11 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Option | What it produces | Recommendation |
 |---|---|---|
-| A. Commit AGT-003 through AGT-010 compressed drafts | Threat catalog populated at structural level | Recommended next: closes the threat catalog at the exemplar level |
-| B. Populate CTL-002 through CTL-005 fully | v1 control library complete | Strong second next step |
-| C. Write executive summary and gaps section | Framing for the entire document | Defer until threat and control catalogs are at structural completeness |
-| D. Begin regulatory mapping framework | Surfaces the regulatory crosswalk as a primary artifact | Defer until controls library is more mature |
+| A. Populate CTL-002 through CTL-005 fully | v1 control library complete | Recommended next: closes the control library at v1 scope. Requires source content for the four controls |
+| B. Populate realistic examples for AGT-003 through AGT-010 | Threat catalog reaches parity with AGT-001 and AGT-002 | Strong second next step |
+| C. Draft practitioner guide sections 2, 3, 4, 7, 9 | Document structure assembled around the threat and control catalogs | Defer until control library is at v1 completeness |
+| D. Write executive summary and gaps section | Framing for the entire document | Requires chat dialogue with the author; defer to a dedicated session |
+| E. Begin regulatory mapping framework | Surfaces the regulatory crosswalk as a primary artifact | Defer until controls library is more mature |
 
 ## How to use this document
 
