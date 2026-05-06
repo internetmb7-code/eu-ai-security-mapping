@@ -67,7 +67,7 @@ This section presents a coarse-grained v1 control library of 10 to 15 controls o
 
 The methodology, per-control template, taxonomy, and consolidation rules are documented in `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md`. That framework is the authoritative reference for how the library is structured and how new controls are added or refined. This section presents the controls themselves; the framework explains why they look the way they do.
 
-The current v1 library status: CTL-001 and CTL-002 are fully populated (presented below). CTL-003 through CTL-005 are reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
+The current v1 library status: CTL-001, CTL-002, and CTL-003 are fully populated (presented below). CTL-004 and CTL-005 are reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
 
 ### CTL-001: Identity and Authorization Context Propagation
 
@@ -235,13 +235,105 @@ The strongest implementations combine all three: structured envelopes at the run
 - MITRE ATLAS, AML.T0070 (Indirect Prompt Injection)
 - Greshake et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" (2023)
 
-### CTL-003 through CTL-005: forthcoming
+### CTL-003: Action Verification at High-Impact Boundaries
+
+**Domain**: Governance
+**Function**: Preventive
+**Maturity**: Emerging
+
+**Description**: Before an agent executes an action that exceeds defined impact thresholds, the action is verified through an explicit checkpoint that is independent of the agent reasoning. The control inserts a governance boundary between agent intent and consequential action. Where automated controls cannot fully prevent a threat, this checkpoint is often the only fully reliable mitigation.
+
+The control is governance-domain because the central work is policy: defining what counts as high-impact, how verification happens, who or what performs it, and what triggers escalation. The technical enforcement is straightforward once policy is clear; the policy itself requires deliberate organizational decisions that cannot be automated.
+
+**Implementation pattern**: Define impact thresholds across multiple dimensions: financial (transaction value, cumulative cost), reputational (external communications, customer-facing decisions), regulatory (actions touching regulated data or processes), irreversibility (data deletion, contract execution, public statements), and cumulative composition (sequences of individually small actions producing high-impact outcomes).
+
+For any action exceeding a threshold, the agent must obtain verification before proceeding. Verification can take several forms:
+
+| Verification mode | Use case |
+|---|---|
+| Human approval (human-in-the-loop) | Highest-stakes actions; irreversible decisions; regulated environments where automation alone is not permitted |
+| Out-of-band confirmation | User confirms via secondary channel (email, push notification, signed token); appropriate where the user is the originating actor |
+| Secondary agent review | A second agent with different prompts, different context, or different authorization reviews the proposed action; useful at scale where human approval does not |
+| Policy engine check | Automated rule evaluation against a policy; appropriate for well-defined, repeatable threshold tests |
+| Multi-step delay with notification | Action is queued for a defined window during which it can be canceled; appropriate for moderate-impact actions where review is desirable but not essential |
+
+The control extends to composed actions. A sequence of low-impact actions that together produce a high-impact outcome must be detected and verified at the composition boundary, not only at the individual action level. This requires the agent runtime to track cumulative effect, not just per-call thresholds. For high-stakes deployments, verification is layered: a policy engine handles the high-volume routine cases, secondary agent review handles the medium-volume novel cases, and human approval handles the low-volume highest-stakes cases.
+
+**Operational considerations**:
+
+| Consideration | Description |
+|---|---|
+| Latency | Verification adds latency, ranging from milliseconds (policy engine) to hours or days (human approval); this directly affects user experience and must be designed into the workflow |
+| Threshold calibration | Thresholds must be tuned to organizational risk tolerance; too low and verification becomes routine and ignored, too high and meaningful actions slip through |
+| Verification fatigue | Reviewers exposed to many verifications develop rubber-stamping behavior; design must include sampling, randomization, or explicit attention prompts |
+| Cumulative effect tracking | Tracking composed actions requires runtime instrumentation that many agent platforms do not natively support |
+| Threshold drift | Policy thresholds set at deployment can become stale as products, regulations, and risk environment evolve; periodic governance review is essential |
+| Workaround risk | Agents under instruction or pressure may find paths to achieve the same outcome through actions that individually fall below thresholds; CTL-003 alone does not prevent this |
+| Cross-organization variance | What counts as high-impact varies dramatically across regulated sectors; the control framework requires sector-specific policy work |
+
+**Common failure modes**:
+
+| Failure mode | Description |
+|---|---|
+| Threshold definitions becoming stale | Initial thresholds reflect deployment-time assumptions; product changes, regulatory changes, and threat landscape evolution make them inadequate over time |
+| Rubber-stamping | Reviewers process too many verifications too quickly; the verification becomes formal rather than meaningful |
+| Per-action thresholds without composition | Thresholds catch single high-impact actions but miss sequences of low-impact actions producing similar outcomes |
+| Verification path bypass | Agents discover paths that achieve the goal through tools or sequences not covered by threshold rules |
+| Policy engine staleness | Automated rules are written once and not maintained; new action types fall outside the rules and proceed without verification |
+| Out-of-band channel compromise | Confirmation channels (email, SMS) are themselves attackable; under sophisticated attack, the confirmation step can be defeated |
+| Misaligned verification authority | The reviewer lacks the context, authority, or training to evaluate the action meaningfully; the verification is procedural rather than substantive |
+
+**Threats addressed**: AGT-001 (primary), AGT-002 (primary), AGT-003 (primary), AGT-008 (primary), AGT-009 (secondary), AGT-010 (secondary).
+
+**Regulatory basis**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 14 | Human oversight; the regulatory anchor for human-in-the-loop verification at high-impact boundaries |
+| EU AI Act | Art. 15 | Cybersecurity; resilience to manipulation requires verification gates for consequential actions |
+| EU AI Act | Art. 9 | Risk management system; high-impact actions require proportionate verification controls |
+| NIS2 | Art. 21 | Cybersecurity risk-management measures; action-boundary verification is a structural risk control |
+| DORA | Art. 6 to 9 | ICT risk management and identification of critical functions requiring proportionate verification |
+| GDPR | Art. 22 | Automated individual decision-making; verification is the structural mechanism for the right to human review |
+| GDPR | Art. 32 | Security of processing; verification at high-impact boundaries is a technical and organizational measure |
+
+**Existing standard mappings**:
+
+| Standard | Control ID | Relationship |
+|---|---|---|
+| NIST SP 800-53 Rev. 5 | AC-3 (Access Enforcement) | Refinement: AC-3 establishes the principle of enforcing approved authorizations; CTL-003 extends to action-level verification beyond identity-based authorization |
+| NIST SP 800-53 Rev. 5 | CA-7 (Continuous Monitoring) | Refinement: continuous monitoring extended to agent action streams |
+| NIST SP 800-53 Rev. 5 | AC-21 (Information Sharing) | Adjacent: information-sharing decisions are a class of high-impact action that CTL-003 covers |
+| NIST SP 800-53 Rev. 5 | SI-4 (System Monitoring) | Adjacent: system monitoring extended to agent action patterns |
+| ISO 27001 Annex A | A.5.36 (Compliance with policies, rules and standards) | Refinement: policy compliance enforced at the action boundary |
+| ISO 27001 Annex A | A.8.7 (Protection against malware) | Adjacent: extended to protection against agent-driven actions exceeding authorization scope |
+| BSI grundschutz | ORP.1 (Organisation) | Refinement: organizational governance extended to agent action governance |
+| BSI grundschutz | ORP.4 (Identitäts- und Berechtigungsmanagement) | Adjacent: identity and authorization management extended to action verification |
+
+**Related controls**:
+
+| Control | Relationship |
+|---|---|
+| CTL-001 (Identity and authorization context propagation) | Complementary: CTL-001 limits what the agent is authorized to do; CTL-003 verifies high-impact actions within that authorization |
+| CTL-002 (Tool-output and context provenance) | Complementary: provenance metadata informs the verification decision; untrusted-content-influenced actions warrant stricter verification |
+| CTL-005 (End-to-end audit and accountability) | Dependent: verification decisions must be auditable; CTL-005 captures the verification record |
+
+**References**:
+
+- NIST SP 800-53 Rev. 5, controls AC-3, AC-21, CA-7, SI-4
+- NIST SP 800-37 Rev. 2, Risk Management Framework, for governance context
+- ISO/IEC 27001:2022, Annex A controls A.5.36 and A.8.7
+- ISO/IEC 38500:2024, Governance of information technology, for organizational governance principles applicable to agent governance
+- BSI IT-Grundschutz-Kompendium, Bausteine ORP.1 and ORP.4
+- EU AI Act, Article 14 (Human oversight), as the regulatory anchor for human-in-the-loop verification at high-impact boundaries
+- DORA, Articles 6 to 9, for ICT risk management and identification of critical functions requiring proportionate verification
+
+### CTL-004 and CTL-005: forthcoming
 
 The following entries are reserved with title and domain assigned. Full population is deferred to subsequent sessions.
 
 | ID | Title | Domain | Function | Status |
 |---|---|---|---|---|
-| CTL-003 | Action verification at high-impact boundaries | Governance | Preventive | Stub |
 | CTL-004 | Authorization-aware output filtering | Data | Preventive | Stub |
 | CTL-005 | End-to-end audit and accountability | Audit and accountability | Detective | Stub |
 
