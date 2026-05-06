@@ -406,7 +406,7 @@
       "control_id": "CTL-003",
       "threat_id": "AGT-001",
       "relationship": "primary",
-      "rationale": "Action verification at high-impact boundaries: require explicit verification before state-changing or high-impact actions, even when the agent's reasoning suggests them, so injected instructions cannot trigger consequential actions without review"
+      "rationale": "Verification at action boundaries prevents injected instructions from triggering consequential actions without review"
     },
     {
       "control_id": "CTL-001",
@@ -441,14 +441,14 @@
     {
       "control_id": "CTL-003",
       "threat_id": "AGT-002",
-      "relationship": "secondary",
-      "rationale": "Action verification at high-impact boundaries: where authorization scoping is impractical or imperfect, human verification at the action boundary is the reliable fallback"
+      "relationship": "primary",
+      "rationale": "Provides a fallback when CTL-001 cannot fully scope authorization; high-impact actions get explicit verification regardless of authorization model"
     },
     {
       "control_id": "CTL-003",
       "threat_id": "AGT-003",
       "relationship": "primary",
-      "rationale": "Action verification at high-impact boundaries: high-impact actions composed from individual tool calls are subject to verification at the boundary even when no single call would warrant it"
+      "rationale": "Composition tracking and verification at composed-action thresholds is the core defense against tool-chain abuse"
     },
     {
       "control_id": "CTL-005",
@@ -544,7 +544,7 @@
       "control_id": "CTL-003",
       "threat_id": "AGT-008",
       "relationship": "primary",
-      "rationale": "Action verification at high-impact boundaries: requires verification before agent output triggers downstream execution"
+      "rationale": "Verification before agent output triggers downstream execution prevents output-injection harm"
     },
     {
       "control_id": "CTL-002",
@@ -561,8 +561,8 @@
     {
       "control_id": "CTL-003",
       "threat_id": "AGT-009",
-      "relationship": "primary",
-      "rationale": "Action verification at high-impact boundaries: requires verification when the agent's actions exceed expected scope"
+      "relationship": "secondary",
+      "rationale": "Verification provides a checkpoint where the agent's stated action exceeds expected scope, surfacing context-driven goal drift"
     },
     {
       "control_id": "CTL-005",
@@ -579,8 +579,8 @@
     {
       "control_id": "CTL-003",
       "threat_id": "AGT-010",
-      "relationship": "primary",
-      "rationale": "Action verification at high-impact boundaries: high cumulative resource consumption is itself a high-impact action"
+      "relationship": "secondary",
+      "rationale": "Cumulative resource consumption is itself a high-impact pattern that verification can catch"
     },
     {
       "control_id": "CTL-005",
@@ -723,11 +723,6 @@
     }
   ],
   "control_placeholders": [
-    {
-      "control_id": "CTL-003",
-      "status": "stub",
-      "note": "Action verification at high-impact boundaries; full population deferred to a later session"
-    },
     {
       "control_id": "CTL-004",
       "status": "stub",
