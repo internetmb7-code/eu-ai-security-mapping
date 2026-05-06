@@ -37,6 +37,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Populated CTL-005 (End-to-End Audit and Accountability) as fully drafted control entry. v1 control library is now complete with all five controls fully populated.
 
+- Drafted section 8 (Gaps and Open Problems) in `docs/sections/08-gaps.md` and inserted into section 8 of `docs/main-document/EU-AI-Security-Mapping.md`. Sub-sections cover threat catalog non-exhaustiveness, v1 control library coverage gaps, the fundamental limit of model reasoning provenance, absence of documented incident examples, the unproven vendor mapping platform, and the deliberate exclusion of governance, culture, and organizational change. Closes with a v2 control library priority list (memory and persistence provenance, runtime resource governance, output sanitization, CTL-003 refinement for composed actions).
+
 ### Changed
 
 - Reframed threat model framework (v2): 10 named threats are now positioned as exemplars within the attack surface taxonomy, not as an exhaustive enumeration. The reframe addresses the methodological concern that threats are infinite and any catalog will be incomplete. No threat content changes; the framework's introduction, scope, and methodology sections are updated. Section 5 of the practitioner guide is renamed from "Agent-Specific Threat Model" to "Agent Threat Patterns and Exemplars". Added `exemplar_role` field to threat entries in `data/threats.json` (and to `data/threats.schema.json`); AGT-001 and AGT-002 populated. PROJECT_BRIEF.md and PROJECT_STATUS.md updated to reflect the exemplar status of the catalog.
