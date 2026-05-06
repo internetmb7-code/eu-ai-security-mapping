@@ -209,3 +209,447 @@ Practitioner and research literature:
 - Hardt, "The OAuth 2.0 Authorization Framework," RFC 6749 (foundational for delegation patterns)
 - Greshake et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" (2023) (relevant for the attack vector that exploits AGT-002)
 - Recent work on agent identity and authorization from 2025 to 2026 (specific citations to be selected during section drafting)
+
+---
+
+> The eight entries that follow (AGT-003 through AGT-010) are compressed drafts. Each is schema-faithful to the AGT-001 and AGT-002 template but lighter in detail; realistic examples are deferred to a later session. Each entry references only the consolidated v1 controls (CTL-001 through CTL-005). Per-threat source markdown lives at `docs/sections/05-threat-model/AGT-NNN.md`.
+
+---
+
+### AGT-003: Tool-Chain Abuse
+
+**Primary surface**: Tool-use
+**Secondary surfaces**: Output, Audit and provenance
+
+**Description**: An agent invokes a sequence of legitimately authorized tools that, in composition, produce harm that no individual tool invocation would. Where AGT-002 covers the agent having broader authorization than the user, AGT-003 covers harm emerging from how individually authorized actions chain together. Sub-patterns include benign-step composition (each step is permissioned and reasonable; the aggregate exceeds intent), reconnaissance-then-action chains (the agent enumerates state via read tools and then acts on synthesized knowledge), and emergent capability chains (the agent combines tools in ways the deployment did not anticipate to achieve outcomes none of them are individually designed for).
+
+**Attack scenario**: A workflow agent in a regulated DACH financial services enterprise has read access to customer records, write access to internal tickets, and the ability to send notifications. None of these tools is sensitive in isolation. A user request, possibly shaped by AGT-001 or AGT-009, causes the agent to read several customer records, correlate them, write a ticket linking the correlations, and send a notification to a downstream team. The composed action discloses cross-customer information that no individual tool authorization would have allowed. No control is bypassed; the harm is in the composition.
+
+**Affected components**:
+- Agent action planner and tool selection
+- Tool authorization layer (per-tool permissions)
+- Cross-tool data flow inside the agent runtime
+- Audit infrastructure that records tool calls but may not capture composition intent
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Per-tool authorization | Each tool is correctly authorized; the threat is in composition |
+| Action allowlists | Allowlists at tool level cannot represent emergent compositions |
+| Anomaly detection on tool calls | Each call is within normal patterns |
+| Audit logging of tool calls | Captures events; does not capture composed intent |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-003 context |
+|---|---|---|
+| CTL-003 (Action verification at high-impact boundaries) | Primary | High-impact actions composed from individual tool calls are subject to verification at the boundary even when no single call would warrant it |
+| CTL-005 (End-to-end audit and accountability) | Secondary | Enables review of action chains and detection of patterns of legitimate-but-composed harm |
+| CTL-001 (Identity and authorization context propagation) | Secondary | Constrains the user authority that any chain can leverage |
+
+**Control gap flag**: Tool-chain composition is partially addressed by CTL-003 if the action boundary is broadly defined to include cumulative composed actions; v1 does not include a dedicated control for chain detection or composition policy. A v2 control on action-chain governance may be warranted.
+
+**Residual risk**: Even with action verification at boundaries, sophisticated chains may slip below thresholds individually while exceeding them in aggregate. For high-stakes contexts, scope-based composition policies and human review of multi-tool plans are necessary complements.
+
+**Detection maturity**: Emerging. **Mitigation maturity**: Emerging.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 9 (Risk management) | Composed agent actions are a risk class that risk management must explicitly address |
+| EU AI Act | Art. 14 (Human oversight) | Composition that exceeds individual review thresholds defeats the oversight model |
+| DORA | Art. 6 to 8 (ICT risk management) | Operational resilience requires controls on agent action composition for financial entities |
+| GDPR | Art. 5(1)(c) (Data minimization) | Aggregating individual data points into composites can violate minimization even when each retrieval is permitted |
+| GDPR | Art. 25 (Data protection by design) | Design must consider composed effects, not only individual operations |
+
+**ATLAS mapping**: Limited direct technique coverage; tool-chain composition is an emerging area as ATLAS expands its agentic catalog.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-004: Data Exfiltration via Legitimate Channels
+
+**Primary surface**: Output
+**Secondary surfaces**: Tool-use, Memory and persistence
+
+**Description**: Sensitive data flows out of the controlled environment through channels the agent is legitimately authorized to use (responses to users, API calls to integrated systems, writes to logs or audit destinations, tool outputs to other agents). Where traditional exfiltration relies on bypassing controls, this pattern works within them: the agent has tool-use authorization to call the channel and content authorization for the data, but the combination crosses a boundary the user is not authorized for. Sub-patterns include over-disclosure to authorized recipients, inference-based exfiltration (the agent's summarization or reasoning reveals protected content beyond the authorization scope), telemetry leakage (sensitive content reaching log or telemetry systems), and persistence-mediated exfiltration (sensitive content stored in memory that is later retrieved into a less-protected context).
+
+**Attack scenario**: A research analysis agent in a regulated DACH financial services enterprise is asked to "summarize what we know about customer Schmidt's risk profile." The agent has authorized access to internal sources and to a third-party benchmarking integration. It composes a summary that includes risk-relevant attributes from the internal sources and includes them in the third-party query as context. The query is logged at the third-party with full content. No traditional control is bypassed; the agent had authorization for both the internal data and the integration. The harm is in the boundary the composed flow crosses, which the agent's authorization model did not represent.
+
+**Affected components**:
+- Agent output channels (response, integrations, logs, telemetry)
+- Tool-output propagation to external systems
+- Memory and vector stores reachable across user contexts
+- Logging and audit infrastructure as a data-flow target
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Network-layer DLP | Detects pattern matches; cannot represent agent semantic context |
+| Egress filtering | Filters known channels; legitimate channels are by definition allowed |
+| Data classification at storage | Classification at rest does not constrain agent reasoning over content |
+| Log redaction | Tuned to known patterns; agent paraphrase evades it |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-004 context |
+|---|---|---|
+| CTL-004 (Authorization-aware output filtering) | Primary | Filtering boundary is the user authorization rather than the channel |
+| CTL-001 (Identity and authorization context propagation) | Primary | Per-user scoping at retrieval limits what can be exfiltrated |
+| CTL-005 (End-to-end audit and accountability) | Primary | Data-flow audit enables detection of legitimate-channel exfiltration |
+
+**Control gap flag**: CTL-004 addresses output filtering by user authorization but the data-flow dimension across channels and time is not deeply specified in v1. Persistence-mediated exfiltration in particular requires memory governance that is closer to AGT-006 territory.
+
+**Residual risk**: Inference-based exfiltration is fundamentally hard to control; the agent can convey protected content through paraphrase and synthesis. For high-stakes contexts, output review and minimization of agent reasoning over sensitive sources are necessary complements.
+
+**Detection maturity**: Emerging. **Mitigation maturity**: Emerging.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 15 (Cybersecurity) | Resilience to unauthorized data exposure |
+| GDPR | Art. 5(1)(f) (Integrity and confidentiality) | Personal data must be protected against unauthorized disclosure |
+| GDPR | Art. 32 (Security of processing) | Technical and organizational measures including encryption and access control |
+| DORA | Art. 6 (ICT risk management) | Confidentiality of information processed by ICT systems |
+| NIS2 | Art. 21 (Cybersecurity risk-management measures) | Includes incident handling and confidentiality protections |
+
+**ATLAS mapping**: AML.T0024 (Exfiltration via ML Inference API) is adjacent; direct mappings for legitimate-channel exfiltration in agent contexts are limited and emerging.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-005: Audit and Provenance Failure
+
+**Primary surface**: Audit and provenance
+**Secondary surfaces**: Identity, Tool-use
+
+**Description**: An agent's actions are not attributable to the originating user, the instructions that drove them, or the reasoning that produced them. Traditional audit logs may capture the agent's tool calls and outputs, but the provenance chain (which user requested what, which intermediate reasoning influenced the action, which retrieved content shaped the decision, which sub-agent was involved) is incomplete or unreconstructible. The threat is structural: agent runtimes typically do not capture the full chain of cause and effect needed to investigate, prove compliance, or respond to data-subject requests. Sub-patterns include user-attribution loss across agent boundaries, reasoning provenance gaps (the chain of thought that led to an action is not recorded), retrieved-content provenance gaps (which content shaped the decision is not traceable), and inter-agent attribution gaps.
+
+**Attack scenario**: A workflow agent in a regulated DACH financial services enterprise takes an action that affects a customer account. A subsequent inquiry, possibly an audit request or a data-subject access request, asks who decided to take that action and why. The audit trail shows the agent called specific tools at specific times with specific parameters. It does not show which user request initiated the chain, which retrieved documents shaped the agent's reasoning, or which sub-agent contributions led to the conclusion. The organization cannot demonstrate accountability or reconstruct the decision; the gap is itself a compliance and forensic failure.
+
+**Affected components**:
+- Agent runtime audit and logging
+- Reasoning trace capture (where present)
+- Retrieved-content tagging and persistence
+- User-session-to-agent-action correlation
+- Inter-agent and sub-agent audit records
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Application-level logging | Logs events; misses reasoning, retrieved content, and inter-agent context |
+| SIEM correlation | Correlates events at log granularity; cannot reconstruct agent reasoning |
+| Audit log retention | Retains what was captured; cannot fix capture gaps |
+| Compliance attestation | Attests to logging policy; does not validate provenance chain coverage |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-005 context |
+|---|---|---|
+| CTL-005 (End-to-end audit and accountability) | Primary | The control is directly designed to address audit and provenance failure |
+| CTL-001 (Identity and authorization context propagation) | Primary | User attribution in audit records requires context propagation through the agent stack |
+| CTL-002 (Tool-output and context provenance) | Primary | Provenance is the input to meaningful audit |
+
+**Control gap flag**: AGT-005 is the threat for which v1 controls are most directly designed. The principal gap is operational rather than control-level: organizations may have CTL-005 designed but lack the runtime instrumentation to capture reasoning provenance.
+
+**Residual risk**: Reasoning provenance is inherently partial; current LLM-based agents do not provide deterministic explanations of their decisions, and capturing the full causal chain is technically difficult. For high-stakes contexts, decision boundaries that require human judgment provide the only fully attributable record.
+
+**Detection maturity**: Emerging. **Mitigation maturity**: Emerging.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 12 (Record-keeping) | Logging requirements for high-risk AI systems |
+| EU AI Act | Art. 13 (Transparency) | Information about how the AI system operates |
+| EU AI Act | Art. 14 (Human oversight) | Oversight requires understanding of what the system did and why |
+| DORA | Art. 12 (Major ICT-related incidents) | Reporting requires the ability to reconstruct events |
+| GDPR | Art. 5(2) (Accountability) | Controllers must be able to demonstrate compliance |
+| GDPR | Art. 22 (Automated individual decision-making) | Data subjects' rights to explanation depend on auditable decision provenance |
+| NIS2 | Art. 21 (Cybersecurity risk-management measures) | Includes logging and incident handling |
+
+**ATLAS mapping**: Limited direct coverage; provenance failure is a cross-cutting precondition for many ATLAS techniques rather than a technique itself.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-006: Memory and Persistence Poisoning
+
+**Primary surface**: Memory and persistence
+**Secondary surfaces**: Input, Model
+
+**Description**: An agent's persistent state (long-term memory, conversation history, vector stores, user profiles) is contaminated with adversarial content that influences future decisions. Unlike traditional state corruption (which targets data integrity), memory poisoning targets the agent's behavioral integrity: the persistent state continues to look valid but biases the agent's future actions. The threat is particularly insidious because the poisoning event may be far in the past and the resulting behavior change is gradual or selective. Sub-patterns include vector-store poisoning (adversarial documents indexed for retrieval), conversation memory injection (content from one interaction influencing the agent's behavior in another), user profile manipulation (agent memory of user preferences or patterns influenced by adversarial input), and cross-session persistence of injected instructions.
+
+**Attack scenario**: A customer service agent with persistent conversation memory across sessions is contacted by a malicious user in a low-stakes interaction. The user crafts conversation that, when persisted to memory, includes content the agent will later recognize as a pattern (for example, framing the malicious user as a trusted internal contact). In a subsequent session days later, when the agent retrieves relevant memory before responding to a sensitive request, the persisted content biases its trust assessment. The agent grants requests it would have refused without the poisoned memory. No new injection occurs at the time of harm; the harm is the legacy of an earlier benign-seeming interaction.
+
+**Affected components**:
+- Vector stores and retrieval systems
+- Conversation history persistence
+- User profile and preference stores
+- Memory integrity controls
+- Session and cross-session boundary enforcement
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Database access control | Controls who can write to memory; does not constrain what content the agent itself writes |
+| Data integrity hashing | Detects tampering by external actors; does not address agent-mediated poisoning |
+| Input validation on user inputs | Validates at input time; cannot anticipate what content will be problematic when retrieved later |
+| Content filtering | Tuned for current threats; emergent semantic poisoning evades pattern matching |
+| Session isolation | Persistent memory by definition crosses sessions |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-006 context |
+|---|---|---|
+| CTL-002 (Tool-output and context provenance) | Primary | Tagging and isolating retrieved content prevents memory content from being treated as authoritative instruction |
+| CTL-005 (End-to-end audit and accountability) | Primary | Enables forensic review when poisoning is suspected |
+| CTL-003 (Action verification at high-impact boundaries) | Secondary | Provides a checkpoint when retrieved memory influences high-impact decisions |
+
+**Control gap flag**: CTL-002 was designed for tool-output provenance, not memory provenance. The principles are similar but the implementation differs. A v2 refinement might explicitly address memory and persistence as a distinct provenance domain. Memory expiration and refresh policies are not directly covered by any v1 control.
+
+**Residual risk**: Memory expiration policies reduce but do not eliminate the threat. Once content has influenced model behavior or vector embeddings, retraction is technically difficult and may be practically impossible without rebuilding the memory store.
+
+**Detection maturity**: Experimental. **Mitigation maturity**: Experimental.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 10 (Data and data governance) | Data quality and integrity for AI systems |
+| EU AI Act | Art. 15 (Robustness) | Resilience to adversarial manipulation |
+| GDPR | Art. 5(1)(d) (Accuracy) | Personal data must be accurate; poisoned profiles violate this |
+| GDPR | Art. 17 (Right to erasure) | Erasure is more complex when data has influenced model behavior or vector embeddings |
+| NIS2 | Art. 21 (Risk management) | Integrity of information systems |
+
+**ATLAS mapping**: AML.T0020 (Poison Training Data), adapted for runtime memory rather than training. Newer agentic techniques in v5.4.0 begin to address runtime memory poisoning explicitly.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-007: Inter-Agent Trust and Delegation Abuse
+
+**Primary surface**: Tool-use
+**Secondary surfaces**: Identity, Audit and provenance
+
+**Description**: When an agent delegates to another agent or coordinates with other agents, the trust model between them creates new attack surfaces. The delegating agent may treat the delegated agent's outputs as authoritative; the delegated agent may inherit broader authorization than its task requires; the chain of delegation may obscure user attribution and intent. Multi-agent systems amplify each of the other threats in this catalog because the same vulnerabilities exist at every agent boundary. Sub-patterns include excess inheritance (delegated agent inherits broader scope than the task requires), output-as-instruction (delegating agent treats delegated agent output as authoritative without independent verification), identity confusion across agents (downstream systems cannot distinguish which agent in the chain is acting), and delegation loop attacks.
+
+**Attack scenario**: A primary workflow agent in a regulated DACH financial services enterprise delegates a KYC enrichment task to a sub-agent. The sub-agent has integrations to public records, internal customer databases, and a third-party risk-scoring service. An attacker compromises the third-party service and returns crafted scoring data. The sub-agent treats this as authoritative and includes it in its response to the primary agent. The primary agent treats the sub-agent's output as authoritative (it is from a trusted internal agent) and acts on it, applying decisions to a real customer account. The chain has propagated unverified third-party output into authoritative action without any individual agent acting outside its scope.
+
+**Affected components**:
+- Inter-agent communication infrastructure
+- Agent identity and authorization at delegation boundaries
+- Output verification at receiving agents
+- Delegation chain audit
+- Third-party service integrations within sub-agents
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Service-to-service authentication | Authenticates that the agent identity is genuine; does not validate the content of the response |
+| API authorization between services | Controls what the receiving service is willing to execute; does not constrain what the calling agent treats as authoritative |
+| Sub-agent authorization scoping | Limits what the sub-agent can do; does not prevent the primary agent from over-trusting the output |
+| Network segmentation | Internal agent communication is by design within trusted boundaries |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-007 context |
+|---|---|---|
+| CTL-001 (Identity and authorization context propagation) | Primary | Ensures user context is preserved through the delegation chain |
+| CTL-002 (Tool-output and context provenance) | Primary | Tagging sub-agent outputs as content rather than instruction |
+| CTL-003 (Action verification at high-impact boundaries) | Primary | Requires verification at the primary agent before acting on sub-agent outputs in high-stakes contexts |
+| CTL-005 (End-to-end audit and accountability) | Primary | Enables traceability across the delegation chain |
+
+**Control gap flag**: All four primary v1 controls apply, but the specific inter-agent dimension (trust calibration, output verification at receiving agents, delegation chain governance) is not explicit in any single control. v2 may benefit from a dedicated inter-agent trust control.
+
+**Residual risk**: Trust calibration between agents is fundamentally difficult. Even with all four v1 controls applied, residual risk remains because the primary agent must make trust decisions about sub-agent outputs that current systems are not designed to make explicitly, third-party integrations within sub-agents create supply-chain risk, and delegation depth often exceeds what audit and verification systems were designed for. For high-stakes multi-agent workflows, human approval at delegation chain endpoints is the only fully reliable mitigation.
+
+**Detection maturity**: Experimental. **Mitigation maturity**: Experimental.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 14 (Human oversight) | Multi-agent chains amplify the oversight challenge |
+| EU AI Act | Art. 15 (Cybersecurity) | Resilience requirements apply to the full system, including inter-agent boundaries |
+| DORA | Art. 28 to 30 (Third-party risk) | When sub-agents integrate third-party services, third-party risk management applies |
+| GDPR | Art. 5(2) (Accountability) | Accountability through delegation chains requires audit traceability |
+| NIS2 | Art. 21 (Risk management) | Includes supply chain security relevant to multi-agent dependencies |
+
+**ATLAS mapping**: Newer agentic techniques in v5.4.0 onward include inter-agent attack patterns; specific mappings to be reviewed as ATLAS expands.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-008: Output-Channel Injection
+
+**Primary surface**: Output
+**Secondary surfaces**: Tool-use
+
+**Description**: An agent's outputs are crafted in ways that exploit the systems that consume them. Where AGT-001 covers content entering the agent, AGT-008 covers content leaving the agent and being interpreted as instruction by downstream systems. Common downstream systems that misinterpret agent output include shell command interpreters, SQL query engines, email and messaging systems that render content, ticketing systems that auto-process structured fields, and other agents that consume the output as input. Sub-patterns include command injection through agent-generated commands, structured-output manipulation (JSON, XML, YAML constructed in ways that exploit downstream parsers), rendered-output exploitation (HTML, markdown, or rich text that includes payloads when rendered), and downstream agent injection.
+
+**Attack scenario**: A developer copilot agent in a regulated enterprise is asked to generate a deployment script based on an open-source library's documentation. The documentation, which the agent retrieves via its web-fetch tool, contains crafted text that the agent reproduces in the generated script. When the script is executed by an automated CI pipeline, the embedded command exploits the shell environment. The agent's output is exactly what was requested (a script based on the documentation) and the content is faithful to its source. The harm is in the downstream interpretation of agent output as executable instruction.
+
+**Affected components**:
+- Agent output rendering and serialization
+- Downstream systems that consume agent output (shells, parsers, renderers, other agents)
+- Output sanitization layers
+- Content type negotiation between agent and downstream systems
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Input sanitization at downstream systems | Should be present, frequently is not, and shifts responsibility to systems that may not anticipate agent-generated input |
+| Output encoding by the agent | Helpful but agents construct novel outputs that may evade specific encoding rules |
+| Web Application Firewalls | Tuned for known attack patterns; agent-generated content can evade pattern matching |
+| Code review of agent-generated code | Possible for human-reviewed code; not feasible for autonomous agent loops |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-008 context |
+|---|---|---|
+| CTL-003 (Action verification at high-impact boundaries) | Primary | Requires verification before agent output triggers downstream execution |
+| CTL-002 (Tool-output and context provenance) | Primary | Provenance tagging helps downstream systems treat agent output appropriately |
+| CTL-004 (Authorization-aware output filtering) | Partial | Addresses content authorization; less direct on syntactic exploits in output structure |
+
+**Control gap flag**: Output sanitization for syntactic exploits is not directly covered by v1 controls. CTL-004 addresses content authorization but not output structure. A v2 control around output sanitization and downstream-aware encoding may be warranted.
+
+**Residual risk**: Output-channel injection inherits the broader problem of cross-system trust. Even with sanitization, novel attack patterns continue to emerge. Agent-generated content should be treated as untrusted input by downstream systems. Where downstream systems cannot enforce that discipline, human review at the agent-output-to-downstream-system boundary is the only fully reliable mitigation.
+
+**Detection maturity**: Emerging. **Mitigation maturity**: Emerging.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 15 (Cybersecurity) | Resilience to manipulation of system output |
+| NIS2 | Art. 21 (Risk management) | Technical and organizational measures |
+| DORA | Art. 6 to 8 (ICT risk management) | Operational resilience including output integrity |
+| GDPR | Art. 32 (Security of processing) | Where output exploitation results in unauthorized data access or processing |
+
+**ATLAS mapping**: AML.T0048 (Backdoor ML Model) is adjacent for the case where agent output behavior is shaped maliciously. Direct technique mappings for output injection are limited as of v5.4.0.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-009: Goal Subversion via Context Manipulation
+
+**Primary surface**: Model
+**Secondary surfaces**: Input, Memory and persistence
+
+**Description**: The agent's stated goal or task is subverted through manipulation of its operating context, even when no traditional prompt injection is present. The model's interpretation of what it should be doing drifts from the user's actual intent due to ambiguous instructions, conflicting context elements, accumulated session state, or the model's own emergent goal-pursuit behavior. Where AGT-001 covers explicit injection, AGT-009 covers subtler corruptions of the agent's goal that emerge from legitimate inputs. Sub-patterns include goal drift in long-running sessions, conflicting context resolution (the agent reconciles conflicting signals in ways the user did not anticipate), instrumental goal pursuit (the agent pursues sub-goals that exceed the scope of the original task), and emergent misalignment.
+
+**Attack scenario**: A research analysis agent in a regulated DACH financial services enterprise is asked to "produce a comprehensive analysis of customer Schmidt's risk profile." The agent interprets "comprehensive" expansively, retrieves data from sources not strictly necessary, makes inferences about the customer's behavior that exceed the analytical mandate, and presents conclusions that the user neither requested nor expected. No malicious actor was involved. The agent's goal pursuit produced an analytical product that is more invasive than the task required. The user cannot easily articulate what went wrong because the agent did exactly what was asked, just more thoroughly.
+
+**Affected components**:
+- Agent reasoning layer
+- System prompt and instruction architecture
+- Session state and context management
+- Goal-clarification mechanisms
+- Output review
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Instruction tuning of the underlying model | Reduces but does not eliminate goal drift |
+| System prompts | Constrain general behavior but cannot anticipate every task-specific drift |
+| Output filtering | Addresses content but not goal-pursuit scope |
+| Session context limits | Reduce the surface for context-driven drift but do not address it structurally |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-009 context |
+|---|---|---|
+| CTL-003 (Action verification at high-impact boundaries) | Primary | Requires verification when the agent's actions exceed expected scope |
+| CTL-005 (End-to-end audit and accountability) | Primary | Enables review of how the agent interpreted its goal |
+| CTL-002 (Tool-output and context provenance) | Secondary | Provenance helps trace which context elements influenced the goal interpretation |
+
+**Control gap flag**: Goal subversion is genuinely hard to address with technical controls. The v1 controls provide partial coverage but the structural problem (agent reasoning may be opaque and emergent) is not solvable at the control level alone. Organizational controls (clear task scoping, output review processes, escalation criteria) are essential complements.
+
+**Residual risk**: Significant. Goal subversion is one of the most fundamental open problems in AI alignment. Technical controls and organizational processes reduce but cannot eliminate the threat. Organizations should treat agent goal pursuit as a structurally bounded capability, with human review at scope boundaries for high-stakes contexts. The honest position is that current LLM-based agents are not reliably aligned to human intent at fine granularity, and security programs should design assuming this.
+
+**Detection maturity**: Experimental. **Mitigation maturity**: Experimental.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 9 (Risk management) | Goal drift is a risk class requiring management |
+| EU AI Act | Art. 14 (Human oversight) | Oversight is the primary mitigation when technical controls cannot fully prevent goal drift |
+| EU AI Act | Art. 15 (Robustness) | Stability under varied inputs and contexts |
+| GDPR | Art. 5(1)(b) (Purpose limitation) | Processing must be for specified purposes; goal drift can violate this |
+| GDPR | Art. 5(1)(c) (Data minimization) | Goal drift often correlates with retrieving more data than necessary |
+| GDPR | Art. 25 (Data protection by design) | Design must consider goal drift, not only intended use |
+
+**ATLAS mapping**: Limited direct technique coverage; emerging area as ATLAS expands its agentic catalog.
+
+**Realistic example**: To be populated.
+
+---
+
+### AGT-010: Resource Exhaustion via Agent Loops
+
+**Primary surface**: Tool-use
+**Secondary surfaces**: Model, Output
+
+**Description**: An agent enters a loop of tool invocations, model calls, or self-prompting that consumes resources at a rate beyond intended operation. The loop may be triggered by adversarial input, ambiguous task specification, or emergent agent behavior. Resource exhaustion includes not only computational and financial cost but also rate-limit consumption against downstream services, reputational impact (the agent appearing to spam or harass external systems), and operational impact (the agent saturating queues that other workflows depend on). Sub-patterns include tool-call loops, self-reflection loops (the agent prompts itself in cycles without termination), retry escalation, and adversarial loop induction.
+
+**Attack scenario**: A workflow agent in a regulated DACH financial services enterprise is asked to "verify customer details and resolve any inconsistencies." The verification tool returns an inconsistency. The agent attempts a resolution, which produces a different inconsistency. The agent loops, each iteration consuming model calls, tool calls to the verification service, and writes to the audit log. The loop is detected only when the audit log fills disk, alerting on infrastructure rather than on agent behavior. By that time, the agent has incurred substantial costs against the LLM provider and has saturated rate limits on the verification service, affecting other workflows.
+
+**Affected components**:
+- Agent runtime loop control
+- Model invocation cost and quota management
+- Tool-call rate limiting
+- Audit and observability infrastructure (which can become collateral damage)
+- Downstream service quotas
+
+**Traditional controls and why insufficient**:
+
+| Traditional control | Why insufficient |
+|---|---|
+| Rate limiting on tool calls | Limits velocity per tool but may not address agent-driven multi-tool loops |
+| Cost quotas on model invocations | Helpful but typically discovered after the fact |
+| Timeout policies | Often configured per call rather than per session or per task |
+| Resource monitoring and alerting | Detects exhaustion after it has occurred |
+| Circuit breakers | Helpful in microservice patterns; less commonly applied to agent loops |
+
+**Recommended controls**:
+
+| Control ID | Role for this threat | Brief description in the AGT-010 context |
+|---|---|---|
+| CTL-003 (Action verification at high-impact boundaries) | Primary | High cumulative resource consumption is itself a high-impact action |
+| CTL-005 (End-to-end audit and accountability) | Secondary | Enables review of loop patterns |
+| CTL-001 (Identity and authorization context propagation) | Secondary | Limits which user contexts can cause uncontrolled loops |
+
+**Control gap flag**: v1 controls partially address resource exhaustion but specific loop-prevention patterns (iteration limits, convergence checks, cost budgets per task, anomaly detection on agent action rates) are not explicit. A v2 control around agent runtime resource governance may be warranted.
+
+**Residual risk**: Loop prevention reduces but does not eliminate the threat. Sophisticated adversarial inputs may still trigger loops within configured limits, and emergent agent behavior may produce loops that limits did not anticipate. For high-stakes or high-cost agent workflows, hard caps on cumulative resource consumption per task and human review at threshold boundaries are essential.
+
+**Detection maturity**: Emerging. **Mitigation maturity**: Emerging.
+
+**Regulatory hooks**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 15 (Robustness) | System must operate reliably without resource exhaustion |
+| DORA | Art. 6 to 8 (ICT risk management) | Operational resilience including capacity management |
+| NIS2 | Art. 21 (Risk management) | Availability and resilience |
+
+**ATLAS mapping**: Limited direct coverage; resource exhaustion is partially covered by general denial-of-service techniques in ATLAS.
+
+**Realistic example**: To be populated.
