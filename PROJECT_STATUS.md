@@ -29,7 +29,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Phase 1: Strategy and scaffolding | Define scope, audience, structure, set up repository | Done |
 | Phase 2: Threat model | Frame threats, draft all 10 entries | In progress (2 of 10 fully populated, 8 of 10 compressed drafts committed; realistic examples deferred) |
 | Phase 3: Control library | Frame v1 library, draft entries | Done (5 of 5 fully populated; v1 control library complete) |
-| Phase 4: Document drafting | Write all 9 sections of the practitioner guide | In progress (sections 1, 5, 6, and 8 drafted; sections 2, 3, 4, 7, 9 not started) |
+| Phase 4: Document drafting | Write all 9 sections of the practitioner guide | In progress (sections 1, 2, 5, 6, and 8 drafted; sections 3, 4, 7, 9 not started) |
 | Phase 5: Regulatory crosswalk | Surface the regulatory mapping as a primary artifact | Partial (regulatory hooks accumulated through threats and controls) |
 | Phase 6: Web tool | Build the multi-entry-point navigator | Not started |
 | Phase 7: Vendor mapping interface | Define contribution schema and process | Deferred (until controls library is mature) |
@@ -90,7 +90,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Section | Status |
 |---|---|
 | 1. Executive summary | Drafted (section file and canonical document populated) |
-| 2. Scope and disclaimer | Not started |
+| 2. Scope and disclaimer | Drafted (section file and canonical document populated) |
 | 3. Regulatory landscape | Not started |
 | 4. Common-control crosswalk | Not started |
 | 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
@@ -164,7 +164,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Threat catalog completeness | 2 of 10 fully populated; 8 of 10 committed as compressed drafts (realistic examples deferred); structural completeness reached at the exemplar level |
 | Control library completeness | 5 of 5 fully populated; v1 control library complete |
 | v2 framework reframe | Applied |
-| Document drafting | Sections 1, 5, 6, and 8 drafted; sections 2, 3, 4, 7, 9 not started |
+| Document drafting | Sections 1, 2, 5, 6, and 8 drafted; sections 3, 4, 7, 9 not started |
 | Web tool | Not started |
 | Public visibility | Deferred until foundation is more mature |
 
@@ -176,7 +176,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Option | What it produces | Recommendation |
 |---|---|---|
-| A. Draft practitioner guide sections 2 (Scope and disclaimer), 3 (Regulatory landscape), 4 (Common-control crosswalk), 7 (Implementation considerations), 9 (References) | Remaining unwritten sections of the practitioner guide | Recommended next: sections 1, 5, 6, and 8 are drafted; closing the remaining sections gives a complete v1 document |
+| A. Draft practitioner guide sections 3 (Regulatory landscape), 4 (Common-control crosswalk), 7 (Implementation considerations), 9 (References) | Remaining unwritten sections of the practitioner guide | Recommended next: sections 1, 2, 5, 6, and 8 are drafted; closing the remaining sections gives a complete v1 document |
 | B. Populate realistic examples for AGT-003 through AGT-010 | Threat catalog reaches parity with AGT-001 and AGT-002 | Strong parallel work to section drafting |
 | C. Begin regulatory mapping framework | Surfaces the regulatory crosswalk as a primary artifact | Natural feeder into section 4 once sections 2 and 3 are stable |
 | D. Plan the web tool | Multi-entry-point navigator scoped against the now-stable schema | Defer until practitioner guide is closer to v1 publishable |
