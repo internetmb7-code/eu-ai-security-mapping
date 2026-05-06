@@ -430,7 +430,7 @@
       "control_id": "CTL-004",
       "threat_id": "AGT-002",
       "relationship": "primary",
-      "rationale": "Authorization-aware output filtering: even when an agent retrieves data using broader authorization, output to the user is filtered to what the user is independently authorized to see"
+      "rationale": "Closes the gap between agent retrieval authorization and user output authorization, directly addressing the deputy pattern"
     },
     {
       "control_id": "CTL-005",
@@ -466,7 +466,7 @@
       "control_id": "CTL-004",
       "threat_id": "AGT-004",
       "relationship": "primary",
-      "rationale": "Authorization-aware output filtering: ensures the filtering boundary is the user authorization rather than the channel"
+      "rationale": "The central defense against agent outputs disclosing more than the user is authorized to receive"
     },
     {
       "control_id": "CTL-001",
@@ -555,8 +555,8 @@
     {
       "control_id": "CTL-004",
       "threat_id": "AGT-008",
-      "relationship": "partial",
-      "rationale": "Authorization-aware output filtering: addresses content authorization; less direct on syntactic exploits in output structure"
+      "relationship": "secondary",
+      "rationale": "Filtering content authorization is partial defense against output-injection where the injection includes unauthorized content"
     },
     {
       "control_id": "CTL-003",
@@ -723,11 +723,6 @@
     }
   ],
   "control_placeholders": [
-    {
-      "control_id": "CTL-004",
-      "status": "stub",
-      "note": "Authorization-aware output filtering; full population deferred to a later session"
-    },
     {
       "control_id": "CTL-005",
       "status": "stub",
