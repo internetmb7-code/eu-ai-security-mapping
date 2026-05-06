@@ -28,7 +28,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 |---|---|---|
 | Phase 1: Strategy and scaffolding | Define scope, audience, structure, set up repository | Done |
 | Phase 2: Threat model | Frame threats, draft all 10 entries | In progress (2 of 10 fully populated, 8 of 10 compressed drafts committed; realistic examples deferred) |
-| Phase 3: Control library | Frame v1 library, draft entries | In progress (3 of 5 fully populated, 2 stubs) |
+| Phase 3: Control library | Frame v1 library, draft entries | In progress (4 of 5 fully populated, 1 stub) |
 | Phase 4: Document drafting | Write all 9 sections of the practitioner guide | Not started |
 | Phase 5: Regulatory crosswalk | Surface the regulatory mapping as a primary artifact | Partial (regulatory hooks accumulated through threats and controls) |
 | Phase 6: Web tool | Build the multi-entry-point navigator | Not started |
@@ -82,7 +82,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | CTL-001 | Identity and authorization context propagation | Fully populated, committed |
 | CTL-002 | Tool-output and context provenance | Fully populated, committed |
 | CTL-003 | Action verification at high-impact boundaries | Fully populated, committed |
-| CTL-004 | Authorization-aware output filtering | Stub only |
+| CTL-004 | Authorization-aware output filtering | Fully populated, committed |
 | CTL-005 | End-to-end audit and accountability | Stub only |
 
 ### Practitioner guide sections (9 sections total)
@@ -94,7 +94,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | 3. Regulatory landscape | Not started |
 | 4. Common-control crosswalk | Not started |
 | 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
-| 6. Recommended controls | Partially populated (CTL-001, CTL-002, and CTL-003 inserted; CTL-004 and CTL-005 forthcoming) |
+| 6. Recommended controls | Partially populated (CTL-001, CTL-002, CTL-003, and CTL-004 inserted; CTL-005 forthcoming) |
 | 7. Implementation considerations | Not started |
 | 8. Gaps and open problems | Not started |
 | 9. References | Not started |
@@ -104,7 +104,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | File | Status |
 |---|---|
 | `data/threats.json` | All 10 threats present: AGT-001 and AGT-002 fully populated; AGT-003 through AGT-010 as compressed drafts (status: `compressed_draft`, `realistic_example_status: to_be_populated`) |
-| `data/controls.json` | CTL-001, CTL-002, and CTL-003 populated; CTL-004 and CTL-005 as stubs |
+| `data/controls.json` | CTL-001, CTL-002, CTL-003, and CTL-004 populated; CTL-005 as stub |
 | `data/mappings.json` | Bidirectional mappings for all 10 threats against CTL-001 to CTL-005 (56 threat-to-requirement entries, 33 control-to-threat entries, 25 threat-to-threat entries) |
 | `data/regulations/` | Source regulation texts not yet collected |
 | `data/vendor-mappings/` | Folder structure exists; no contributions yet (deferred) |
@@ -160,9 +160,9 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Element | Status |
 |---|---|
-| Foundation | Solid: framework documents done, 2 threats fully populated, 8 threats committed as compressed drafts, 3 controls fully populated |
+| Foundation | Solid: framework documents done, 2 threats fully populated, 8 threats committed as compressed drafts, 4 controls fully populated |
 | Threat catalog completeness | 2 of 10 fully populated; 8 of 10 committed as compressed drafts (realistic examples deferred); structural completeness reached at the exemplar level |
-| Control library completeness | 3 of 5 fully populated, 2 stubs |
+| Control library completeness | 4 of 5 fully populated, 1 stub |
 | v2 framework reframe | Applied |
 | Document drafting | Not started |
 | Web tool | Not started |

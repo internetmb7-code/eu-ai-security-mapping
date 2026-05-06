@@ -67,7 +67,7 @@ This section presents a coarse-grained v1 control library of 10 to 15 controls o
 
 The methodology, per-control template, taxonomy, and consolidation rules are documented in `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md`. That framework is the authoritative reference for how the library is structured and how new controls are added or refined. This section presents the controls themselves; the framework explains why they look the way they do.
 
-The current v1 library status: CTL-001, CTL-002, and CTL-003 are fully populated (presented below). CTL-004 and CTL-005 are reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
+The current v1 library status: CTL-001, CTL-002, CTL-003, and CTL-004 are fully populated (presented below). CTL-005 is reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
 
 ### CTL-001: Identity and Authorization Context Propagation
 
@@ -328,13 +328,106 @@ The control extends to composed actions. A sequence of low-impact actions that t
 - EU AI Act, Article 14 (Human oversight), as the regulatory anchor for human-in-the-loop verification at high-impact boundaries
 - DORA, Articles 6 to 9, for ICT risk management and identification of critical functions requiring proportionate verification
 
-### CTL-004 and CTL-005: forthcoming
+### CTL-004: Authorization-Aware Output Filtering
 
-The following entries are reserved with title and domain assigned. Full population is deferred to subsequent sessions.
+**Domain**: Data
+**Function**: Preventive
+**Maturity**: Emerging
+
+**Description**: Agent outputs are filtered against the requesting user's authorization context before delivery, regardless of what the agent retrieved. The control closes the gap between agent retrieval scope and user authorization. Even when an agent has retrieved data using broader privileges than the user holds (a common operational reality), the output the user receives is constrained to what they are independently authorized to see.
+
+The control operates at the output boundary, downstream of agent reasoning. It is structurally distinct from retrieval authorization: retrieval determines what the agent can read, output filtering determines what the user can see. Both are needed because in many enterprise deployments the agent must read broadly to perform its task, but users served by the agent have differentiated authorization.
+
+**Implementation pattern**: After the agent has composed its proposed response and before delivery to the user, an output filter applies the user authorization context to the response. The filter has access to the user identity, the user's authorization claims (roles, group memberships, tenant, sensitivity clearances), and the data sources or content elements that contributed to the response.
+
+Three implementation styles are common:
+
+| Style | How it works |
+|---|---|
+| Source-based filtering | Each content element in the proposed output is tagged with its source; the filter removes elements from sources the user is not authorized to access |
+| Attribute-based filtering | Output content is classified at filter time (PII type, sensitivity level, regulatory category); the filter compares classifications against user authorization and redacts non-authorized content |
+| Hybrid filtering | Source tags provide the primary signal; attribute-based filtering catches inferential disclosure where source attribution is insufficient |
+
+The filter must handle three distinct disclosure modes: direct quotation (content from a non-authorized source appears verbatim, which source-based filtering catches reliably); paraphrase or summary (content is rephrased but conveys the same protected information, which source-based filtering may miss and attribute-based filtering may catch); and inferential disclosure (content composed from authorized sources reveals protected information through inference, for example aggregating individually permitted records into a profile that would not have been permitted directly; both filtering styles struggle here, and this is where CTL-004 has known limits).
+
+For high-stakes deployments, the filter extends to non-user-facing output channels: log entries, telemetry, audit records, and persistence to memory or vector stores. Output filtering at the user boundary alone is insufficient if the same content reaches other systems unfiltered.
+
+**Operational considerations**:
+
+| Consideration | Description |
+|---|---|
+| Performance overhead | Output filtering adds latency, typically 20 to 100 ms per response depending on filter complexity; cumulative for streaming or multi-turn responses |
+| User context dependency | Filtering requires the user authorization context to be available at the output boundary; if CTL-001 is not implemented, the filter has insufficient information |
+| Inferential disclosure limits | Current filtering technology cannot reliably detect when a paraphrased or composed response reveals protected information; this is a known limit, not an implementation defect |
+| Content classification accuracy | Attribute-based filtering depends on classifiers (PII detectors, sensitivity classifiers); their accuracy varies and false negatives produce real disclosure |
+| Channel coverage | Filtering only the user-facing channel leaves logs, telemetry, audit records, and persisted state unfiltered; full coverage requires deliberate channel inventory |
+| Authorization model complexity | Enterprises with role-based, attribute-based, or relationship-based authorization need filter logic that mirrors the production authorization model; mismatches produce inconsistent behavior |
+| Streaming output | Real-time streaming responses are harder to filter than complete responses; partial filtering during streaming risks revealing protected content before the filter completes |
+
+**Common failure modes**:
+
+| Failure mode | Description |
+|---|---|
+| Filtering only direct quotes | The filter catches verbatim disclosure but misses paraphrase and summary; the agent reveals protected information in its own words |
+| Inference leaks | Composed responses reveal protected information through inference even when no individual content element is unauthorized |
+| Channel bypass | Output filtering applies to the user response but logs, telemetry, audit records, or persistence include the unfiltered content |
+| User context unavailable at filter time | The filter runs but cannot evaluate authorization because the user identity or claims were not propagated; the filter fails open or fails closed inconsistently |
+| Classifier false negatives | Attribute-based filters miss content the classifier was not trained for; novel sensitive categories evade detection |
+| Authorization model drift | Filter logic was implemented against a production authorization model; the production model evolves but the filter logic does not |
+| Permission-denied notice as oracle | When the filter redacts content, the resulting permission-denied notice itself reveals that protected content existed; this can be a disclosure in regulated contexts |
+
+**Threats addressed**: AGT-002 (primary), AGT-004 (primary), AGT-008 (secondary).
+
+**Regulatory basis**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| GDPR | Art. 5(1)(c) | Data minimization; the regulatory anchor for output filtering as a data protection principle |
+| GDPR | Art. 25 | Data protection by design and by default; design-level requirement to filter outputs to the minimum necessary |
+| GDPR | Art. 32 | Security of processing; technical measures including access control at output |
+| EU AI Act | Art. 10 | Data and data governance; output filtering enforces data governance at the agent output boundary |
+| EU AI Act | Art. 15 | Cybersecurity; filtering reduces unauthorized disclosure as a security outcome |
+| NIS2 | Art. 21 | Cybersecurity risk-management measures; output filtering is a structural confidentiality control |
+| DORA | Art. 6 to 8 | ICT risk management; operational resilience including confidentiality controls at agent output |
+
+**Existing standard mappings**:
+
+| Standard | Control ID | Relationship |
+|---|---|---|
+| NIST SP 800-53 Rev. 5 | AC-3 (Access Enforcement) | Refinement: AC-3 establishes access enforcement; CTL-004 extends enforcement to the output boundary as a distinct point of control |
+| NIST SP 800-53 Rev. 5 | AC-21 (Information Sharing) | Refinement: information-sharing decisions enforced at the agent output boundary |
+| NIST SP 800-53 Rev. 5 | SC-8 (Transmission Confidentiality and Integrity) | Adjacent: confidentiality of transmission extended to filtering of agent outputs |
+| NIST SP 800-53 Rev. 5 | SI-15 (Information Output Filtering) | Direct equivalent: SI-15 is specifically about output filtering; CTL-004 is its application to agent runtimes |
+| ISO 27001 Annex A | A.5.10 (Acceptable use of information) | Refinement: acceptable use enforced at the output boundary of agent systems |
+| ISO 27001 Annex A | A.8.12 (Data leakage prevention) | Refinement: data leakage prevention applied to agent-mediated output |
+| BSI grundschutz | CON.6 (Löschen und Vernichten von Daten) | Adjacent: data minimization principles extended to output filtering |
+| BSI grundschutz | CON.2 (Datenschutz) | Refinement: data protection principles applied to agent output |
+
+**Related controls**:
+
+| Control | Relationship |
+|---|---|
+| CTL-001 (Identity and authorization context propagation) | Dependent: filter operation requires the user authorization context that CTL-001 propagates; without CTL-001, the filter has insufficient information |
+| CTL-002 (Tool-output and context provenance) | Complementary: provenance metadata helps the filter identify which content elements came from which sources for source-based filtering |
+| CTL-005 (End-to-end audit and accountability) | Complementary: filter decisions (what was filtered, why, for whom) are themselves auditable events that CTL-005 captures |
+
+**References**:
+
+- NIST SP 800-53 Rev. 5, controls AC-3, AC-21, SC-8, SI-15
+- NIST SP 800-122, Guide to Protecting the Confidentiality of Personally Identifiable Information
+- ISO/IEC 27001:2022, Annex A controls A.5.10 and A.8.12
+- ISO/IEC 27018:2019, Code of practice for protection of personally identifiable information in public clouds
+- BSI IT-Grundschutz-Kompendium, Bausteine CON.2 and CON.6
+- GDPR, Article 5(1)(c) (Data minimization), as the regulatory anchor for output filtering as a data protection principle
+- GDPR, Article 25 (Data protection by design and by default), for design-level requirement to filter outputs to the minimum necessary
+- GDPR, Article 32 (Security of processing), for technical measures including access control at output
+
+### CTL-005: forthcoming
+
+The following entry is reserved with title and domain assigned. Full population is deferred to subsequent sessions.
 
 | ID | Title | Domain | Function | Status |
 |---|---|---|---|---|
-| CTL-004 | Authorization-aware output filtering | Data | Preventive | Stub |
 | CTL-005 | End-to-end audit and accountability | Audit and accountability | Detective | Stub |
 
 ## 7. Implementation Considerations
