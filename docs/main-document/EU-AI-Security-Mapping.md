@@ -67,7 +67,7 @@ This section presents a coarse-grained v1 control library of 10 to 15 controls o
 
 The methodology, per-control template, taxonomy, and consolidation rules are documented in `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md`. That framework is the authoritative reference for how the library is structured and how new controls are added or refined. This section presents the controls themselves; the framework explains why they look the way they do.
 
-The current v1 library status: CTL-001, CTL-002, CTL-003, and CTL-004 are fully populated (presented below). CTL-005 is reserved with title and domain assigned and full population deferred to subsequent sessions. CTL-006 through CTL-015 are reserved IDs that will be populated as the remaining threats (AGT-003 through AGT-010) are drafted.
+The current v1 library status: CTL-001, CTL-002, CTL-003, CTL-004, and CTL-005 are all fully populated (presented below). The v1 control library is complete at five controls. CTL-006 through CTL-015 are reserved IDs that will be populated in v2 as the library expands beyond the initial five.
 
 ### CTL-001: Identity and Authorization Context Propagation
 
@@ -422,13 +422,114 @@ For high-stakes deployments, the filter extends to non-user-facing output channe
 - GDPR, Article 25 (Data protection by design and by default), for design-level requirement to filter outputs to the minimum necessary
 - GDPR, Article 32 (Security of processing), for technical measures including access control at output
 
-### CTL-005: forthcoming
+### CTL-005: End-to-End Audit and Accountability
 
-The following entry is reserved with title and domain assigned. Full population is deferred to subsequent sessions.
+**Domain**: Audit and accountability
+**Function**: Detective, Corrective
+**Maturity**: Emerging (operational logs); Experimental (reasoning provenance)
 
-| ID | Title | Domain | Function | Status |
-|---|---|---|---|---|
-| CTL-005 | End-to-end audit and accountability | Audit and accountability | Detective | Stub |
+**Description**: Every agent action is traceable to the originating user, the agent involved, the delegation chain (where applicable), the data and context that informed the decision, and the authorization basis on which the action was taken. The control enables forensic review, regulatory reporting, accountability for agent-mediated harm, and the detection of patterns that span multiple actions or users.
+
+The control is detective and corrective rather than preventive: it does not stop bad things from happening, but it makes them visible after the fact and provides the basis for remediation. In agent contexts this matters more than in traditional systems because agent behavior is emergent and individual actions may look benign in isolation. Without end-to-end audit, organizations cannot answer fundamental accountability questions when something goes wrong.
+
+The control distinguishes itself from traditional logging by capturing five dimensions of provenance simultaneously: who initiated the action (user attribution), what acted (agent attribution including delegation chain), what informed the decision (context provenance, retrieved data, instructions), what reasoning produced the action (model reasoning where available), and on what authority (authorization basis).
+
+**Implementation pattern**: Audit records are structured to capture the full provenance chain for each agent action. A typical record includes:
+
+| Dimension | What is captured |
+|---|---|
+| User attribution | Verified user identity, session identifier, authentication method, request that initiated the chain |
+| Agent attribution | Agent service identity, agent version or model identifier, delegation chain if multiple agents are involved |
+| Context provenance | Tools invoked, tool outputs received with their provenance metadata (from CTL-002), retrieved documents with version or revision identifiers, system prompts active at the time |
+| Decision provenance | Model reasoning where available (chain-of-thought, tool selection rationale), policy decisions consulted, alternative paths considered |
+| Authorization basis | The user authorization context that applied (from CTL-001), the verification that occurred at action boundaries (from CTL-003), the output filter decisions that were made (from CTL-004) |
+| Action and outcome | The action taken, the system that received it, the result, and any downstream effects |
+
+Records are correlated across systems through consistent identifiers: session ID, request ID, agent invocation ID, tool call ID. Without correlation, forensic reconstruction becomes prohibitively expensive.
+
+For high-stakes deployments, audit extends to memory and persistence operations: every write to memory or vector stores is logged with the user, agent, and context that produced it, enabling later investigation when persisted content influences subsequent agent behavior.
+
+The control acknowledges a fundamental limit: model reasoning provenance is partially opaque. Current LLMs do not produce reliable, deterministic explanations of their own decisions. Audit records should capture what reasoning the model emitted (where it produces chain-of-thought) but should not fabricate reasoning where none was emitted. This is a documented limit, not an implementation defect.
+
+**Operational considerations**:
+
+| Consideration | Description |
+|---|---|
+| Log volume | Provenance-rich records are substantially larger than traditional application logs; storage costs grow accordingly, often by an order of magnitude |
+| SIEM ingestion cost | Most enterprise SIEMs are priced by ingestion volume; agent audit records compound the cost |
+| Correlation infrastructure | Cross-system correlation requires consistent identifier propagation, which often requires retrofit of existing logging infrastructure |
+| Reasoning provenance limits | Where the model does not emit reasoning, the audit record cannot synthesize it; this must be documented honestly rather than papered over |
+| Retention policy alignment | Regulatory retention requirements (GDPR data subject rights, DORA incident reconstruction, sector-specific audit retention) drive retention, not internal preference |
+| Privacy of audit records | Audit records often contain personal data and sensitive content; the audit infrastructure itself becomes a high-value target requiring its own access control |
+| Detection at scale | Surfacing useful patterns from agent audit volumes requires detection rules tuned for agent behavior, which most enterprise SOC tooling does not yet have |
+| Real-time vs batch | Real-time logging affects performance; batch logging risks loss during incidents; deployments must choose deliberately |
+
+**Common failure modes**:
+
+| Failure mode | Description |
+|---|---|
+| Logs fragmented across systems | Each component logs to its own destination with no common correlation key; reconstruction requires manual joins that are infeasible at scale |
+| User attribution lost when CTL-001 is not implemented | Logs record the agent acted but cannot link to the originating user; accountability is broken at the foundation |
+| Reasoning provenance fabricated | Implementations that synthesize plausible-sounding reasoning when the model did not emit any; gives false confidence in interpretability |
+| Retention policies inconsistent with regulatory requirements | Logs are retained per IT policy rather than per regulatory obligation; data subject rights or incident-reconstruction requests cannot be fulfilled |
+| Memory and persistence operations not audited | Direct user-facing actions are logged but writes to vector stores or long-term memory are not; later investigation cannot trace influence back to origin |
+| Audit records exposed | Logs are stored without access control proportionate to their content; the audit infrastructure becomes a privacy or security incident in itself |
+| Detection rules absent | Logs exist but no detection logic surfaces patterns; audit becomes forensic-only, not preventive |
+| Volume-induced sampling | Cost pressures lead to sampling that breaks reconstruction integrity; sampling must be deliberate and documented, not silent |
+
+**Threats addressed**: AGT-005 (primary), AGT-001 (secondary), AGT-002 (secondary), AGT-003 (secondary), AGT-006 (secondary), AGT-007 (secondary), AGT-009 (secondary), AGT-010 (secondary).
+
+**Regulatory basis**:
+
+| Regulation | Article or section | Relevance |
+|---|---|---|
+| EU AI Act | Art. 12 | Record-keeping; AI-specific logging requirements applicable to high-risk systems |
+| EU AI Act | Art. 13 | Transparency; the information-about-system-operation requirement that audit supports |
+| GDPR | Art. 5(2) | Accountability; the foundational requirement that audit enables |
+| GDPR | Art. 30 | Records of processing activities; formal record-keeping obligation that overlaps with agent audit |
+| NIS2 | Art. 21 | Cybersecurity risk-management measures; logging and monitoring as structural controls |
+| NIS2 | Art. 23 | Incident reporting; reporting obligations depend on audit data being available |
+| DORA | Art. 12 | Major ICT-related incidents; regulatory anchor for incident reconstruction obligations |
+| DORA | Art. 17 to 19 | ICT-related incident management, classification, and reporting; all depend on audit |
+
+**Existing standard mappings**:
+
+| Standard | Control ID | Relationship |
+|---|---|---|
+| NIST SP 800-53 Rev. 5 | AU-2 (Event Logging) | Refinement: event logging extended to agent actions and decisions |
+| NIST SP 800-53 Rev. 5 | AU-3 (Content of Audit Records) | Refinement: audit content extended to capture user, agent, context, and reasoning provenance |
+| NIST SP 800-53 Rev. 5 | AU-6 (Audit Record Review, Analysis, and Reporting) | Refinement: review extended to agent-specific patterns |
+| NIST SP 800-53 Rev. 5 | AU-9 (Protection of Audit Information) | Refinement: audit protection acknowledging audit records contain sensitive agent context |
+| NIST SP 800-53 Rev. 5 | AU-12 (Audit Record Generation) | Refinement: record generation across agent runtime, tools, model invocations, and persistence |
+| NIST SP 800-53 Rev. 5 | IR-4 (Incident Handling) | Adjacent: incident handling depends on the audit data CTL-005 produces |
+| ISO 27001 Annex A | A.8.15 (Logging) | Refinement: logging extended to agent provenance |
+| ISO 27001 Annex A | A.8.16 (Monitoring activities) | Refinement: monitoring extended to agent behavior patterns |
+| ISO 27001 Annex A | A.5.28 (Collection of evidence) | Refinement: evidence collection extended to agent reasoning and provenance |
+| BSI grundschutz | OPS.1.1.5 (Protokollierung) | Refinement: logging principles extended to agent runtime |
+| BSI grundschutz | DER.1 (Detektion von sicherheitsrelevanten Ereignissen) | Refinement: detection extended to agent-specific patterns |
+
+**Related controls**:
+
+| Control | Relationship |
+|---|---|
+| CTL-001 (Identity and authorization context propagation) | Dependent: user attribution in audit records requires identity propagation; without CTL-001, audit cannot attribute reliably |
+| CTL-002 (Tool-output and context provenance) | Dependent: context provenance in audit records requires the metadata that CTL-002 produces |
+| CTL-003 (Action verification at high-impact boundaries) | Complementary: verification decisions are audit events; CTL-005 captures them |
+| CTL-004 (Authorization-aware output filtering) | Complementary: filter decisions are audit events; CTL-005 captures them |
+
+**References**:
+
+- NIST SP 800-53 Rev. 5, AU family controls (AU-2, AU-3, AU-6, AU-9, AU-12), IR-4
+- NIST SP 800-92, Guide to Computer Security Log Management
+- NIST SP 800-61 Rev. 2, Computer Security Incident Handling Guide
+- ISO/IEC 27001:2022, Annex A controls A.5.28, A.8.15, A.8.16
+- ISO/IEC 27037:2012, Guidelines for identification, collection, acquisition and preservation of digital evidence
+- BSI IT-Grundschutz-Kompendium, Bausteine OPS.1.1.5 and DER.1
+- DORA, Article 12 (Major ICT-related incidents), as the regulatory anchor for incident reconstruction obligations
+- EU AI Act, Article 12 (Record-keeping), for AI-specific logging requirements applicable to high-risk systems
+- EU AI Act, Article 13 (Transparency), for the information-about-system-operation requirement that audit supports
+- GDPR, Article 5(2) (Accountability), as the foundational requirement that audit enables
+- GDPR, Article 30 (Records of processing activities), for the formal record-keeping obligation that overlaps with agent audit
 
 ## 7. Implementation Considerations
 

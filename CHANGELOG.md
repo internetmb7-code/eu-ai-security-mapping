@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Populated CTL-004 (Authorization-Aware Output Filtering) as fully drafted control entry. Addresses AGT-002 and AGT-004 as primary; AGT-008 as secondary. Source markdown placed at `docs/sections/06-controls/CTL-004.md`; full entry written to `data/controls.json`. Updated `data/mappings.json` `control_mitigates_threat` rationales for CTL-004 to align with the spec, reclassified (CTL-004, AGT-008) from `partial` to `secondary` per spec and standardized taxonomy, and removed CTL-004 from `control_placeholders`. Inserted CTL-004 in section 6 of `docs/main-document/EU-AI-Security-Mapping.md` after CTL-003; the forthcoming section now covers CTL-005 only.
 
+- Populated CTL-005 (End-to-End Audit and Accountability) as fully drafted control entry. v1 control library is now complete with all five controls fully populated.
+
 ### Changed
 
 - Reframed threat model framework (v2): 10 named threats are now positioned as exemplars within the attack surface taxonomy, not as an exhaustive enumeration. The reframe addresses the methodological concern that threats are infinite and any catalog will be incomplete. No threat content changes; the framework's introduction, scope, and methodology sections are updated. Section 5 of the practitioner guide is renamed from "Agent-Specific Threat Model" to "Agent Threat Patterns and Exemplars". Added `exemplar_role` field to threat entries in `data/threats.json` (and to `data/threats.schema.json`); AGT-001 and AGT-002 populated. PROJECT_BRIEF.md and PROJECT_STATUS.md updated to reflect the exemplar status of the catalog.
