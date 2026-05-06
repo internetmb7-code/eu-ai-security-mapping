@@ -57,6 +57,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md` | Done |
 | `docs/frameworks/VENDOR_MAPPING_FRAMEWORK.md` | Deferred until controls library is more mature |
 | `docs/frameworks/REGULATORY_MAPPING_FRAMEWORK.md` | Not yet |
+| `docs/frameworks/regulatory-facts.md` (source-of-truth reference for regulatory dates, article numbers, and citations) | Done (initial v1; verified May 2026) |
 
 ### Threat model (10 threats total)
 

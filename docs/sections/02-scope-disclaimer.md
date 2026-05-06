@@ -42,6 +42,8 @@ The framework maps to four EU instruments:
 
 Mappings to non-EU frameworks (NIST SP 800-53, ISO 27001 Annex A, BSI IT-Grundschutz) are provided as a translation aid, not as primary coverage. The framework is EU-regulation-anchored.
 
+Verified citations, application dates, and article numbers for the four instruments above are maintained in the source-of-truth reference file [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md). Section 3 (Regulatory landscape) draws primarily from that file.
+
 ## Threat catalog scope
 
 The 10 threats in Section 5 are **exemplars within an attack surface taxonomy**, not an exhaustive enumeration. Coverage of all 10 does not mean coverage of all agent threats. Section 5 documents the methodology for discovering threats specific to a deployment; the methodology is the durable contribution, not the catalog.
