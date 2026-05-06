@@ -29,12 +29,12 @@ For verified dates, article references, and citation specifics for the four prim
 
 | Citation | Source |
 |---|---|
-| BSI, Cloud Computing Compliance Criteria Catalogue (C5:2020 and C5:2025) | bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5 |
+| BSI, Cloud Computing Compliance Criteria Catalogue (C5:2020 and C5:2026) | bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5 |
 | C5-Gleichwertigkeitsverordnung (Verordnung über gleichwertige Sicherheitsnachweise zum C5-Standard für Cloud-Computing-Dienste im Gesundheitswesen), 19 March 2025, BGBl. 2025 I Nr. 91 | gesetze-im-internet.de/c5gleichwv |
 | § 393 SGB V (Fünftes Buch Sozialgesetzbuch), introduced by the Digital-Gesetz (DigiG), 22 March 2024 | gesetze-im-internet.de/sgb_5 |
 | BSI, IT-Grundschutz-Kompendium (current edition) | bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/IT-Grundschutz-Kompendium |
 | BSI IT-Grundschutz, Baustein ORP.1 (Organisation), ORP.4 (Identitäts- und Berechtigungsmanagement), CON.2 (Datenschutz), CON.6 (Löschen und Vernichten), CON.10 (Entwicklung von Webanwendungen), DER.1 (Detektion), OPS.1.1.5 (Protokollierung), OPS.1.2.4 (Telearbeit) | BSI IT-Grundschutz-Kompendium |
-| Germany NIS2 transposition (NIS2-Umsetzungs- und Cybersicherheitsstärkungsgesetz, NIS2UmsuCG), draft as of early 2026 | Bundesministerium des Innern und für Heimat |
+| Germany NIS2 transposition (NIS2-Umsetzungs- und Cybersicherheitsstärkungsgesetz, NIS2UmsuCG), in force 6 December 2025 | Bundesgesetzblatt 2025; bsi.bund.de |
 
 ## International standards and frameworks
 
@@ -83,7 +83,6 @@ For verified dates, article references, and citation specifics for the four prim
 | Threat model framework | `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` |
 | Control library framework | `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md` |
 | Regulatory facts (source of truth for dates and article references) | `docs/frameworks/regulatory-facts.md` |
-| Section 7 / Section 8 boundary specification | `docs/working-notes/section-7-8-boundary-spec.md` |
 | Threat catalog (data) | `data/threats.json` |
 | Control library (data) | `data/controls.json` |
 | Bidirectional mappings | `data/mappings.json` |

@@ -1,6 +1,3 @@
-# 1. Executive Summary
-<!-- Length budget: 1-2 pages -->
-
 This is a practitioner framework for the security of enterprise AI agent deployments under EU regulation. It maps the security-relevant requirements of the EU AI Act, NIS2, DORA, and GDPR to a concrete agent-specific threat catalog and to operational controls that extend, rather than replace, established security programs based on NIST SP 800-53, ISO/IEC 27001, and BSI grundschutz.
 
 ## What this framework is

@@ -1,6 +1,3 @@
-# 8. Gaps and Open Problems
-<!-- Length budget: 2-3 pages -->
-
 A framework that overstates its coverage will be discovered by serious readers. The credibility of the rest of this document depends on this section being honest about what is missing and why. The categories below are the limits worth naming, with practical implications for how practitioners should use the framework today.
 
 ## 8.1 The threat catalog is not exhaustive

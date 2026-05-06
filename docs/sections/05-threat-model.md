@@ -1,6 +1,3 @@
-# 5. Agent-Specific Threat Model
-<!-- Length budget: 4-6 pages -->
-
 This section presents 10 agent-specific threats organized by the attack surface where each threat manifests most directly: input, model, tool-use, output, memory and persistence, and audit and provenance. Each entry follows a fixed template covering the threat's structural cause, a concrete attack scenario, the components affected, why traditional controls do not fully address it, the recommended controls from the framework's library, residual risk, detection and mitigation maturity, regulatory hooks, MITRE ATLAS mapping, and primary references. The catalog is deliberately bounded; threats outside this list are either covered adequately by existing frameworks (OWASP LLM Top 10, MITRE ATLAS technique-level entries) or out of the narrow agent scope defined in section 1.
 
 This section is a guideline based on the author's interpretation of public regulatory texts and operational security experience. It is not legal advice. Readers should consult qualified legal counsel for compliance determinations specific to their organization.

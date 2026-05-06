@@ -2,7 +2,7 @@
 
 Internal reference file for the EU AI Security Mapping framework. Provides verified citations and dates for the four regulatory instruments in scope, plus DACH-specific national rules. Update when source positions change. Cite this file from Section 3 (Regulatory landscape) and from threat or control specifications that reference dates or article numbers.
 
-Last verified: 6 May 2026.
+Last verified: 6 May 2026 (post-validation rerun, same date).
 
 ## EU AI Act (Regulation (EU) 2024/1689)
 
@@ -16,7 +16,7 @@ Last verified: 6 May 2026.
 | Application: governance and GPAI model obligations (Chapter V) | 2 August 2025 | digital-strategy.ec.europa.eu |
 | Application: most remaining provisions including Annex III high-risk obligations | 2 August 2026 | digital-strategy.ec.europa.eu |
 | Application: Article 6(1) high-risk systems (AI as safety components in products under Annex I, e.g. medical devices, civil aviation) | 2 August 2027 | digital-strategy.ec.europa.eu, Mayer Brown |
-| Pending modifier | Digital Omnibus simplification proposal published 19 November 2025 may extend high-risk application timeline by up to 16 months pending availability of harmonised standards | bakermckenzie.com |
+| Pending modifier | Digital Omnibus simplification proposal published 19 November 2025 may extend high-risk application timeline by up to 16 months pending availability of harmonised standards. Council adopted negotiating mandate 13 March 2026; Parliament adopted position 26 March 2026; second trilogue on 28 April 2026 ended without agreement; follow-up trilogue scheduled 13 May 2026. The 2 August 2026 deadline remains the binding planning anchor until adoption is confirmed. | digital-strategy.ec.europa.eu, europarl.europa.eu, twobirds.com |
 
 ### Article map for security practitioners
 
@@ -50,10 +50,10 @@ Last verified: 6 May 2026.
 
 ### DACH transposition status (verify before customer-facing use)
 
-| Country | Status as of early 2026 | Source |
+| Country | Status as of May 2026 | Source |
 |---|---|---|
-| Germany | Not yet transposed; NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) draft in parliamentary process; Commission reasoned opinion issued 7 May 2025 | nis-2-directive.com |
-| Austria | Transposed (verify current status before citing) | gtlaw.com (general status) |
+| Germany | Transposed; NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) approved by Bundestag 13 November 2025; entered into force 6 December 2025; expanded BSI Act covers approximately 29,500 entities (up from approximately 4,500); BSI portal registration window opens 6 January 2026; no transition period | bsi.bund.de, Bundesgesetzblatt 2025 |
+| Austria | Not yet transposed; first draft NISG 2024 rejected February 2024; Commission reasoned opinion issued 7 May 2025; revised draft NISG 2026 published 13 November 2025; entry into force scheduled 1 October 2026; NISG 2018 applies in the interim | digital-strategy.ec.europa.eu, nis-2-directive.com |
 | Switzerland | Not in EU; not subject to NIS2 directly; relevant only via cross-border service obligations | n/a |
 
 ### Key NIS2 articles for agent security
@@ -135,6 +135,19 @@ Article 22 applies only to "solely" automated decisions. Meaningful human review
 
 Relevance to agent security framework: narrow. Affects healthcare-sector cloud and AI deployments in Germany specifically. Worth a short reference in Section 3 or a footnote, not a primary regulatory pillar.
 
+### BSI C5:2026 (Cloud Computing Compliance Criteria Catalogue)
+
+| Attribute | Value | Source |
+|---|---|---|
+| Status | Final version published end of March 2026, replacing C5:2020 | bsi.bund.de |
+| Structure | 168 criteria across 17 subject areas (up from 121 in C5:2020); criteria subdivided into sub-criteria | bsi.bund.de |
+| New thematic areas | Container management, post-quantum cryptography (CSPs must document a PQC strategy), confidential computing, supply chain transparency | bsi.bund.de |
+| Publication formats | PDF, Excel, and (new) machine-readable YAML | bsi.bund.de |
+| Cross-reference table to international standards | Scheduled end of Q2 2026 | bsi.bund.de |
+| Application date for audits | C5:2026 criteria apply for audit engagements with specified dates or periods beginning on or after 1 June 2027; earlier adoption permitted | bsi.bund.de |
+| Alignment | Incorporates EUCS "Substantial" level requirements and the NIS2 implementing regulation | bsi.bund.de |
+| Licence | CC-BY-ND 4.0 International | bsi.bund.de |
+
 ### BSI IT-Grundschutz
 
 | Attribute | Value |
@@ -158,7 +171,6 @@ Relevance to agent security framework: narrow. Affects healthcare-sector cloud a
 
 | Question | Status |
 |---|---|
-| Final wording of Digital Omnibus simplification proposal and its impact on AI Act high-risk timeline | Pending; check Commission status quarterly |
-| Germany NIS2 transposition (NIS2UmsuCG) entry into force | Pending; check parliamentary status quarterly |
-| C5:2026 publication and superseding of C5:2020 | Referenced in BSI FAQ; verify current status before citing |
-| First Annex III guidelines from Commission (originally expected by 2 February 2026) | Verify publication status |
+| Final wording of Digital Omnibus simplification proposal and its impact on AI Act high-risk timeline | Pending; trilogue resumed 13 May 2026 after 28 April 2026 stall; check Commission status |
+| Austria NIS2 transposition (NISG 2026) entry into force on 1 October 2026 | Pending; verify parliamentary adoption and any operational guidance from supervisory authorities |
+| First Annex III guidelines from Commission (originally expected by 2 February 2026) | Verify publication status; standardisation work by CEN and CENELEC remains ongoing |

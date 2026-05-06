@@ -81,15 +81,15 @@ The threats and controls in this document assume all five attributes hold. Syste
 
 | Out of scope | Why excluded |
 |---|---|
-| Classical robotic process automation (RPA) without an LLM reasoning core | Different threat model; deterministic rule-based execution; established control frameworks already exist |
-| Single-shot LLM calls (chatbots, summarization, classification) without tool use | No tool-chain attack surface; no autonomy between approvals; existing AI risk frameworks (NIST AI RMF, ISO 42001) address these adequately |
-| Fully supervised copilots where every action requires explicit human approval | Human approval is the dominant control; agent-specific threats like authorization confusion and tool-chain abuse are bounded |
-| Foundation model training, fine-tuning, and pre-deployment safety evaluation | Different lifecycle phase; covered by AI provider obligations under EU AI Act Articles 16 to 29 and frameworks like the AISI evaluation guidance |
-| Consumer-facing AI products and general-purpose AI assistants | Different regulatory regime, different threat model, different audience |
-| Adversarial machine learning research (model extraction, membership inference, evasion) | Active research field with its own literature; orthogonal to operational deployment security |
-| Physical-world agents (robotics, autonomous vehicles, embedded systems) | Different regulatory frameworks (Machinery Regulation, type approval); different threat surfaces |
+| Classical RPA without an LLM reasoning core | Different threat model; established control frameworks cover it |
+| Single-shot LLM calls (chatbots, summarization, classification) without tool use | No tool-chain attack surface; existing AI risk frameworks (NIST AI RMF, ISO 42001) cover them |
+| Fully supervised copilots where every action requires explicit human approval | Human approval is the dominant control; agent-specific threats are bounded |
+| Foundation model training, fine-tuning, and pre-deployment safety evaluation | Different lifecycle phase; covered by AI Act Articles 16 to 29 and AISI evaluation guidance |
+| Consumer-facing AI products and general-purpose AI assistants | Different regulatory regime, different audience |
+| Adversarial ML research (model extraction, membership inference, evasion) | Active research field with its own literature; orthogonal to operational deployment security |
+| Physical-world agents (robotics, autonomous vehicles, embedded systems) | Different regulatory frameworks (Machinery Regulation, type approval) |
 
-The boundary that matters most: this document is about **operational security of agents already deployed in enterprise environments**, not about the safety properties of the underlying models or the design of agent architectures from scratch.
+The boundary that matters most: this document is about **operational security of agents already deployed in enterprise environments**, not the safety properties of the underlying models or agent architecture design from scratch.
 
 ### Regulatory scope
 
@@ -97,14 +97,12 @@ The framework maps to four EU instruments:
 
 | Instrument | Relevance |
 |---|---|
-| EU AI Act (Regulation 2024/1689) | High-risk AI system obligations; general-purpose AI model obligations; enforcement begins August 2026 for high-risk systems |
+| EU AI Act (Regulation 2024/1689) | High-risk AI system and GPAI obligations; high-risk enforcement from August 2026 |
 | NIS2 Directive (Directive 2022/2555) | Cybersecurity obligations for essential and important entities; in force since October 2024 |
 | DORA (Regulation 2022/2554) | ICT risk management for financial entities; in force since January 2025 |
-| GDPR Article 22 | Automated decision-making with legal or similarly significant effects; in force since 2018 |
+| GDPR Article 22 | Solely automated decisions with legal or similarly significant effects |
 
-Mappings to non-EU frameworks (NIST SP 800-53, ISO 27001 Annex A, BSI IT-Grundschutz) are provided as a translation aid, not as primary coverage. The framework is EU-regulation-anchored.
-
-Verified citations, application dates, and article numbers for the four instruments above are maintained in the source-of-truth reference file [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md). Section 3 (Regulatory landscape) draws primarily from that file.
+Mappings to non-EU frameworks (NIST SP 800-53, ISO 27001 Annex A, BSI IT-Grundschutz) are translation aids. Verified citations and dates are maintained in [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md), from which Section 3 draws.
 
 ### Threat catalog scope
 
@@ -112,15 +110,7 @@ The 10 threats in Section 5 are **exemplars within an attack surface taxonomy**,
 
 ### Control library scope
 
-The 5 controls in Section 6 are a **coarse-grained v1**. They cover the high-leverage operational decisions. They do not cover:
-
-| Gap | Status |
-|---|---|
-| Detection and response controls (SIEM integration, anomaly detection on agent behavior) | Acknowledged in Section 8; v2 priority |
-| Supply chain controls (model provenance, prompt template integrity) | Acknowledged in Section 8; v2 priority |
-| Human factors controls (operator training, alert fatigue management) | Acknowledged in Section 8; v2 priority |
-
-Honest gap acknowledgment beats false comprehensiveness. The control library will expand in v2 based on customer engagement feedback on v1.
+The 5 controls in Section 6 are a **coarse-grained v1**. Detection and response (SIEM integration, behavioral anomaly detection), supply-chain controls (model provenance, prompt-template integrity), and human-factors controls (operator training, alert-fatigue management) are acknowledged gaps in Section 8 and are v2 priorities. Honest gap acknowledgment beats false comprehensiveness; the library will expand in v2 based on customer engagement feedback.
 
 ### Disclaimer and author affiliation
 
@@ -210,11 +200,11 @@ Transposition is uneven. As of early 2026:
 
 | Country | Status | Note |
 |---|---|---|
-| Germany | Not yet transposed | NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) draft is in parliamentary process; the European Commission issued a reasoned opinion on 7 May 2025 for delayed transposition |
-| Austria | Transposed | Verify current Austrian implementing law before relying on specific national obligations |
+| Germany | Transposed | NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) approved by Bundestag on 13 November 2025 and entered into force on 6 December 2025; the BSI Act now covers approximately 29,500 supervised entities (up from approximately 4,500); BSI portal registration window opens 6 January 2026; no transition period |
+| Austria | Not yet transposed | First draft (NISG 2024) rejected by the National Council in February 2024; revised draft NISG 2026 published 13 November 2025; entry into force scheduled 1 October 2026; until then NISG 2018 applies |
 | Switzerland | Out of scope | Not an EU member; relevant only to Swiss entities providing services into the EU |
 
-For Germany specifically, this is operationally awkward: the directive entered into force in 2023, transposition was due in October 2024, and as of this writing the implementing law has not been adopted. Enterprises preparing for NIS2 are working from the directive text and the draft transposition law concurrently, with the expectation that the German law will tighten or extend specific obligations. Verify the current state with qualified counsel before relying on this section for compliance decisions.
+For German entities, the implementing law is now in force; the relevant operational reference is the revised BSI Act (BSIG) rather than the directive text alone. Verify the current state and any sector-specific implementing rules with qualified counsel before relying on this section for compliance decisions.
 
 **What this means for agent deployments**: NIS2 supplies the general cybersecurity baseline that AI agents inherit by virtue of running inside an in-scope enterprise. It is not AI-specific. Article 21's 10-point list maps cleanly onto traditional security controls; the agent-specific overlay (prompt injection, authorization confusion, tool-chain abuse, etc.) sits on top of that baseline rather than replacing it. The supply-chain security obligation (Article 21(2)(d)) is the most relevant for agent deployments because it pulls foundation model providers, agent platform vendors, and tool integrations into the scope of the customer's NIS2 risk assessment. Incident reporting timelines under Article 23 are tight; agent-specific incidents (prompt-injection-driven exfiltration, authorization-confusion-driven actions) can trigger them just like traditional incidents.
 
@@ -319,12 +309,12 @@ Honest gaps in the v1 crosswalk are documented in subsection 4.7.
 
 | AI Act requirement | Bridging threats | v1 controls (with bridge) |
 |---|---|---|
-| Article 9 (Risk management system) | AGT-001, AGT-003, AGT-009 | CTL-001 [via AGT-001, AGT-003], CTL-002 [via AGT-001, AGT-009], CTL-003 [via AGT-001, AGT-003, AGT-009], CTL-004 [via AGT-001], CTL-005 [via AGT-001, AGT-003, AGT-009] |
+| Article 9 (Risk management system) | AGT-001, AGT-003, AGT-009 | CTL-001 [via AGT-001, AGT-003], CTL-002 [via AGT-001, AGT-009], CTL-003 [via AGT-001, AGT-003, AGT-009], CTL-005 [via AGT-001, AGT-003, AGT-009] |
 | Article 10 (Data and data governance) | AGT-006 | None in v1 (this is primarily a provider-side training-data obligation; v1 controls do not address training data quality. Memory poisoning under AGT-006 is the closest agent-deployment connection) |
 | Article 12 (Record-keeping) | AGT-005 | CTL-005 [via AGT-005, primary], CTL-001 [via AGT-005, primary], CTL-002 [via AGT-005, primary] |
 | Article 13 (Transparency to deployers) | AGT-005 | CTL-001 [via AGT-005], CTL-002 [via AGT-005], CTL-005 [via AGT-005] |
 | Article 14 (Human oversight) | AGT-001, AGT-002, AGT-003, AGT-005, AGT-007, AGT-009 | CTL-003 [via AGT-001, AGT-002, AGT-003, AGT-007, AGT-009; primary across most], CTL-002 [via AGT-005, AGT-007, AGT-009], CTL-005 [via AGT-005, AGT-009] |
-| Article 15 (Accuracy, robustness, cybersecurity) | AGT-001, AGT-002, AGT-004, AGT-006, AGT-007, AGT-008, AGT-009, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-006, AGT-007, AGT-008, AGT-009], CTL-003 [via most], CTL-004 [via AGT-001, AGT-002, AGT-004, AGT-008], CTL-005 [via most] (all five v1 controls contribute; cybersecurity is addressed by the entire library) |
+| Article 15 (Accuracy, robustness, cybersecurity) | AGT-001, AGT-002, AGT-004, AGT-006, AGT-007, AGT-008, AGT-009, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-006, AGT-007, AGT-008, AGT-009], CTL-003 [via most], CTL-004 [via AGT-002, AGT-004, AGT-008], CTL-005 [via most] (all five v1 controls contribute; cybersecurity is addressed by the entire library) |
 
 **What this means for agent deployments**: The v1 control library covers the technical core of AI Act compliance for agent deployments, with strongest coverage of Articles 12 (logging), 14 (oversight), and 15 (cybersecurity). Coverage of data governance (Article 10) and process obligations (QMS, FRIA) is intentionally out of scope. Deployers should treat this framework as the technical layer of a broader compliance program, not as the program itself.
 
@@ -334,7 +324,7 @@ NIS2 mappings in `mappings.json` reference Article 21 at the article level rathe
 
 | NIS2 requirement | Bridging threats | v1 controls (with bridge) |
 |---|---|---|
-| Article 21 (Cybersecurity risk-management measures, general) | AGT-001, AGT-002, AGT-004, AGT-005, AGT-006, AGT-007, AGT-008, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-005, AGT-006, AGT-007, AGT-008], CTL-003 [via most], CTL-004 [via AGT-001, AGT-002, AGT-004, AGT-008], CTL-005 [via most] (NIS2 Art 21 is the universal cybersecurity baseline; the full v1 library contributes through the threats it mitigates) |
+| Article 21 (Cybersecurity risk-management measures, general) | AGT-001, AGT-002, AGT-004, AGT-005, AGT-006, AGT-007, AGT-008, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-005, AGT-006, AGT-007, AGT-008], CTL-003 [via most], CTL-004 [via AGT-002, AGT-004, AGT-008], CTL-005 [via most] (NIS2 Art 21 is the universal cybersecurity baseline; the full v1 library contributes through the threats it mitigates) |
 
 **What this means for agent deployments**: NIS2 Article 21 sets the cybersecurity risk-management baseline. The v1 controls address the agent-specific layer that sits on top of foundational cybersecurity baselines (cryptography, MFA, backup, network segmentation, supply chain). Entities subject to NIS2 should treat this framework as agent-specific reinforcement of an existing NIS2 program, not as a substitute for it. Sub-paragraph-level coverage of Article 21 (for example, 21(2)(a) policies, 21(2)(d) supply chain, 21(2)(g) hygiene and training) is documented in subsection 4.7.
 
@@ -342,7 +332,7 @@ NIS2 mappings in `mappings.json` reference Article 21 at the article level rathe
 
 | DORA requirement | Bridging threats | v1 controls (with bridge) |
 |---|---|---|
-| Articles 6 to 8 (ICT risk-management framework) | AGT-001, AGT-002, AGT-003, AGT-004, AGT-008, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-008], CTL-003 [via AGT-001, AGT-002, AGT-003, AGT-008], CTL-004 [via AGT-001, AGT-002, AGT-004, AGT-008], CTL-005 [via most] (the v1 controls form the technical agent-specific layer of the ICT risk management framework) |
+| Articles 6 to 8 (ICT risk-management framework) | AGT-001, AGT-002, AGT-003, AGT-004, AGT-008, AGT-010 | CTL-001 [via most], CTL-002 [via AGT-001, AGT-008], CTL-003 [via AGT-001, AGT-002, AGT-003, AGT-008], CTL-004 [via AGT-002, AGT-004, AGT-008], CTL-005 [via most] (the v1 controls form the technical agent-specific layer of the ICT risk management framework) |
 | Article 9 (Identification and classification of ICT-supported business functions) | AGT-002 | CTL-001 [via AGT-002, primary], CTL-003 [via AGT-002, primary], CTL-004 [via AGT-002, primary], CTL-005 [via AGT-002] |
 | Article 12 (Major ICT-related incidents) | AGT-005 | CTL-005 [via AGT-005, primary], CTL-001 [via AGT-005, primary], CTL-002 [via AGT-005, primary] |
 | Articles 28 to 30 (ICT third-party risk) | AGT-007 | CTL-001 [via AGT-007, primary], CTL-002 [via AGT-007, primary], CTL-003 [via AGT-007, primary], CTL-005 [via AGT-007] (third-party risk applies when sub-agents integrate third-party services; contractual provisions under Article 30 are organizational and not addressed by v1 technical controls) |
@@ -363,7 +353,7 @@ GDPR coverage extends beyond Article 22. The crosswalk includes the GDPR article
 | Article 17 (Right to erasure) | AGT-006 | CTL-002 [via AGT-006, primary], CTL-005 [via AGT-006] (erasure is more complex when persisted state has influenced agent behavior; provenance and audit are necessary but not sufficient) |
 | Article 22 (Automated individual decision-making) | AGT-001, AGT-002, AGT-005 | CTL-001 [via AGT-002], CTL-003 [via AGT-001, AGT-002; the structural mechanism for ensuring decisions are not "solely" automated], CTL-004 [via AGT-002], CTL-005 [via AGT-005; supports the right-to-explanation by providing auditable decision provenance] |
 | Article 25 (Data protection by design and by default) | AGT-002, AGT-003, AGT-009 | CTL-001 [via AGT-002, AGT-003], CTL-003 [via AGT-003, AGT-009], CTL-005 [via AGT-009] |
-| Article 32 (Security of processing) | AGT-001, AGT-002, AGT-004, AGT-008 | CTL-001 [via AGT-002, AGT-004; primary], CTL-002 [via AGT-001, AGT-008], CTL-003 [via AGT-001, AGT-002, AGT-008], CTL-004 [via AGT-001, AGT-002, AGT-004, AGT-008; primary] |
+| Article 32 (Security of processing) | AGT-001, AGT-002, AGT-004, AGT-008 | CTL-001 [via AGT-002, AGT-004; primary], CTL-002 [via AGT-001, AGT-008], CTL-003 [via AGT-001, AGT-002, AGT-008], CTL-004 [via AGT-002, AGT-004, AGT-008; primary] |
 
 **What this means for agent deployments**: GDPR coverage in the v1 controls is broader than Article 22 alone. Article 32 (security of processing) is satisfied substantively by CTL-001, CTL-003, and CTL-004 across multiple threats. Article 5(1)(f) (integrity and confidentiality) is the principle-level anchor for the deputy and exfiltration patterns. Article 22 specifically applies only when the agent makes solely automated decisions producing legal or similarly significant effects on individuals; CTL-003 is the structural mechanism for placing meaningful human review at the decision boundary. Where Article 22 applies, deployers should pair CTL-003 with the organizational measures (lawful basis assessment, data subject communication, contestability process) that the v1 control library does not address.
 
@@ -376,7 +366,7 @@ This subsection presents the inverse of the requirement-to-control crosswalk. Fo
 | CTL-001 (Identity and authorization context propagation) | Articles 9, 12, 13, 14, 15 | Article 21 | Articles 6 to 8, 9, 12, 28 to 30 | Articles 5(1)(c), 5(1)(f), 5(2), 22, 25, 32 |
 | CTL-002 (Tool-output and context provenance) | Articles 9, 12, 13, 14, 15 | Article 21 | Articles 6 to 8, 12, 28 to 30 | Articles 5(1)(b), 5(1)(d), 5(2), 17, 32 |
 | CTL-003 (Action verification at high-impact boundaries) | Articles 9, 14, 15 | Article 21 | Articles 6 to 8, 9, 28 to 30 | Articles 5(1)(b), 5(1)(c), 5(1)(d), 5(1)(f), 22, 25, 32 |
-| CTL-004 (Authorization-aware output filtering) | Articles 9, 15 | Article 21 | Articles 6 to 8, 9 | Articles 5(1)(f), 22, 32 |
+| CTL-004 (Authorization-aware output filtering) | Article 15 | Article 21 | Articles 6 to 8, 9 | Articles 5(1)(f), 22, 32 |
 | CTL-005 (End-to-end audit and accountability) | Articles 9, 12, 13, 14, 15 | Article 21 | Articles 6 to 8, 9, 12, 28 to 30 | Articles 5(1)(b), 5(1)(c), 5(1)(d), 5(1)(f), 5(2), 17, 22, 25 |
 
 The pattern: CTL-005 carries the broadest regulatory weight because logging, audit, and accountability are universal requirements across all four instruments. CTL-001 and CTL-003 are the structural anchors for human-oversight and access-control requirements. CTL-002 is the specialized control for provenance-related obligations (transparency, accuracy, erasure). CTL-004 has the narrowest direct mapping but is decisive for confidentiality and Article 22 contexts.
@@ -1108,12 +1098,12 @@ For verified dates, article references, and citation specifics for the four prim
 
 | Citation | Source |
 |---|---|
-| BSI, Cloud Computing Compliance Criteria Catalogue (C5:2020 and C5:2025) | bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5 |
+| BSI, Cloud Computing Compliance Criteria Catalogue (C5:2020 and C5:2026) | bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5 |
 | C5-Gleichwertigkeitsverordnung (Verordnung über gleichwertige Sicherheitsnachweise zum C5-Standard für Cloud-Computing-Dienste im Gesundheitswesen), 19 March 2025, BGBl. 2025 I Nr. 91 | gesetze-im-internet.de/c5gleichwv |
 | § 393 SGB V (Fünftes Buch Sozialgesetzbuch), introduced by the Digital-Gesetz (DigiG), 22 March 2024 | gesetze-im-internet.de/sgb_5 |
 | BSI, IT-Grundschutz-Kompendium (current edition) | bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/IT-Grundschutz-Kompendium |
 | BSI IT-Grundschutz, Baustein ORP.1 (Organisation), ORP.4 (Identitäts- und Berechtigungsmanagement), CON.2 (Datenschutz), CON.6 (Löschen und Vernichten), CON.10 (Entwicklung von Webanwendungen), DER.1 (Detektion), OPS.1.1.5 (Protokollierung), OPS.1.2.4 (Telearbeit) | BSI IT-Grundschutz-Kompendium |
-| Germany NIS2 transposition (NIS2-Umsetzungs- und Cybersicherheitsstärkungsgesetz, NIS2UmsuCG), draft as of early 2026 | Bundesministerium des Innern und für Heimat |
+| Germany NIS2 transposition (NIS2-Umsetzungs- und Cybersicherheitsstärkungsgesetz, NIS2UmsuCG), in force 6 December 2025 | Bundesgesetzblatt 2025; bsi.bund.de |
 
 ### International standards and frameworks
 
@@ -1162,7 +1152,6 @@ For verified dates, article references, and citation specifics for the four prim
 | Threat model framework | `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` |
 | Control library framework | `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md` |
 | Regulatory facts (source of truth for dates and article references) | `docs/frameworks/regulatory-facts.md` |
-| Section 7 / Section 8 boundary specification | `docs/working-notes/section-7-8-boundary-spec.md` |
 | Threat catalog (data) | `data/threats.json` |
 | Control library (data) | `data/controls.json` |
 | Bidirectional mappings | `data/mappings.json` |

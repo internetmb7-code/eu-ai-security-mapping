@@ -96,7 +96,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | 4. Common-control crosswalk | Drafted (section file and canonical document populated; reconciled against `data/mappings.json`) |
 | 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
 | 6. Recommended controls | Fully populated for v1 (CTL-001 through CTL-005 all inserted; v1 control library complete) |
-| 7. Implementation considerations | Drafted (section file and canonical document populated; structure follows docs/working-notes/section-7-8-boundary-spec.md) |
+| 7. Implementation considerations | Drafted (section file and canonical document populated) |
 | 8. Gaps and open problems | Drafted (section file and canonical document populated) |
 | 9. References | Drafted (section file and canonical document populated; consolidated from data/threats.json, data/controls.json, and docs/frameworks/regulatory-facts.md) |
 

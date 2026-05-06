@@ -1,6 +1,3 @@
-# 3. Regulatory Landscape
-<!-- Length budget: 4-6 pages -->
-
 Four EU instruments shape the security obligations of an enterprise AI agent deployment in the DACH region: the EU AI Act, the NIS2 Directive, DORA, and GDPR (specifically Article 22). They were drafted independently, on different timelines, and with different primary objectives. They overlap on operational security in ways that are not always obvious from the text. This section walks each instrument in turn at the depth a security practitioner needs to identify which articles apply to a given deployment and what they require operationally. Detailed control mappings are deferred to Sections 4 and 6; threat-level analysis to Section 5.
 
 Verified citations, dates, and article numbers throughout this section are drawn from [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md). Where legal interpretation is contested, I flag it; where the text is settled, I do not over-qualify.
@@ -65,15 +62,15 @@ Article 21 is intentionally broad. It does not specify how to implement each mea
 
 ### DACH transposition status
 
-Transposition is uneven. As of early 2026:
+Transposition is uneven. As of May 2026:
 
 | Country | Status | Note |
 |---|---|---|
-| Germany | Not yet transposed | NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) draft is in parliamentary process; the European Commission issued a reasoned opinion on 7 May 2025 for delayed transposition |
-| Austria | Transposed | Verify current Austrian implementing law before relying on specific national obligations |
+| Germany | Transposed | NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) approved by Bundestag on 13 November 2025 and entered into force on 6 December 2025; the BSI Act now covers approximately 29,500 supervised entities (up from approximately 4,500); BSI portal registration window opens 6 January 2026; no transition period |
+| Austria | Not yet transposed | First draft (NISG 2024) rejected by the National Council in February 2024; revised draft NISG 2026 published 13 November 2025; entry into force scheduled 1 October 2026; until then NISG 2018 applies |
 | Switzerland | Out of scope | Not an EU member; relevant only to Swiss entities providing services into the EU |
 
-For Germany specifically, this is operationally awkward: the directive entered into force in 2023, transposition was due in October 2024, and as of this writing the implementing law has not been adopted. Enterprises preparing for NIS2 are working from the directive text and the draft transposition law concurrently, with the expectation that the German law will tighten or extend specific obligations. Verify the current state with qualified counsel before relying on this section for compliance decisions.
+For German entities, the implementing law is now in force; the relevant operational reference is the revised BSI Act (BSIG) rather than the directive text alone. Verify the current state and any sector-specific implementing rules with qualified counsel before relying on this section for compliance decisions.
 
 **What this means for agent deployments**: NIS2 supplies the general cybersecurity baseline that AI agents inherit by virtue of running inside an in-scope enterprise. It is not AI-specific. Article 21's 10-point list maps cleanly onto traditional security controls; the agent-specific overlay (prompt injection, authorization confusion, tool-chain abuse, etc.) sits on top of that baseline rather than replacing it. The supply-chain security obligation (Article 21(2)(d)) is the most relevant for agent deployments because it pulls foundation model providers, agent platform vendors, and tool integrations into the scope of the customer's NIS2 risk assessment. Incident reporting timelines under Article 23 are tight; agent-specific incidents (prompt-injection-driven exfiltration, authorization-confusion-driven actions) can trigger them just like traditional incidents.
 
