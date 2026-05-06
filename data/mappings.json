@@ -400,7 +400,7 @@
       "control_id": "CTL-002",
       "threat_id": "AGT-001",
       "relationship": "primary",
-      "rationale": "Tool-output and context provenance: tag and isolate content returned by tools so injected instructions cannot blend with the agent's working context as authoritative"
+      "rationale": "Foundational defense against indirect prompt injection: the structural distinction between content and instruction is what prevents tool-output injections from being elevated to authoritative instruction"
     },
     {
       "control_id": "CTL-003",
@@ -502,7 +502,7 @@
       "control_id": "CTL-002",
       "threat_id": "AGT-006",
       "relationship": "primary",
-      "rationale": "Tool-output and context provenance: tagging and isolating retrieved content prevents memory content from being treated as authoritative instruction"
+      "rationale": "Extending provenance to persisted state addresses memory-vector poisoning patterns by preventing persisted content from being treated as authoritative on retrieval"
     },
     {
       "control_id": "CTL-005",
@@ -549,8 +549,8 @@
     {
       "control_id": "CTL-002",
       "threat_id": "AGT-008",
-      "relationship": "primary",
-      "rationale": "Tool-output and context provenance: provenance tagging helps downstream systems treat agent output appropriately"
+      "relationship": "secondary",
+      "rationale": "Provenance tagging helps downstream systems treat agent output appropriately, reducing the risk that consuming systems interpret agent output as instruction"
     },
     {
       "control_id": "CTL-004",
@@ -574,7 +574,7 @@
       "control_id": "CTL-002",
       "threat_id": "AGT-009",
       "relationship": "secondary",
-      "rationale": "Tool-output and context provenance: provenance helps trace which context elements influenced the goal interpretation"
+      "rationale": "Provenance helps trace which context elements influenced agent reasoning, supporting detection and review of context-driven goal drift"
     },
     {
       "control_id": "CTL-003",
@@ -723,11 +723,6 @@
     }
   ],
   "control_placeholders": [
-    {
-      "control_id": "CTL-002",
-      "status": "stub",
-      "note": "Tool-output and context provenance; full population deferred to a later session"
-    },
     {
       "control_id": "CTL-003",
       "status": "stub",
