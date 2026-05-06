@@ -113,6 +113,286 @@
       "article_or_section": "Art. 32 (Security of processing)",
       "rationale": "Appropriate technical measures including pseudonymization and access control are required; broad-authority agents bypassing per-user access control fail this standard",
       "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 9 (Risk management)",
+      "rationale": "Composed agent actions are a risk class that risk management must explicitly address",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Composition that exceeds individual review thresholds defeats the oversight model",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 8 (ICT risk management)",
+      "rationale": "Operational resilience requires controls on agent action composition for financial entities",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(c) (Data minimization)",
+      "rationale": "Aggregating individual data points into composites can violate minimization even when each retrieval is permitted",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 25 (Data protection by design)",
+      "rationale": "Design must consider composed effects, not only individual operations",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Cybersecurity)",
+      "rationale": "Resilience to unauthorized data exposure",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(f) (Integrity and confidentiality)",
+      "rationale": "Personal data must be protected against unauthorized disclosure",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 32 (Security of processing)",
+      "rationale": "Technical and organizational measures including encryption and access control",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 (ICT risk management)",
+      "rationale": "Confidentiality of information processed by ICT systems",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Cybersecurity risk-management measures)",
+      "rationale": "Includes incident handling and confidentiality protections",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 12 (Record-keeping)",
+      "rationale": "Logging requirements for high-risk AI systems",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 13 (Transparency)",
+      "rationale": "Information about how the AI system operates",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Oversight requires understanding of what the system did and why",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "DORA",
+      "article_or_section": "Art. 12 (Major ICT-related incidents)",
+      "rationale": "Reporting requires the ability to reconstruct events",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(2) (Accountability)",
+      "rationale": "Controllers must be able to demonstrate compliance",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 22 (Automated individual decision-making)",
+      "rationale": "Data subjects' rights to explanation depend on auditable decision provenance",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Cybersecurity risk-management measures)",
+      "rationale": "Includes logging and incident handling",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-006",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 10 (Data and data governance)",
+      "rationale": "Data quality and integrity for AI systems",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-006",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Robustness)",
+      "rationale": "Resilience to adversarial manipulation",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-006",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(d) (Accuracy)",
+      "rationale": "Personal data must be accurate; poisoned profiles violate this",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-006",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 17 (Right to erasure)",
+      "rationale": "Erasure is more complex when data has influenced model behavior or vector embeddings",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-006",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Risk management)",
+      "rationale": "Integrity of information systems",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Multi-agent chains amplify the oversight challenge",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Cybersecurity)",
+      "rationale": "Resilience requirements apply to the full system, including inter-agent boundaries",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "DORA",
+      "article_or_section": "Art. 28 to 30 (Third-party risk)",
+      "rationale": "When sub-agents integrate third-party services, third-party risk management applies",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(2) (Accountability)",
+      "rationale": "Accountability through delegation chains requires audit traceability",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Risk management)",
+      "rationale": "Includes supply chain security relevant to multi-agent dependencies",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-008",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Cybersecurity)",
+      "rationale": "Resilience to manipulation of system output",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-008",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Risk management)",
+      "rationale": "Technical and organizational measures",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-008",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 8 (ICT risk management)",
+      "rationale": "Operational resilience including output integrity",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-008",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 32 (Security of processing)",
+      "rationale": "Where output exploitation results in unauthorized data access or processing",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 9 (Risk management)",
+      "rationale": "Goal drift is a risk class requiring management",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 14 (Human oversight)",
+      "rationale": "Oversight is the primary mitigation when technical controls cannot fully prevent goal drift",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Robustness)",
+      "rationale": "Stability under varied inputs and contexts",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(b) (Purpose limitation)",
+      "rationale": "Processing must be for specified purposes; goal drift can violate this",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 5(1)(c) (Data minimization)",
+      "rationale": "Goal drift often correlates with retrieving more data than necessary",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-009",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 25 (Data protection by design)",
+      "rationale": "Design must consider goal drift, not only intended use",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-010",
+      "regulation": "EU AI Act",
+      "article_or_section": "Art. 15 (Robustness)",
+      "rationale": "System must operate reliably without resource exhaustion",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-010",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 8 (ICT risk management)",
+      "rationale": "Operational resilience including capacity management",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-010",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 21 (Risk management)",
+      "rationale": "Availability and resilience",
+      "requirement_status": "referenced_but_not_yet_defined"
     }
   ],
   "control_mitigates_threat": [
@@ -163,6 +443,156 @@
       "threat_id": "AGT-002",
       "relationship": "secondary",
       "rationale": "Action verification at high-impact boundaries: where authorization scoping is impractical or imperfect, human verification at the action boundary is the reliable fallback"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-003",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: high-impact actions composed from individual tool calls are subject to verification at the boundary even when no single call would warrant it"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-003",
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: enables review of action chains and detection of patterns of legitimate-but-composed harm"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-003",
+      "relationship": "secondary",
+      "rationale": "Identity and authorization context propagation: constrains the user authority that any chain can leverage"
+    },
+    {
+      "control_id": "CTL-004",
+      "threat_id": "AGT-004",
+      "relationship": "primary",
+      "rationale": "Authorization-aware output filtering: ensures the filtering boundary is the user authorization rather than the channel"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-004",
+      "relationship": "primary",
+      "rationale": "Identity and authorization context propagation: per-user scoping at retrieval limits what can be exfiltrated"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-004",
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: data-flow audit enables detection of legitimate-channel exfiltration"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-005",
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: the control is directly designed to address audit and provenance failure"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-005",
+      "relationship": "primary",
+      "rationale": "Identity and authorization context propagation: user attribution in audit records requires context propagation through the agent stack"
+    },
+    {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-005",
+      "relationship": "primary",
+      "rationale": "Tool-output and context provenance: provenance is the input to meaningful audit"
+    },
+    {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-006",
+      "relationship": "primary",
+      "rationale": "Tool-output and context provenance: tagging and isolating retrieved content prevents memory content from being treated as authoritative instruction"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-006",
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: enables forensic review when poisoning is suspected"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-006",
+      "relationship": "secondary",
+      "rationale": "Action verification at high-impact boundaries: provides a checkpoint when retrieved memory influences high-impact decisions"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-007",
+      "relationship": "primary",
+      "rationale": "Identity and authorization context propagation: ensures user context is preserved through the delegation chain"
+    },
+    {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-007",
+      "relationship": "primary",
+      "rationale": "Tool-output and context provenance: tagging sub-agent outputs as content rather than instruction"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-007",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: requires verification at the primary agent before acting on sub-agent outputs in high-stakes contexts"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-007",
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: enables traceability across the delegation chain"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-008",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: requires verification before agent output triggers downstream execution"
+    },
+    {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-008",
+      "relationship": "primary",
+      "rationale": "Tool-output and context provenance: provenance tagging helps downstream systems treat agent output appropriately"
+    },
+    {
+      "control_id": "CTL-004",
+      "threat_id": "AGT-008",
+      "relationship": "partial",
+      "rationale": "Authorization-aware output filtering: addresses content authorization; less direct on syntactic exploits in output structure"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-009",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: requires verification when the agent's actions exceed expected scope"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-009",
+      "relationship": "primary",
+      "rationale": "End-to-end audit and accountability: enables review of how the agent interpreted its goal"
+    },
+    {
+      "control_id": "CTL-002",
+      "threat_id": "AGT-009",
+      "relationship": "secondary",
+      "rationale": "Tool-output and context provenance: provenance helps trace which context elements influenced the goal interpretation"
+    },
+    {
+      "control_id": "CTL-003",
+      "threat_id": "AGT-010",
+      "relationship": "primary",
+      "rationale": "Action verification at high-impact boundaries: high cumulative resource consumption is itself a high-impact action"
+    },
+    {
+      "control_id": "CTL-005",
+      "threat_id": "AGT-010",
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: enables review of loop patterns"
+    },
+    {
+      "control_id": "CTL-001",
+      "threat_id": "AGT-010",
+      "relationship": "secondary",
+      "rationale": "Identity and authorization context propagation: limits which user contexts can cause uncontrolled loops"
     }
   ],
   "threat_related_to_threat": [
@@ -210,6 +640,86 @@
       "from_threat_id": "AGT-002",
       "to_threat_id": "AGT-007",
       "relationship": "The delegation-ambiguity sub-pattern within AGT-002 connects directly to AGT-007 when the delegated entity is another agent rather than a tool"
+    },
+    {
+      "from_threat_id": "AGT-003",
+      "to_threat_id": "AGT-002",
+      "relationship": "Tool-chain abuse often depends on the agent having broader authorization than the user, which is AGT-002"
+    },
+    {
+      "from_threat_id": "AGT-003",
+      "to_threat_id": "AGT-001",
+      "relationship": "Prompt injection often drives the chain composition; the injected instruction directs the agent through legitimately authorized tool calls"
+    },
+    {
+      "from_threat_id": "AGT-004",
+      "to_threat_id": "AGT-002",
+      "relationship": "Authorization confusion is often the precondition that allows the agent to retrieve more than the user is authorized to see"
+    },
+    {
+      "from_threat_id": "AGT-004",
+      "to_threat_id": "AGT-006",
+      "relationship": "Persistence into memory or vector stores is a sub-pattern of AGT-004 that carries the AGT-006 long-lived exposure characteristic"
+    },
+    {
+      "from_threat_id": "AGT-005",
+      "to_threat_id": "AGT-002",
+      "relationship": "Authorization confusion compounds audit failure: when the agent acts beyond user scope, the audit trail's gap is also an accountability gap"
+    },
+    {
+      "from_threat_id": "AGT-005",
+      "to_threat_id": "AGT-001",
+      "relationship": "Detection of injection-driven action depends on the kind of provenance AGT-005 highlights"
+    },
+    {
+      "from_threat_id": "AGT-006",
+      "to_threat_id": "AGT-001",
+      "relationship": "Persisted content can be the vehicle for injection across sessions; AGT-001 plus persistence becomes AGT-006"
+    },
+    {
+      "from_threat_id": "AGT-006",
+      "to_threat_id": "AGT-005",
+      "relationship": "Detection of memory poisoning depends on the persistence boundary provenance described in AGT-005"
+    },
+    {
+      "from_threat_id": "AGT-007",
+      "to_threat_id": "AGT-002",
+      "relationship": "The delegation-ambiguity sub-pattern within AGT-002 connects directly to AGT-007 when the delegated entity is another agent rather than a tool"
+    },
+    {
+      "from_threat_id": "AGT-007",
+      "to_threat_id": "AGT-001",
+      "relationship": "Output-as-instruction is the inter-agent variant of indirect prompt injection: one agent's output becomes another agent's adversarial input"
+    },
+    {
+      "from_threat_id": "AGT-008",
+      "to_threat_id": "AGT-001",
+      "relationship": "Inverse direction: AGT-001 is content entering the agent, AGT-008 is content leaving the agent. The two together cover the cross-system trust boundaries"
+    },
+    {
+      "from_threat_id": "AGT-008",
+      "to_threat_id": "AGT-007",
+      "relationship": "Output to another agent in a multi-agent system is the AGT-007 dimension of AGT-008"
+    },
+    {
+      "from_threat_id": "AGT-009",
+      "to_threat_id": "AGT-001",
+      "relationship": "Prompt injection is one mechanism by which goal subversion occurs, but goal subversion can also occur without explicit injection"
+    },
+    {
+      "from_threat_id": "AGT-009",
+      "to_threat_id": "AGT-006",
+      "relationship": "Memory poisoning can be a pathway for goal subversion that persists across sessions"
+    },
+    {
+      "from_threat_id": "AGT-010",
+      "to_threat_id": "AGT-009",
+      "relationship": "Goal subversion can drive an agent into loops when its interpretation of the task does not converge"
+    },
+    {
+      "from_threat_id": "AGT-010",
+      "to_threat_id": "AGT-005",
+      "relationship": "Loop detection often depends on the kind of cumulative-action audit AGT-005 highlights"
     }
   ],
   "control_placeholders": [
