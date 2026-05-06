@@ -418,7 +418,7 @@
       "control_id": "CTL-005",
       "threat_id": "AGT-001",
       "relationship": "secondary",
-      "rationale": "End-to-end audit and accountability: enables post-incident attribution, forensic analysis, and detection of injection-driven actions through reasoning provenance"
+      "rationale": "End-to-end audit and accountability: enables post-incident attribution and forensic analysis of injection-driven actions"
     },
     {
       "control_id": "CTL-001",
@@ -435,8 +435,8 @@
     {
       "control_id": "CTL-005",
       "threat_id": "AGT-002",
-      "relationship": "primary",
-      "rationale": "End-to-end audit and accountability: every agent action must be traceable to the originating user, the agent involved, the delegation chain, and the authorization basis"
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: enables traceability of agent actions back to originating users, exposing authorization mismatches"
     },
     {
       "control_id": "CTL-003",
@@ -454,7 +454,7 @@
       "control_id": "CTL-005",
       "threat_id": "AGT-003",
       "relationship": "secondary",
-      "rationale": "End-to-end audit and accountability: enables review of action chains and detection of patterns of legitimate-but-composed harm"
+      "rationale": "End-to-end audit and accountability: cumulative composition patterns become detectable when full action streams are auditable"
     },
     {
       "control_id": "CTL-001",
@@ -484,7 +484,7 @@
       "control_id": "CTL-005",
       "threat_id": "AGT-005",
       "relationship": "primary",
-      "rationale": "End-to-end audit and accountability: the control is directly designed to address audit and provenance failure"
+      "rationale": "End-to-end audit and accountability: this control directly defines what audit and provenance must look like for agents"
     },
     {
       "control_id": "CTL-001",
@@ -507,8 +507,8 @@
     {
       "control_id": "CTL-005",
       "threat_id": "AGT-006",
-      "relationship": "primary",
-      "rationale": "End-to-end audit and accountability: enables forensic review when poisoning is suspected"
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: when persisted content later influences agent behavior, audit enables tracing back to the originating event"
     },
     {
       "control_id": "CTL-003",
@@ -537,8 +537,8 @@
     {
       "control_id": "CTL-005",
       "threat_id": "AGT-007",
-      "relationship": "primary",
-      "rationale": "End-to-end audit and accountability: enables traceability across the delegation chain"
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: delegation chain audit enables traceability across agent boundaries"
     },
     {
       "control_id": "CTL-003",
@@ -567,8 +567,8 @@
     {
       "control_id": "CTL-005",
       "threat_id": "AGT-009",
-      "relationship": "primary",
-      "rationale": "End-to-end audit and accountability: enables review of how the agent interpreted its goal"
+      "relationship": "secondary",
+      "rationale": "End-to-end audit and accountability: reasoning provenance, where available, enables detection of goal drift"
     },
     {
       "control_id": "CTL-002",
@@ -586,7 +586,7 @@
       "control_id": "CTL-005",
       "threat_id": "AGT-010",
       "relationship": "secondary",
-      "rationale": "End-to-end audit and accountability: enables review of loop patterns"
+      "rationale": "End-to-end audit and accountability: loop patterns are detectable in audit streams"
     },
     {
       "control_id": "CTL-001",
@@ -722,11 +722,5 @@
       "relationship": "Loop detection often depends on the kind of cumulative-action audit AGT-005 highlights"
     }
   ],
-  "control_placeholders": [
-    {
-      "control_id": "CTL-005",
-      "status": "stub",
-      "note": "End-to-end audit and accountability; full population deferred to a later session"
-    }
-  ]
+  "control_placeholders": []
 }
