@@ -97,9 +97,8 @@ The remaining sections are organized for two different ways of using the framewo
 | Find the right controls for a specific regulatory requirement | Section 4 (common-control crosswalk) |
 | Understand the threat model in depth | Section 5 (threat patterns and exemplars) |
 | Implement the v1 controls | Section 6 (control specifications) and Section 7 (implementation considerations) |
-| Walk through a concrete deployment scenario | Annex B (worked example) |
 | Understand what the framework does not cover | Section 8 (gaps and open problems) |
 
-A practitioner deploying agents in a regulated DACH enterprise should read Section 1 (this section), Section 7 (implementation considerations), and Annex B (worked example) first. The other sections become useful when specific questions arise.
+A practitioner deploying agents in a regulated DACH enterprise should read Section 1 (this section) and Section 7 (implementation considerations) first. The other sections become useful when specific questions arise.
 
-A regulator or auditor evaluating an agent deployment against the framework should read Sections 2, 3, 4, 5, 6, and 8. Sections 1 and 7 are practitioner-oriented and Annex B is illustrative; they are not the framework's primary content for compliance evaluation.
+A regulator or auditor evaluating an agent deployment against the framework should read Sections 2, 3, 4, 5, 6, and 8. Sections 1 and 7 are practitioner-oriented; they are not the framework's primary content for compliance evaluation.
