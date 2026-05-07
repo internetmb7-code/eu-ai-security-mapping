@@ -1,4 +1,25 @@
-This section presents 10 agent-specific threats organized by the attack surface where each threat manifests most directly: input, model, tool-use, output, memory and persistence, and audit and provenance. Each entry follows a fixed template covering the threat's structural cause, a concrete attack scenario, the components affected, why traditional controls do not fully address it, the recommended controls from the framework's library, residual risk, detection and mitigation maturity, regulatory hooks, MITRE ATLAS mapping, and primary references. The catalog is deliberately bounded; threats outside this list are either covered adequately by existing frameworks (OWASP LLM Top 10, MITRE ATLAS technique-level entries) or out of the narrow agent scope defined in section 1.
+This section presents the framework's view of agent-specific threats. It is structured in three layers, each playing a distinct role.
+
+The first layer is an attack surface taxonomy. Agents have a bounded set of attack surfaces (input, model, tool-use, output, memory and persistence, audit and provenance), and each surface produces recognizable threat patterns. The taxonomy is the durable structural claim of the framework: it is finite, derived from the architectural components every agent has, and stable across deployments.
+
+The second layer is a set of ten named threat exemplars (AGT-001 through AGT-010), one or two illustrative threats per attack surface. Each exemplar is documented with an attack scenario, an analysis of why traditional controls are insufficient, recommended controls from the v1 library, residual risk, detection and mitigation maturity, regulatory hooks, and MITRE ATLAS mappings. The exemplars are not an exhaustive enumeration of agent threats. They illustrate patterns concretely enough that practitioners can recognize variants in their own deployments.
+
+The third layer is methodology for discovering threats specific to a deployment that may not match the named exemplars. The methodology is essential: threats are infinite, no catalog can be complete, and the framework's value lies in the taxonomy and the structured way of thinking, not in the specific list of named threats. The methodology is documented in `docs/frameworks/THREAT_MODEL_FRAMEWORK.md`; this section references it rather than restating it.
+
+### Provenance of the threat catalog
+
+The framework's threat catalog draws on multiple sources, each playing a different role:
+
+| Source | Role in the catalog |
+|---|---|
+| Attack surface taxonomy (input, model, tool-use, output, memory, audit) | Framework-original. The structural claim that agent threats are bounded by a finite set of architectural surfaces is the framework's primary contribution and is not adopted from any specific external catalog |
+| MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems) | Secondary tagging on each exemplar where applicable. ATLAS provides technique-level adversarial-ML reference; this framework uses ATLAS technique IDs as cross-references but does not adopt ATLAS taxonomy as the primary structure |
+| OWASP Top 10 for LLM Applications | Substantial overlap with several exemplars (notably AGT-001 prompt injection, AGT-004 data exfiltration). OWASP Top 10 is the most widely-recognized agent-relevant catalog among practitioners; the framework's exemplars overlap intentionally to ease cross-referencing, but the catalog is not derived from OWASP |
+| Greshake et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection," AISec '23 | Specific influence on AGT-001 (prompt injection via tool outputs). Cited in the exemplar as the canonical academic reference for the indirect-injection pattern |
+| Author's practitioner experience in DACH regulated enterprises | The curation choice: which threats made the cut as exemplars, which residual risks were highlighted, and which regulatory hooks were emphasized. This influence is unavoidable in any practitioner framework and is acknowledged here rather than disguised |
+| Cross-references to MITRE ATT&CK and NIST AI 100-2 (Adversarial Machine Learning) | Applied where threats overlap with general adversarial-ML or general-IT-security patterns; cited in individual exemplars rather than as primary structure |
+
+The framework's claim is not that these ten threats are the complete or correct set; it is that the attack surface taxonomy is bounded and that the methodology for discovering deployment-specific threats is the durable contribution. Practitioners using this section should not interpret coverage of the ten exemplars as completion of agent threat work. Coverage of the exemplars is necessary but not sufficient. The actual security work is in applying the taxonomy and methodology to the specific deployment, complemented by external catalogs (MITRE ATLAS, OWASP LLM Top 10, MITRE ATT&CK, NIST AI 100-2) for technique-level detail.
 
 This section is a guideline based on the author's interpretation of public regulatory texts and operational security experience. It is not legal advice. Readers should consult qualified legal counsel for compliance determinations specific to their organization.
 

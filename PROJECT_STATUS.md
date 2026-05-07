@@ -90,11 +90,11 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Section | Status |
 |---|---|
-| 1. Executive summary | Drafted (section file and canonical document populated) |
+| 1. Executive briefing | Drafted as CISO executive briefing (4-6 pages) with overview table, board talking points, priority ranking, cost framing; provenance paragraph references Section 5 |
 | 2. Scope and disclaimer | Drafted (section file and canonical document populated) |
 | 3. Regulatory landscape | Drafted (section file and canonical document populated; uses `docs/frameworks/regulatory-facts.md` as spine; one subsection per instrument with bridging "what this means for agent deployments" paragraphs) |
 | 4. Common-control crosswalk | Drafted (section file and canonical document populated; reconciled against `data/mappings.json`) |
-| 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
+| 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Drafted (framing rewritten with explicit provenance to ATLAS, OWASP Top 10 for LLM, Greshake 2023; placeholder note resolved). Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
 | 6. Recommended controls | Fully populated for v1 (CTL-001 through CTL-005 all inserted; v1 control library complete) |
 | 7. Implementation considerations | Drafted (section file and canonical document populated) |
 | 8. Gaps and open problems | Drafted (section file and canonical document populated) |
@@ -166,6 +166,9 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Control library completeness | 5 of 5 fully populated; v1 control library complete |
 | v2 framework reframe | Applied |
 | Document drafting | All nine sections drafted |
+| Document restructuring (Option C: guidance layer on spec) | Section 1 now serves as the CISO executive briefing layer per Option C of the document restructuring decision. Annex B (worked example) and Section 7 rewrite are the remaining Option C subsessions |
+| Annex B (worked example) dependency | Section 1.7 forward-references "Annex B (worked example)" as a reading-path entry. Annex B does not yet exist; it is the next Option C subsession and is an immediate dependency for Section 1 readability claims |
+| Section 5 exemplar bodies in canonical document | AGT-001 through AGT-010 exemplar bodies are present in `docs/sections/05-threat-model.md` (section file) and `data/threats.json` but are NOT yet in `docs/main-document/EU-AI-Security-Mapping.md` (canonical document). The merge from section file into the canonical document is outstanding work; an honest placeholder note now references `data/threats.json` for compressed entries |
 | Pre-publication | Framework approaching v1-publishable status pending final assembly review (full-document read-through, cross-reference audit, consistency pass across sections, peer review by named subject matter experts, license confirmation) |
 | Web tool | Not started |
 | Public visibility | Deferred until foundation is more mature |
