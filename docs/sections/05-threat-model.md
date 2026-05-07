@@ -23,6 +23,8 @@ The framework's claim is not that these ten threats are the complete or correct 
 
 This section is a guideline based on the author's interpretation of public regulatory texts and operational security experience. It is not legal advice. Readers should consult qualified legal counsel for compliance determinations specific to their organization.
 
+**Note on v1 scope**: The ten exemplars below differ in depth. AGT-001 (prompt injection via tool outputs) and AGT-002 (authorization confusion) are fully populated, with attack scenario, traditional controls and why insufficient, recommended controls, residual risk, detection and mitigation maturity, regulatory hooks, and MITRE ATLAS mappings. AGT-003 through AGT-010 are compressed exemplars: they cover the attack scenario, the recommended controls, and the regulatory hooks, but defer realistic deployment examples and full residual-risk analysis to v1.1. Practitioners requiring depth equivalent to AGT-001 and AGT-002 should treat AGT-003 through AGT-010 as patterns to recognize rather than fully-documented exemplars at v1. Section 8 records the v1.1 commitment to populate AGT-003 through AGT-010 to parity.
+
 ---
 
 ### AGT-001: Prompt Injection via Tool Outputs

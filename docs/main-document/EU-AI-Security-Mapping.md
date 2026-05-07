@@ -494,7 +494,7 @@ The framework's threat catalog draws on multiple sources, each playing a differe
 
 The framework's claim is not that these ten threats are the complete or correct set; it is that the attack surface taxonomy is bounded and that the methodology for discovering deployment-specific threats is the durable contribution. Practitioners using this section should not interpret coverage of the ten exemplars as completion of agent threat work. Coverage of the exemplars is necessary but not sufficient. The actual security work is in applying the taxonomy and methodology to the specific deployment, complemented by external catalogs (MITRE ATLAS, OWASP LLM Top 10, MITRE ATT&CK, NIST AI 100-2) for technique-level detail.
 
-**Note on completeness**: The exemplar entries below provide AGT-001 (Prompt injection via tool outputs) and AGT-002 (Authorization confusion) in fully populated form. AGT-003 through AGT-010 are present in `data/threats.json` as compressed drafts with attack scenarios, recommended controls, and regulatory hooks but without realistic deployment examples. The realistic-example expansion is a v2 priority and is not blocking for v1 publication. Practitioners using this section should consult `data/threats.json` directly for the compressed entries until the v2 expansion is complete.
+**Note on v1 scope**: The canonical document at v1 contains the framing above; the exemplar bodies are not inlined here. AGT-001 (Prompt injection via tool outputs) and AGT-002 (Authorization confusion) are fully populated in `docs/sections/05-threat-model.md`, with attack scenario, traditional controls and why insufficient, recommended controls, residual risk, detection and mitigation maturity, regulatory hooks, and MITRE ATLAS mappings. AGT-003 through AGT-010 are present as compressed exemplars in the same section file and in `data/threats.json`: they cover attack scenario, recommended controls, and regulatory hooks but defer realistic deployment examples and full residual-risk analysis. Practitioners requiring depth equivalent to AGT-001 and AGT-002 should treat AGT-003 through AGT-010 as patterns to recognize rather than fully-documented exemplars at v1. Section 8 records the v1.1 commitments to populate AGT-003 through AGT-010 to parity and to merge full exemplar bodies into the canonical document.
 
 ## 6. Recommended Controls and Patterns
 
@@ -914,7 +914,7 @@ The control acknowledges a fundamental limit: model reasoning provenance is part
 | Detection rules absent | Logs exist but no detection logic surfaces patterns; audit becomes forensic-only, not preventive |
 | Volume-induced sampling | Cost pressures lead to sampling that breaks reconstruction integrity; sampling must be deliberate and documented, not silent |
 
-**Threats addressed**: AGT-005 (primary), AGT-001 (secondary), AGT-002 (secondary), AGT-003 (secondary), AGT-006 (secondary), AGT-007 (secondary), AGT-009 (secondary), AGT-010 (secondary).
+**Threats addressed**: AGT-005 (primary), AGT-004 (primary), AGT-001 (secondary), AGT-002 (secondary), AGT-003 (secondary), AGT-006 (secondary), AGT-007 (secondary), AGT-009 (secondary), AGT-010 (secondary).
 
 **Regulatory basis**:
 
@@ -1135,6 +1135,18 @@ The platform model is unproven. Its value depends on adoption that has not yet h
 ### 8.6 The framework does not address governance, culture, or organizational change
 
 This framework is technical-practitioner-oriented. It addresses threats, controls, and regulatory mappings at the architectural and operational level. It does not address the organizational work of integrating AI security into procurement, shifting development culture, or building cross-functional governance. This is a deliberate scope choice. Most enterprise AI security failures will be governance failures as much as technical control failures, but addressing both in one document would dilute the focus and produce a less useful technical reference. Organizations should pair this framework with NIST AI RMF, ISO/IEC 42001, or ENISA AI cybersecurity guidance for the governance layer.
+
+### 8.7 v1.1 commitments
+
+The following items were intentionally deferred from v1 to keep the framework scope bounded and publishable. They are recorded here as commitments for the v1.1 release rather than v2, because they extend existing v1 content to parity rather than introducing new control or threat work.
+
+| Commitment | What it covers | Why deferred from v1 |
+|---|---|---|
+| Populate AGT-003 through AGT-010 to parity with AGT-001 and AGT-002 | Add attack scenario depth, traditional controls and why insufficient, full residual-risk analysis, detection and mitigation maturity, and realistic deployment examples for the eight compressed exemplars in Section 5 | Time-bounded curation; the compressed form is sufficient for pattern recognition at v1, but practitioners using the framework for engagement-grade threat modeling need the deeper form |
+| Merge full exemplar bodies into the canonical document | The canonical document at v1 contains the Section 5 framing only; exemplar bodies live in `docs/sections/05-threat-model.md`. v1.1 will inline the full bodies in the canonical document so the single-file artifact is self-contained | Avoided duplication while exemplar depth was uneven; defer to when AGT-003 through AGT-010 reach parity |
+| Annex B (worked example) | A concrete deployment scenario walked through the threat model, the five v1 controls, and the regulatory crosswalk; intended to make the framework vivid for readers unfamiliar with agent security | The worked example requires a specific deployment context the framework does not yet have a sanitized example for; deferred rather than fabricated |
+
+These commitments are bounded extensions of existing v1 content. They are distinct from v2 work, which extends the control library and expands the framework scope.
 
 ### What v2 will address
 

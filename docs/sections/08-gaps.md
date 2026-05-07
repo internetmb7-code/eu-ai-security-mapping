@@ -42,6 +42,18 @@ The platform model is unproven. Its value depends on adoption that has not yet h
 
 This framework is technical-practitioner-oriented. It addresses threats, controls, and regulatory mappings at the architectural and operational level. It does not address the organizational work of integrating AI security into procurement, shifting development culture, or building cross-functional governance. This is a deliberate scope choice. Most enterprise AI security failures will be governance failures as much as technical control failures, but addressing both in one document would dilute the focus and produce a less useful technical reference. Organizations should pair this framework with NIST AI RMF, ISO/IEC 42001, or ENISA AI cybersecurity guidance for the governance layer.
 
+## 8.7 v1.1 commitments
+
+The following items were intentionally deferred from v1 to keep the framework scope bounded and publishable. They are recorded here as commitments for the v1.1 release rather than v2, because they extend existing v1 content to parity rather than introducing new control or threat work.
+
+| Commitment | What it covers | Why deferred from v1 |
+|---|---|---|
+| Populate AGT-003 through AGT-010 to parity with AGT-001 and AGT-002 | Add attack scenario depth, traditional controls and why insufficient, full residual-risk analysis, detection and mitigation maturity, and realistic deployment examples for the eight compressed exemplars in Section 5 | Time-bounded curation; the compressed form is sufficient for pattern recognition at v1, but practitioners using the framework for engagement-grade threat modeling need the deeper form |
+| Merge full exemplar bodies into the canonical document | The canonical document at v1 contains the Section 5 framing only; exemplar bodies live in `docs/sections/05-threat-model.md`. v1.1 will inline the full bodies in the canonical document so the single-file artifact is self-contained | Avoided duplication while exemplar depth was uneven; defer to when AGT-003 through AGT-010 reach parity |
+| Annex B (worked example) | A concrete deployment scenario walked through the threat model, the five v1 controls, and the regulatory crosswalk; intended to make the framework vivid for readers unfamiliar with agent security | The worked example requires a specific deployment context the framework does not yet have a sanitized example for; deferred rather than fabricated |
+
+These commitments are bounded extensions of existing v1 content. They are distinct from v2 work, which extends the control library and expands the framework scope.
+
 ## What v2 will address
 
 The gaps above produce a v2 control library priority list:
