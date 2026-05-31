@@ -208,164 +208,123 @@ As of v1, no vendor mappings have been contributed.
 
 <!-- Source: docs/sections/03-regulatory-landscape.md (4-6 pages) -->
 
-Four EU instruments shape the security obligations of an enterprise AI agent deployment in the DACH region: the EU AI Act, the NIS2 Directive, DORA, and GDPR (specifically Article 22). They were drafted independently, on different timelines, and with different primary objectives. They overlap on operational security in ways that are not always obvious from the text. This section walks each instrument in turn at the depth a security practitioner needs to identify which articles apply to a given deployment and what they require operationally. Detailed control mappings are deferred to Sections 4 and 6; threat-level analysis to Section 5.
+This section presents the four EU regulations that shape the security requirements for enterprise AI agent deployments: the EU AI Act, the NIS2 Directive, the Digital Operational Resilience Act (DORA), and the General Data Protection Regulation (GDPR). It describes what each regulation requires that is specifically relevant to agent security, and how they overlap in practice.
 
-Verified citations, dates, and article numbers throughout this section are drawn from [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md). Where legal interpretation is contested, I flag it; where the text is settled, I do not over-qualify.
+The framework treats these four together because they overlap. A regulated DACH enterprise deploying an agent will frequently be subject to all four simultaneously. Treating them in isolation produces fragmented compliance work; treating them together surfaces where one common control can satisfy obligations across multiple regulations.
 
-### EU AI Act (Regulation (EU) 2024/1689)
+This section operates at the article level. Citations identify specific provisions. Practitioners verifying compliance should consult the official consolidated texts on EUR-Lex (linked in section 9) and obtain legal counsel where the answer affects organizational decisions.
 
-The AI Act is the only one of the four instruments written specifically for AI systems. It was adopted on 13 June 2024, published in the Official Journal on 12 July 2024, and entered into force on 1 August 2024. Its substantive obligations apply on a staggered schedule.
+### 3.1 EU AI Act (Regulation 2024/1689)
 
-| Application date | Provisions |
-|---|---|
-| 2 February 2025 | Prohibitions in Chapter II (e.g. social scoring, untargeted facial recognition scraping) and AI literacy obligations |
-| 2 August 2025 | Governance provisions and obligations on general-purpose AI (GPAI) model providers (Chapter V) |
-| 2 August 2026 | Most remaining provisions, including the Annex III high-risk obligations that affect typical enterprise agent deployments |
-| 2 August 2027 | Article 6(1) high-risk systems (AI as safety components in products under Annex I sectoral law: medical devices, civil aviation, etc.) |
+The EU AI Act establishes harmonised rules for AI systems placed on the market, put into service, or used in the European Union. It applies a risk-based framework with different obligations for AI systems classified as prohibited, high-risk, limited-risk, or minimal-risk.
 
-The Commission published a Digital Omnibus simplification proposal on 19 November 2025 that may extend the high-risk application timeline by up to 16 months pending availability of harmonised standards. This is a moving target; verify before relying on a specific date for compliance planning.
+For enterprise AI agent deployments, the most consequential classification is **high-risk**. Many enterprise agents will fall into this category, particularly those involved in employment decisions, access to essential services, law enforcement, or critical infrastructure. Practitioners should determine classification before applying the requirements below.
 
-For agent security, the relevant articles cluster around risk management, data governance, oversight, and operational security:
+The articles most relevant to agent security:
 
-| Article | Topic | Why it matters for agent security |
+| Article | Subject | Relevance to agent security |
 |---|---|---|
-| Article 6 and Annex III | High-risk classification rules | Determines whether the deployment is high-risk and which obligations apply |
-| Article 9 | Risk management system | Direct hook for threat modeling and control selection |
-| Article 10 | Data and data governance | Training-data quality, bias mitigation, representativeness for high-risk systems |
-| Article 12 | Record-keeping (logging) | Direct hook for audit and provenance controls (see CTL-005 in Section 6) |
-| Article 13 | Transparency and information to deployers | Informs customer-facing security advisories |
-| Article 14 | Human oversight | Direct hook for action-verification and approval-boundary controls (see CTL-003) |
-| Article 15 | Accuracy, robustness, cybersecurity | The single most operationally relevant article; cited against most threats in Section 5 |
-| Articles 16 to 22 | Provider obligations (QMS, technical documentation, automatically generated logs, corrective action, cooperation, authorised representatives) | Apply if the customer is the AI system provider |
-| Article 26 | Deployer obligations for high-risk AI systems | Apply to most enterprise customers running purchased agents |
-| Article 27 | Fundamental rights impact assessment | Required of public-sector deployers and certain private deployers |
-| Article 50 | Transparency obligations for AI systems interacting with natural persons | Disclosure that the user is interacting with AI |
-| Articles 53 to 55 | GPAI model provider obligations | Apply to model providers (OpenAI, Anthropic, Google, Mistral, Meta, etc.), not deployers |
+| Article 9 | Risk management system | High-risk AI systems must have a risk management system that identifies, analyses, and addresses risks. For agents, this includes foreseeable misuse and adversarial manipulation. |
+| Article 10 | Data and data governance | Training, validation, and testing data must meet quality criteria. For deployed agents using retrieval, data governance extends to retrieval source quality and integrity. |
+| Article 12 | Record-keeping | High-risk AI systems must automatically record events during operation. This is the regulatory basis for end-to-end audit (CTL-005). |
+| Article 13 | Transparency and provision of information | Users must be provided sufficient information to interpret system output. For agents, this constrains how decisions are presented and explained. |
+| Article 14 | Human oversight | High-risk AI systems must be designed to enable effective oversight by natural persons during operation. This is the regulatory basis for action verification at high-impact boundaries (CTL-003). |
+| Article 15 | Accuracy, robustness, and cybersecurity | High-risk AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity throughout their lifecycle. Cybersecurity requirements include resilience against attempts by unauthorized third parties to alter use, outputs, or performance. This is the regulatory basis for most of the framework's threat-driven controls. |
 
-The provider/deployer distinction matters operationally. A typical enterprise customer is a deployer of a purchased agent platform. Deployer obligations under Article 26 (use in line with provider instructions, monitoring, logging, human oversight, incident reporting) are the obligations that drive day-to-day operational security. Provider obligations under Articles 16 to 22 apply to the platform vendor; in practice, the customer inherits security properties from how well the provider implements them. If the customer builds the agent in-house on top of a foundation model, both sets of obligations may apply simultaneously.
+The Act entered into force on 1 August 2024. Application is phased: prohibitions on prohibited AI systems apply from February 2025; obligations for general-purpose AI models from August 2025; obligations for high-risk AI systems from August 2026, with some provisions extending to August 2027.
 
-**What this means for agent deployments**: The AI Act gives the framework its primary anchor. Article 9 (risk management) and Article 15 (cybersecurity, robustness, accuracy) are cited across the threat catalog in Section 5 because they make AI-specific operational security legally binding for the first time. Article 12 (logging) is the legal hook for audit controls that already exist as good engineering practice. Article 14 (human oversight) constrains how much autonomy an agent can have between approval points without violating the Act, which directly shapes the high-impact-action verification controls in Section 6. The August 2026 application date for Annex III obligations is the binding deadline for most enterprise deployments. The Article 6(1) date in August 2027 matters only for AI embedded as safety components in products covered by sectoral law (medical devices, civil aviation, automotive, etc.).
+For agent deployments, the most operationally relevant date is August 2026, when most high-risk system obligations begin to apply.
 
-### NIS2 Directive (Directive (EU) 2022/2555)
+### 3.2 NIS2 Directive (Directive 2022/2555)
 
-NIS2 is the second-generation EU cybersecurity directive. It was adopted on 14 December 2022, entered into force on 16 January 2023, and member states were required to transpose it into national law by 17 October 2024. National measures became applicable from 18 October 2024 in member states that transposed on time. The original NIS Directive (Directive 2016/1148) was repealed on 18 October 2024.
+NIS2 establishes a common cybersecurity regulatory framework across the European Union, applicable to essential and important entities in sectors of high criticality including banking, financial market infrastructure, energy, transport, health, digital infrastructure, public administration, and several others.
 
-NIS2 expanded the scope of the original directive substantially:
+Unlike the AI Act, NIS2 is a directive rather than a regulation: Member States transpose it into national law, and specific obligations may vary slightly across jurisdictions. Most Member States completed transposition by late 2024 to early 2025, though some remain incomplete as of 2026.
 
-| Dimension | NIS1 | NIS2 |
+The article most relevant to agent security:
+
+| Article | Subject | Relevance to agent security |
 |---|---|---|
-| Sectors in scope | 7 | 18 (Annex I plus Annex II) |
-| Estimated entities in scope | 10,000 to 15,000 across the EU | Approximately 160,000 (ENISA) |
-| Entity classification | Operators of essential services / digital service providers | Essential entities / important entities |
+| Article 21 | Cybersecurity risk-management measures | Essential and important entities must take appropriate and proportionate technical, operational, and organizational measures to manage cybersecurity risks. The article enumerates ten specific measure categories including risk analysis policies, incident handling, business continuity, supply chain security, security in network and information systems acquisition and maintenance, policies on cryptography, human resources security, access control policies, and use of multi-factor authentication and secured communications. |
+| Article 23 | Reporting obligations | Significant incidents must be reported to the competent authority. For agent deployments, this includes incidents arising from agent compromise or misuse. |
 
-The expansion catches enterprises that were previously out of NIS scope, including many that operate AI agents. Cloud computing service providers, data centre service providers, ICT service management (B2B), digital providers, and managed security services are explicitly named. Many DACH enterprises that did not previously identify as critical infrastructure now sit inside the directive's scope.
+Article 21 is broad. For agent deployments, the relevant operational interpretation is that all ten measure categories must address the agent-specific risks introduced by autonomous AI systems with action capability. The framework's threat catalog (AGT-001 through AGT-010) and control library (CTL-001 through CTL-005) are positioned as the agent-specific extensions to existing NIS2 compliance programs.
 
-Three articles dominate the operational security analysis:
+### 3.3 Digital Operational Resilience Act (DORA, Regulation 2022/2554)
 
-| Article | Topic |
-|---|---|
-| Article 21 | Cybersecurity risk-management measures: a 10-point list including risk analysis, incident handling, business continuity, supply chain security, vulnerability disclosure, basic cyber hygiene, encryption, access control, MFA, and security in network and information systems acquisition, development and maintenance |
-| Article 23 | Reporting obligations: 24-hour early warning, 72-hour incident notification, one-month final report |
-| Article 32 | Supervisory measures and penalties |
+DORA establishes a uniform regulatory framework for the digital operational resilience of financial entities in the European Union. It applies to a broad range of financial entities including credit institutions, payment service providers, investment firms, insurance and reinsurance undertakings, crypto-asset service providers, and others.
 
-Article 21 is intentionally broad. It does not specify how to implement each measure; member states and competent authorities flesh that out through national law and guidance. This means Article 21 reads like a minimum expectation rather than a prescriptive control catalog. For agent security, the substantive content is in supply-chain security (Article 21(2)(d)), incident handling (Article 21(2)(b)), access control and MFA (Article 21(2)(i) and (j)), and encryption (Article 21(2)(h)).
+DORA applies from 17 January 2025. For financial entities deploying AI agents, DORA is the most operationally specific of the four regulations.
 
-#### DACH transposition status
+The articles most relevant to agent security:
 
-Transposition is uneven. As of early 2026:
-
-| Country | Status | Note |
+| Article | Subject | Relevance to agent security |
 |---|---|---|
-| Germany | Transposed | NIS2UmsuCG (NIS-2-Umsetzungs- und Cybersicherheitsstärkungsgesetz) approved by Bundestag on 13 November 2025 and entered into force on 6 December 2025; the BSI Act now covers approximately 29,500 supervised entities (up from approximately 4,500); BSI portal registration window opens 6 January 2026; no transition period |
-| Austria | Not yet transposed | First draft (NISG 2024) rejected by the National Council in February 2024; revised draft NISG 2026 published 13 November 2025; entry into force scheduled 1 October 2026; until then NISG 2018 applies |
-| Switzerland | Out of scope | Not an EU member; relevant only to Swiss entities providing services into the EU |
+| Article 6 | ICT risk management framework | Financial entities must have a sound, comprehensive, and well-documented ICT risk management framework including strategies, policies, procedures, ICT protocols, and tools necessary to protect information assets. For agents, this framework must explicitly address agent-mediated ICT risks. |
+| Article 7 | ICT systems, protocols, and tools | The technical requirements that ICT systems must meet, including resilience, redundancy, capacity, and information security. |
+| Article 8 | Identification | Financial entities must identify, classify, and adequately document ICT-supported business functions, information assets, and ICT assets. Agents and the systems they integrate with fall in scope. |
+| Article 9 | Protection and prevention | Specific protection requirements including access management, identity management, encryption, and configuration management. The basis for authorization and identity controls (CTL-001) in financial contexts. |
+| Article 12 | Major ICT-related incidents | Financial entities must classify and report major ICT-related incidents. For agents, this includes incidents arising from agent-mediated harm. |
+| Articles 28 to 30 | ICT third-party risk | Where AI agents integrate third-party services or AI providers, third-party risk management requirements apply. |
 
-For German entities, the implementing law is now in force; the relevant operational reference is the revised BSI Act (BSIG) rather than the directive text alone. Verify the current state and any sector-specific implementing rules with qualified counsel before relying on this section for compliance decisions.
+DORA is the most prescriptive of the four regulations regarding specific operational requirements. For financial entities, DORA effectively raises the operational baseline that the framework's controls must meet.
 
-**What this means for agent deployments**: NIS2 supplies the general cybersecurity baseline that AI agents inherit by virtue of running inside an in-scope enterprise. It is not AI-specific. Article 21's 10-point list maps cleanly onto traditional security controls; the agent-specific overlay (prompt injection, authorization confusion, tool-chain abuse, etc.) sits on top of that baseline rather than replacing it. The supply-chain security obligation (Article 21(2)(d)) is the most relevant for agent deployments because it pulls foundation model providers, agent platform vendors, and tool integrations into the scope of the customer's NIS2 risk assessment. Incident reporting timelines under Article 23 are tight; agent-specific incidents (prompt-injection-driven exfiltration, authorization-confusion-driven actions) can trigger them just like traditional incidents.
+### 3.4 General Data Protection Regulation (GDPR, Regulation 2016/679)
 
-### DORA (Regulation (EU) 2022/2554)
+The GDPR governs the processing of personal data of individuals in the European Union. It applies regardless of where the data controller or processor is established, if the processing relates to offering goods or services to data subjects in the EU or monitoring their behavior.
 
-DORA is the EU's digital operational resilience regulation for the financial sector. It was adopted on 14 December 2022 (the same day as NIS2), entered into force on 16 January 2023, and applies from 17 January 2025. A companion directive (Directive (EU) 2022/2556) had a transposition deadline of 17 January 2025. Unlike NIS2, DORA is a regulation, so it applies directly without national transposition.
+For agent deployments, GDPR applies whenever the agent processes personal data, which in most enterprise contexts is unavoidable. The articles most relevant to agent security:
 
-DORA is structured around five pillars:
-
-| Pillar | Articles |
-|---|---|
-| ICT risk management | Articles 5 to 16 |
-| ICT-related incident management, classification, reporting | Articles 17 to 23 |
-| Digital operational resilience testing | Articles 24 to 27 |
-| ICT third-party risk management | Articles 28 to 30 |
-| Information and intelligence sharing | Article 45 |
-
-For agent security in financial entities, the high-leverage articles are:
-
-| Article | Topic |
-|---|---|
-| Article 6 | ICT risk management framework (the umbrella requirement) |
-| Article 9 | Protection and prevention (security controls baseline) |
-| Articles 17 and 18 | ICT incident classification and major-incident reporting |
-| Article 28 | General principles for ICT third-party risk |
-| Article 30 | Mandatory contractual provisions for ICT services supporting critical or important functions |
-
-The third-party risk pillar deserves particular attention for agent deployments. Article 30 specifies contractual provisions that financial entities must include in agreements with ICT service providers supporting critical or important functions: rights to audit, exit strategies, security and incident notification obligations, sub-contracting restrictions, and assistance during incidents. Foundation model providers, agent platform vendors, and major tool integrations sit inside this scope when an agent supports a critical or important function.
-
-The Commission designated the first 19 critical ICT third-party providers (CTPPs) on 18 November 2025, including AWS, Microsoft, Google Cloud, IBM, Bloomberg, LSEG, TCS, and Orange. CTPP designation triggers direct EU oversight under Articles 31 to 44, including the right of EU lead overseers to conduct on-site inspections at the provider. Foundation model providers are not currently on the list; that does not mean they cannot be added in subsequent rounds.
-
-**What this means for agent deployments**: For financial entities, DORA's third-party risk obligations make the foundation model provider, the agent platform vendor, and major tool integrations into named, contractually constrained, regulator-visible elements of the deployment. This is the most operationally specific of the four instruments for agents in financial services. Articles 17 and 18 incident reporting overlap with NIS2 Article 23 reporting; the entity-specific question is which regulator gets the report first and whether a single submission discharges both obligations (this is jurisdiction-specific; verify with national authorities). Article 9's protection and prevention requirements map onto the same operational controls as the AI Act's Article 15 cybersecurity obligation, with finance-specific accent on resilience and continuity.
-
-### GDPR Article 22 (Regulation (EU) 2016/679)
-
-GDPR has applied since 25 May 2018. Most of its provisions are well-traveled by now. For agent security specifically, Article 22 is the article that matters and the only one I cover here in any depth.
-
-Article 22(1) states:
-
-> "The data subject shall have the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects concerning him or her or similarly significantly affects him or her."
-
-Article 22(2) specifies the conditions under which a solely automated decision is permitted:
-
-| Basis | Reference |
-|---|---|
-| Necessary for entering into or performance of a contract between data subject and controller | Article 22(2)(a) |
-| Authorised by Union or Member State law with suitable safeguards | Article 22(2)(b) |
-| Based on the data subject's explicit consent | Article 22(2)(c) |
-
-In cases (a) and (c), Article 22(3) requires the controller to implement suitable measures to safeguard the data subject's rights, at minimum: the right to obtain human intervention, to express their point of view, and to contest the decision.
-
-The operationally critical word in Article 22(1) is "solely". An automated decision is in scope only if no meaningful human review takes place. The threshold for "meaningful" review is set by EDPB Guidelines on Automated Decision-Making (WP251rev.01): the human reviewer must have the authority and competence to override the decision. Rubber-stamp human approval that always confirms the algorithmic recommendation does not qualify. A reviewer who lacks the data, expertise, or organizational authority to disagree does not qualify either.
-
-This is exactly where agentic AI creates new risk. An agent that "recommends" an action that is then "approved" by a human one-click reviewer is, in practice, making a solely automated decision dressed up as a human one. The Article 22 risk is not theoretical; supervisory authorities have shown willingness to look through the form to the substance.
-
-**What this means for agent deployments**: Article 22 is the legal lever for the human-oversight design pattern that runs through Section 6 (specifically CTL-003: Action Verification at High-Impact Boundaries). The framework's position is that high-impact actions (financial transactions, hiring or termination, credit or lending, access to services with legal effects) require human approval that is meaningful, not nominal. The control library specifies what meaningful means operationally: independent context, override authority, sufficient time, and audit of overrides. Article 22 also limits how aggressive an agent can be in autonomy progression: every increment in autonomy reduces the share of decisions that get meaningful human review, and at some point the system crosses into "solely automated" territory. The crossing is not always obvious; it deserves explicit design and legal review.
-
-### DACH-specific national rules
-
-Two German national rules deserve mention because they intersect with agent deployments in specific sectors.
-
-#### BSI C5 Equivalence Regulation (C5-Gleichwertigkeitsverordnung, C5GleichwV)
-
-The C5 Equivalence Regulation was published on 19 March 2025 (BGBl. 2025 I Nr. 91) with retroactive effect from 1 July 2024. Its statutory basis is § 393 Abs. 4 Satz 4 SGB V, introduced by the DigiG (22 March 2024). Scope: cloud computing services processing social or health data for healthcare providers, statutory health insurers, and their processors. Mechanism: it permits alternative certifications (ISO 27001 auf Basis IT-Grundschutz, SOC 2) as temporarily equivalent to a C5-Type-1 testat, for a maximum of two years, conditional on a documented gap-closure plan toward C5-Type-2. Relevance to agent security is narrow: it affects healthcare-sector cloud and AI deployments in Germany specifically.
-
-#### BSI IT-Grundschutz
-
-IT-Grundschutz is the German national security baseline framework, maintained by the Bundesamt für Sicherheit in der Informationstechnik (BSI). Its annual IT-Grundschutz-Kompendium serves as a national reference catalog of building blocks (Bausteine), threats (Gefährdungen), and security requirements. The framework treats it as a translation aid alongside NIST SP 800-53 and ISO 27001 Annex A, not as a primary regulatory anchor.
-
-**What this means for agent deployments**: The DACH-specific rules narrow the framework's relevance for two specific cases (German healthcare cloud; mappings to a German national baseline) without changing the primary EU-level analysis. Practitioners working in those contexts should treat the DACH section as a hook into more specialized guidance from BSI and the national supervisory authorities; it is not a substitute for that guidance.
-
-### How the four instruments interact
-
-The four instruments are layered, not parallel:
-
-| Layer | Instrument | What it adds |
+| Article | Subject | Relevance to agent security |
 |---|---|---|
-| AI-specific | EU AI Act | Risk classification, AI-specific obligations on data, oversight, accuracy, robustness, cybersecurity |
-| Sectoral cybersecurity | NIS2 | Cybersecurity baseline for in-scope entities; supply chain and incident reporting |
-| Sectoral cybersecurity (financial) | DORA | Operational resilience for financial entities; ICT third-party risk; CTPP regime |
-| Data protection | GDPR Article 22 | Human oversight requirement for solely automated decisions affecting individuals |
+| Article 5 | Principles relating to processing of personal data | Personal data must be processed lawfully, fairly, transparently, for specified purposes, in minimised quantities, accurately, and with integrity and confidentiality. Several principles are particularly relevant: purpose limitation (5(1)(b)), data minimisation (5(1)(c)), accuracy (5(1)(d)), and integrity and confidentiality (5(1)(f)). |
+| Article 22 | Automated individual decision-making | Data subjects have the right not to be subject to decisions based solely on automated processing producing legal or similarly significant effects. For agents making consequential decisions about data subjects, this right constrains permissible deployment. |
+| Article 25 | Data protection by design and by default | Data protection must be embedded in system design from the outset, with default settings that minimize processing. For agents, this affects retrieval scope, output filtering, and persistence design. |
+| Article 30 | Records of processing activities | Controllers and processors must maintain records of processing activities. For agents, processing records must capture agent-mediated processing. |
+| Article 32 | Security of processing | Appropriate technical and organizational measures including pseudonymisation, encryption, ensuring confidentiality and integrity, restoration capability, and regular testing. The article is broad and applies wherever personal data is processed, including by agents. |
+| Article 35 | Data protection impact assessment | Where processing is likely to result in high risk to the rights of natural persons, a DPIA is required. Many agent deployments will trigger this requirement. |
 
-A given deployment can sit inside two, three, or all four scopes simultaneously. A high-risk AI agent deployed by a German bank to make credit decisions on retail customers triggers all four: AI Act (high-risk classification under Annex III), NIS2 (banking is a NIS2 essential entity sector), DORA (banks are explicitly in scope), and GDPR Article 22 (credit decisions are solely automated decisions with legal or similarly significant effects). The framework's Section 4 maps where the four instruments converge on common controls, which is what makes integrated compliance tractable rather than four parallel projects.
+The GDPR has been in force longer than the other three regulations and has the most developed body of case law, regulatory guidance, and supervisory authority enforcement. Practitioners should expect the GDPR provisions to be the most rigorously enforced in the short term.
 
-The more general point: a security practitioner who understands the agent-specific threat model in Section 5 and applies the controls in Section 6 will satisfy a substantial portion of the operational obligations across all four instruments. The remainder is process, documentation, and governance work outside the operational security scope of this framework.
+### 3.5 How the regulations overlap
+
+The four regulations were drafted independently and have different primary subjects, but they overlap substantially when applied to enterprise agent deployments.
+
+| Overlap area | What it means in practice |
+|---|---|
+| Cybersecurity requirements | EU AI Act Article 15, NIS2 Article 21, DORA Articles 6 to 9, and GDPR Article 32 all establish cybersecurity obligations. They are not identical but are largely consistent. A single set of well-designed controls can satisfy all four simultaneously. |
+| Risk management | EU AI Act Article 9, NIS2 Article 21, DORA Articles 6 to 8, and GDPR Article 25 all require structured risk management. Again, consistent in principle though differing in detail. |
+| Incident reporting | EU AI Act Article 12, NIS2 Article 23, DORA Article 12, and GDPR Article 33 all impose incident-related obligations. Definitions of reportable incidents differ; reporting timelines differ; supervisory authorities differ. This is the area of greatest practical complexity. |
+| Human oversight | EU AI Act Article 14 and GDPR Article 22 both constrain fully automated decision-making in different ways. EU AI Act focuses on system design for oversight; GDPR focuses on the data subject's right to human intervention. |
+| Record-keeping and audit | EU AI Act Article 12, DORA Article 12, GDPR Article 30, and NIS2 (implicit in incident reporting) all require records. The records serve different purposes but overlap in content. |
+
+The pragmatic implication is that organizations subject to multiple of these regulations should design controls once and document how they satisfy each regulation, rather than implementing separate compliance programs for each. The crosswalk in section 4 supports this approach.
+
+### 3.6 Sectoral and national variations
+
+Beyond the four regulations addressed here, additional requirements apply by sector or jurisdiction. A non-exhaustive list:
+
+| Source | Relevance |
+|---|---|
+| BSI IT-Grundschutz (Germany) | German federal IT security standard; directly applicable to public sector and federally regulated entities; widely adopted in private sector |
+| BaFin guidance (Germany) | Financial supervisory authority guidance applicable to BaFin-supervised institutions; layers on top of DORA |
+| Sectoral cybersecurity acts in transposition | Some Member States have implemented NIS2 with sector-specific overlays |
+| ePrivacy Directive and successor | Specific to electronic communications; relevant where agents interact with such communications |
+| Medical Device Regulation (MDR) | Applies where agents are part of medical devices |
+
+Full treatment of sectoral and national variations is out of scope for v1 of this framework. Practitioners operating in regulated sectors should expect their compliance work to include sectoral requirements in addition to the four addressed here.
+
+### 3.7 What this section does not address
+
+This section names the regulations and identifies the articles most relevant to agent security. It does not:
+
+- Provide compliance determinations for specific deployments
+- Replace legal counsel or formal compliance assessment
+- Cover all provisions of each regulation
+- Address the Member State transposition variations of NIS2
+- Address regulatory developments after the framework's v1 publication date
+
+The framework's regulatory mapping is current as of the v1 publication date. Regulations evolve; technical standards under DORA continue to be issued; AI Act guidance continues to develop. Practitioners should treat the regulatory landscape as moving and consult primary sources for current authoritative text.
 
 ## 4. Common-Control Crosswalk
 
