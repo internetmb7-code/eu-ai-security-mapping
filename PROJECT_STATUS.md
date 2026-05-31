@@ -98,7 +98,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | 6. Recommended controls | Fully populated for v1 (CTL-001 through CTL-005 all inserted; v1 control library complete) |
 | 7. Implementation considerations | Rewritten (section file and canonical document populated; operational realities, sequencing recommendations, integration with existing programs, measurement and assurance, anti-patterns, closing observation) |
 | 8. Gaps and open problems | Drafted (section file and canonical document populated) |
-| 9. References | Drafted (section file and canonical document populated; consolidated from data/threats.json, data/controls.json, and docs/frameworks/regulatory-facts.md) |
+| 9. References | Rewritten (section file and canonical document populated; eight subsections covering EU regulations and directives, information security control frameworks, AI and agent security references, identity/authentication/authorization, research literature, incident handling and forensics, sources maintained outside the framework, and note on citation style) |
 
 ### Data files
 
@@ -165,7 +165,7 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Threat catalog completeness | 2 of 10 fully populated; 8 of 10 committed as compressed drafts (realistic examples deferred); structural completeness reached at the exemplar level |
 | Control library completeness | 5 of 5 fully populated; v1 control library complete |
 | v2 framework reframe | Applied |
-| Document drafting | All nine sections drafted |
+| Document drafting | All nine sections drafted; sections 2, 3, 4, 7, and 9 rewritten in current session. Document is structurally complete and ready for the final verification pass and publication decision |
 | Document restructuring (Option C: guidance layer on spec) | Section 1 serves as the CISO executive briefing layer per Option C. Annex B (worked example) and Section 7 prescriptive rewrite are deferred to v1.1 |
 | Annex B (worked example) | Deferred to v1.1. Section 1 references to Annex B were removed for v1; the worked example is recorded in Section 8 as a v1.1 commitment |
 | Section 5 exemplar bodies in canonical document | AGT-001 through AGT-010 exemplar bodies are present in `docs/sections/05-threat-model.md` (section file) and `data/threats.json` but are NOT yet in `docs/main-document/EU-AI-Security-Mapping.md` (canonical document). The merge from section file into the canonical document is outstanding work; an honest placeholder note now references `data/threats.json` for compressed entries |
@@ -181,10 +181,16 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 
 | Option | What it produces | Recommendation |
 |---|---|---|
-| A. Final assembly review of the practitioner guide | Full-document read-through, cross-reference audit, consistency pass across sections; produces a v1-publishable document | Recommended next: all nine sections are drafted; final assembly review is the natural gate before publication. |
-| B. Populate realistic examples for AGT-003 through AGT-010 | Threat catalog reaches parity with AGT-001 and AGT-002 | Strong parallel work to section drafting |
-| C. Begin regulatory mapping framework | Surfaces the regulatory crosswalk as a primary artifact | Natural feeder into section 4 once sections 2 and 3 are stable |
-| D. Plan the web tool | Multi-entry-point navigator scoped against the now-stable schema | Defer until practitioner guide is closer to v1 publishable |
+| A. Final assembly review of the practitioner guide | Full-document read-through, cross-reference audit, consistency pass across sections; produces a v1-publishable document | Recommended next: all nine sections are drafted and the document is structurally complete. Final assembly review is the natural gate before publication. |
+| B. Citation verification pass against `data/regulations/` PDFs | Verify article numbers, dates, and quoted language in sections 3, 4, 6, and 9 against the four primary regulation PDFs in `data/regulations/`. Surfaces stale or imprecise citations before publication | Recommended in parallel with Option A; the citation pass closes one of the two known structural-completeness caveats |
+| C. Resolve known cleanup items | Specifically (CTL-005, AGT-004) mapping asymmetry; PDF filename normalisation; merge of AGT-001 through AGT-010 exemplar bodies into the canonical document | Required before v1 publication |
+| D. Publication decision and pre-release checklist | License confirmation, peer review by named subject matter experts, GitHub push decision, announcement and distribution plan | Final gate; sequence after A, B, and C |
+| E. Populate realistic examples for AGT-003 through AGT-010 | Threat catalog reaches parity with AGT-001 and AGT-002 | v1.1 commitment per Section 8.7; defer until v1 is published |
+| F. Plan the web tool | Multi-entry-point navigator scoped against the now-stable schema | Defer until practitioner guide is published |
+
+### Completed in prior sessions
+- Section 9 drafting (rewritten in this session; first drafted in an earlier session)
+- All other sections of the practitioner guide
 
 ## How to use this document
 
