@@ -1138,100 +1138,104 @@ v1 is bounded honestly to what it can defend. The framework is more useful for b
 
 ## 9. References
 
-### How references are organized
+<!-- Source: docs/sections/09-references.md (2-3 pages) -->
 
-This section consolidates the sources cited throughout the practitioner guide. It is a working reference list, not an academic bibliography. Entries are short-form (title, publisher, identifier or URL where applicable) and grouped by source type. Where a source is cited in multiple sections, it appears only once.
+This section compiles the sources cited throughout the framework. References are organized by category for ease of navigation. Where multiple versions of a source exist, the most current consolidated text is cited.
 
-For verified dates, article references, and citation specifics for the four primary EU regulatory instruments, see also [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md) in this repository, which is the source-of-truth reference file maintained alongside this guide.
+### 9.1 EU Regulations and Directives
 
-### EU regulations
+The four primary regulations addressed by the framework. Practitioners verifying compliance should consult these consolidated texts on EUR-Lex rather than the framework's interpretation.
 
-| Citation | Source |
+| Source | Identifier | URL |
+|---|---|---|
+| Regulation (EU) 2024/1689 of the European Parliament and of the Council on AI (EU AI Act) | 2024/1689 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689 |
+| Directive (EU) 2022/2555 on cybersecurity across the Union (NIS2 Directive) | 2022/2555 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555 |
+| Regulation (EU) 2022/2554 on digital operational resilience for the financial sector (DORA) | 2022/2554 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554 |
+| Regulation (EU) 2016/679 General Data Protection Regulation (GDPR) | 2016/679 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679 |
+
+Local copies of all four regulations are maintained in `data/regulations/` in the framework repository.
+
+### 9.2 Information Security Control Frameworks
+
+The established frameworks against which the v1 control library is mapped. Each v1 control documents its relationship to specific provisions in these frameworks.
+
+| Framework | Version | Publisher |
+|---|---|---|
+| NIST Special Publication 800-53, Security and Privacy Controls for Information Systems and Organizations | Revision 5 (with updates through 2026) | National Institute of Standards and Technology, United States |
+| ISO/IEC 27001, Information security, cybersecurity and privacy protection - Information security management systems | 2022 edition (Annex A) | International Organization for Standardization |
+| BSI IT-Grundschutz-Kompendium | 2024 edition | Bundesamt für Sicherheit in der Informationstechnik, Germany |
+| NIST Cybersecurity Framework | 2.0 (2024) | National Institute of Standards and Technology, United States |
+| NIST Special Publication 800-207, Zero Trust Architecture | 2020 | National Institute of Standards and Technology, United States |
+| NIST Special Publication 800-37, Risk Management Framework for Information Systems and Organizations | Revision 2 (2018) | National Institute of Standards and Technology, United States |
+| NIST Special Publication 800-92, Guide to Computer Security Log Management | 2006 (current as of 2026) | National Institute of Standards and Technology, United States |
+| NIST Special Publication 800-122, Guide to Protecting the Confidentiality of Personally Identifiable Information | 2010 (current as of 2026) | National Institute of Standards and Technology, United States |
+| ISO/IEC 27018:2019, Code of practice for protection of personally identifiable information in public clouds | 2019 | International Organization for Standardization |
+| ISO/IEC 27037:2012, Guidelines for identification, collection, acquisition and preservation of digital evidence | 2012 | International Organization for Standardization |
+| ISO/IEC 38500:2024, Governance of information technology | 2024 | International Organization for Standardization |
+| ISO/IEC 42001:2023, AI management system | 2023 | International Organization for Standardization |
+| CIS Controls | Version 8 | Center for Internet Security |
+
+### 9.3 AI and Agent Security References
+
+Sources specifically addressing AI security, agent security, and adversarial machine learning.
+
+| Source | Publisher or Author | Notes |
+|---|---|---|
+| NIST AI Risk Management Framework | NIST | NIST AI 100-1, January 2023 and subsequent updates |
+| NIST AI 100-2 E2025, Adversarial Machine Learning Taxonomy | NIST | Updated periodically |
+| MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems) | MITRE | https://atlas.mitre.org |
+| MITRE ATT&CK | MITRE | https://attack.mitre.org |
+| MITRE D3FEND | MITRE | https://d3fend.mitre.org |
+| OWASP Top 10 for LLM Applications | OWASP | https://owasp.org/www-project-top-10-for-large-language-model-applications |
+| ENISA AI Cybersecurity Framework | European Union Agency for Cybersecurity | Multiple publications, 2023 and forward |
+| Google Secure AI Framework (SAIF) | Google | https://safety.google/saif |
+| Cloud Security Alliance AI Controls Matrix | Cloud Security Alliance | First edition 2024 |
+
+### 9.4 Identity, Authentication, and Authorization
+
+Technical specifications underlying the identity and authorization patterns referenced in the framework.
+
+| Source | Identifier | Notes |
+|---|---|---|
+| The OAuth 2.0 Authorization Framework | RFC 6749 | IETF |
+| OAuth 2.0 Token Exchange | RFC 8693 | IETF; foundational for on-behalf-of patterns in agent identity propagation |
+| JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens | RFC 9068 | IETF |
+| HTTP Message Signatures | RFC 9421 | IETF; relevant for verifiable provenance metadata |
+| SPIFFE and SPIRE specifications | SPIFFE project | https://spiffe.io |
+
+### 9.5 Research Literature
+
+Peer-reviewed and well-cited research informing specific threat patterns. Not exhaustive; representative.
+
+| Source | Notes |
 |---|---|
-| Regulation (EU) 2024/1689 of the European Parliament and of the Council laying down harmonised rules on artificial intelligence (Artificial Intelligence Act) | EUR-Lex, https://eur-lex.europa.eu/eli/reg/2024/1689/oj |
-| Directive (EU) 2022/2555 of the European Parliament and of the Council on measures for a high common level of cybersecurity across the Union (NIS2 Directive) | EUR-Lex, https://eur-lex.europa.eu/eli/dir/2022/2555/oj |
-| Regulation (EU) 2022/2554 of the European Parliament and of the Council on digital operational resilience for the financial sector (Digital Operational Resilience Act, DORA) | EUR-Lex, https://eur-lex.europa.eu/eli/reg/2022/2554/oj |
-| Regulation (EU) 2016/679 of the European Parliament and of the Council on the protection of natural persons with regard to the processing of personal data (General Data Protection Regulation, GDPR) | EUR-Lex, https://eur-lex.europa.eu/eli/reg/2016/679/oj |
-| Directive (EU) 2022/2556 (DORA Directive, companion to Regulation 2022/2554) | EUR-Lex, https://eur-lex.europa.eu/eli/dir/2022/2556/oj |
+| Greshake et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection" (2023) | Foundational paper on indirect prompt injection (AGT-001) |
+| NIST IR 8269 (2019) and successors, taxonomies of adversarial machine learning | Background for the adversarial ML field as it relates to agents |
 
-### EU institutional guidance
+### 9.6 Incident Handling and Forensics
 
-| Citation | Source |
+| Source | Identifier | Notes |
+|---|---|---|
+| NIST Special Publication 800-61, Computer Security Incident Handling Guide | Revision 2 (2012; current as of 2026) | NIST |
+
+### 9.7 Sources Maintained Outside the Framework
+
+The framework references several catalogs and standards that are continuously maintained. Practitioners should consult the current published version of each rather than relying on the framework's snapshot.
+
+| Source | Why to consult the current version |
 |---|---|
-| European Commission, AI Act implementation guidance | digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai |
-| AI Act Service Desk, Article-level guidance | ai-act-service-desk.ec.europa.eu |
-| European Data Protection Board (EDPB), Guidelines on Automated Individual Decision-Making and Profiling, WP251rev.01 | edpb.europa.eu |
-| European Supervisory Authorities (EBA, EIOPA, ESMA), DORA Regulatory Technical Standards on ICT risk management, incident reporting, and third-party risk | esas-joint-committee.europa.eu |
-| ESAs, Designated Critical ICT Third-Party Providers under DORA (first list, 18 November 2025) | Joint ESA publication |
-| ENISA, NIS2 Directive guidance and sector taxonomies | enisa.europa.eu |
+| MITRE ATLAS | New agentic AI techniques are added regularly |
+| MITRE ATT&CK | Adversarial techniques are added and refined regularly |
+| OWASP Top 10 for LLM Applications | Updated as the LLM threat landscape evolves |
+| NIST SP 800-53 | Updated periodically with new control variants and refinements |
+| EUR-Lex consolidated texts | Regulations are amended over time; the consolidated text on EUR-Lex reflects the current legal status |
+| ENISA AI Cybersecurity Framework publications | Updated as ENISA issues new guidance |
 
-### National and sector-specific rules (DACH)
+### 9.8 Note on Citation Style
 
-| Citation | Source |
-|---|---|
-| BSI, Cloud Computing Compliance Criteria Catalogue (C5:2020 and C5:2026) | bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5 |
-| C5-Gleichwertigkeitsverordnung (Verordnung über gleichwertige Sicherheitsnachweise zum C5-Standard für Cloud-Computing-Dienste im Gesundheitswesen), 19 March 2025, BGBl. 2025 I Nr. 91 | gesetze-im-internet.de/c5gleichwv |
-| § 393 SGB V (Fünftes Buch Sozialgesetzbuch), introduced by the Digital-Gesetz (DigiG), 22 March 2024 | gesetze-im-internet.de/sgb_5 |
-| BSI, IT-Grundschutz-Kompendium (current edition) | bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/IT-Grundschutz-Kompendium |
-| BSI IT-Grundschutz, Baustein ORP.1 (Organisation), ORP.4 (Identitäts- und Berechtigungsmanagement), CON.2 (Datenschutz), CON.6 (Löschen und Vernichten), CON.10 (Entwicklung von Webanwendungen), DER.1 (Detektion), OPS.1.1.5 (Protokollierung), OPS.1.2.4 (Telearbeit) | BSI IT-Grundschutz-Kompendium |
-| Germany NIS2 transposition (NIS2-Umsetzungs- und Cybersicherheitsstärkungsgesetz, NIS2UmsuCG), in force 6 December 2025 | Bundesgesetzblatt 2025; bsi.bund.de |
+Where the framework cites a specific regulatory article (for example "EU AI Act Article 15"), the citation refers to the consolidated text version current at the framework's publication date. Where the framework cites a control identifier (for example "NIST AC-3"), the citation refers to NIST SP 800-53 Revision 5. Where the citation style does not make the version explicit, the most current consolidated version at the framework's publication date is intended.
 
-### International standards and frameworks
-
-| Citation | Source |
-|---|---|
-| NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations | nist.gov/publications |
-| NIST SP 800-37 Rev. 2, Risk Management Framework for Information Systems and Organizations | nist.gov/publications |
-| NIST SP 800-61 Rev. 2, Computer Security Incident Handling Guide | nist.gov/publications |
-| NIST SP 800-92, Guide to Computer Security Log Management | nist.gov/publications |
-| NIST SP 800-122, Guide to Protecting the Confidentiality of Personally Identifiable Information | nist.gov/publications |
-| NIST SP 800-207, Zero Trust Architecture | nist.gov/publications |
-| NIST SP 800-218, Secure Software Development Framework (SSDF) | nist.gov/publications |
-| NIST AI 100-1, AI Risk Management Framework (AI RMF 1.0) | nist.gov/itl/ai-risk-management-framework |
-| NIST AI 100-2 E2025, Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations | nist.gov/publications |
-| ISO/IEC 27001:2022, Information security, cybersecurity and privacy protection, Information security management systems, Requirements | iso.org |
-| ISO/IEC 27018:2019, Code of practice for protection of personally identifiable information in public clouds acting as PII processors | iso.org |
-| ISO/IEC 27037:2012, Guidelines for identification, collection, acquisition and preservation of digital evidence | iso.org |
-| ISO/IEC 38500:2024, Governance of information technology | iso.org |
-| ISO/IEC 42001:2023, Information technology, Artificial intelligence, Management system | iso.org |
-| ISO 22301:2019, Security and resilience, Business continuity management systems | iso.org |
-| MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems), Matrix v5.4.0 | atlas.mitre.org |
-| OWASP Top 10 for Large Language Model Applications | owasp.org/www-project-top-10-for-large-language-model-applications |
-
-### IETF and protocol specifications
-
-| Citation | Source |
-|---|---|
-| RFC 6749, The OAuth 2.0 Authorization Framework | datatracker.ietf.org/doc/html/rfc6749 |
-| RFC 8693, OAuth 2.0 Token Exchange | datatracker.ietf.org/doc/html/rfc8693 |
-| RFC 9068, JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens | datatracker.ietf.org/doc/html/rfc9068 |
-| RFC 9421, HTTP Message Signatures | datatracker.ietf.org/doc/html/rfc9421 |
-| SPIFFE (Secure Production Identity Framework For Everyone) and SPIRE specifications | spiffe.io |
-
-### Academic and practitioner sources
-
-| Citation | Source |
-|---|---|
-| Greshake, K., et al., "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection," Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISec '23), 2023 | dl.acm.org or arxiv.org/abs/2302.12173 |
-| AI Safety Institute (UK AISI) and partners, evaluation guidance for foundation models | aisi.gov.uk |
-
-### Repository internal references
-
-| Item | Path |
-|---|---|
-| Project brief | `PROJECT_BRIEF.md` |
-| Threat model framework | `docs/frameworks/THREAT_MODEL_FRAMEWORK.md` |
-| Control library framework | `docs/frameworks/CONTROL_LIBRARY_FRAMEWORK.md` |
-| Regulatory facts (source of truth for dates and article references) | `docs/frameworks/regulatory-facts.md` |
-| Threat catalog (data) | `data/threats.json` |
-| Control library (data) | `data/controls.json` |
-| Bidirectional mappings | `data/mappings.json` |
-
-### Notes on currency and verification
-
-Regulatory citations were verified against EUR-Lex and Commission sources in May 2026. Specific application dates, transposition status, and Article references are subject to change as member-state implementation progresses and as the Digital Omnibus simplification proposal (published 19 November 2025) advances. For the current state of these items, consult [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md), which is updated as part of repository maintenance, and verify directly against EUR-Lex and the relevant national supervisory authority before relying on any citation here for compliance decisions.
-
-Threat-specific citations in `data/threats.json` include placeholders ("Recent work on indirect prompt injection from 2024 to 2026 (specific citations to be selected during section drafting)" and similar). These placeholders persist into v1 and will be filled during the v2 expansion of the threat catalog. They are noted here for transparency rather than included as references.
+Practitioners using the framework for compliance work should verify cited provisions against the current consolidated texts before relying on them.
 
 ## Appendix A. ServiceNow Mapping (Optional)
 
