@@ -1,117 +1,112 @@
-This section addresses how to deploy the v1 controls in environments that already have an established security program. The five subsections track the high-leverage decisions: where the controls plug into existing architecture, how to design the human review surface, where to place output filtering, how to roll out controls without exposing the organization to unnecessary risk, and how the controls produce evidence for regulatory obligations. Known gaps in the v1 control library are documented in Section 8 and are not revisited here.
+# 7. Implementation Considerations
 
-## 7.1 Mapping controls to existing security architecture
+The v1 control library and the threat catalog are useful only when they connect to an actual deployment program. This section addresses the operational realities of implementing the controls, the sequencing that tends to work, the integration with existing security programs, and the anti-patterns that recur across enterprises attempting this work.
 
-Most organizations subject to NIS2 or DORA already operate identity, audit, and content security infrastructure. The v1 controls do not replace any of it; they extend it across the agent execution boundary. The integration patterns that work consistently in practice are:
+The framework is opinionated where opinions help. It defers where context-specific judgment matters more than general guidance.
 
-| v1 control | Integrates with | Integration pattern |
+## 7.1 Operational realities
+
+Several themes recur across the v1 controls. Practitioners planning implementation should design for these explicitly rather than discovering them mid-deployment.
+
+### Performance overhead is real but bounded
+
+Each of the v1 controls adds latency. CTL-001 (identity propagation) adds 10 to 50 ms per downstream call. CTL-002 (provenance envelopes) adds 5 to 15 ms per tool invocation. CTL-004 (output filtering) adds 20 to 100 ms per response. CTL-005 (audit) is asynchronous in most implementations but increases storage and SIEM ingestion costs.
+
+In isolation, each is manageable. Cumulative across a multi-step agent workflow, the latency stacks. A workflow that invokes five tools and produces a filtered response can easily add 200 to 500 ms beyond the model invocation itself. This is acceptable for most enterprise use cases but breaks consumer-facing experiences with sub-second response expectations.
+
+Plan for the cumulative cost, not the per-control cost. Where latency is critical, the strongest implementations push provenance and identity propagation into the protocol layer rather than the application layer.
+
+### Legacy integration is the hardest part
+
+Most enterprise systems were not designed for agent-mediated authorization. They authenticate against service accounts, they authorize against the calling identity rather than a propagated user identity, and they log against the agent rather than the originating user. Implementing CTL-001 against modern systems is mechanical. Implementing it against legacy systems requires either narrowing the agent's reach (so it does not need legacy integration) or accepting wider authorization scope on legacy paths (with compensating controls).
+
+This is not an implementation defect of the framework. It is an enterprise architecture reality. Plan for it. A common pattern is to scope agent deployment phase one to systems that support user-context propagation, then expand to legacy systems with explicit risk acceptance for those paths.
+
+### Reasoning provenance is structurally limited
+
+CTL-005 captures decision provenance to the extent the model emits it. Current LLMs do not produce reliable explanations of their own reasoning. Implementations should capture chain-of-thought where models produce it and should not synthesize reasoning where models do not. This is not optional honesty; it is a structural property of the technology.
+
+Practitioners who expect the audit to produce a complete causal chain from input to action will be disappointed. The audit produces what is captureable. For high-stakes decisions where complete reasoning provenance matters, human review at the action boundary (CTL-003) is the only fully reliable accountability mechanism.
+
+### Configuration drift erodes coverage
+
+Every v1 control is vulnerable to configuration drift. Initial deployment with correct authorization scoping, threshold definitions, output filters, and audit retention can degrade over months as new use cases are added, new tools are integrated, and new tenants are onboarded. The drift is rarely a single bad decision; it is the accumulation of small accommodations.
+
+Build governance for periodic review into the deployment plan from the start. Treat the v1 controls as living configurations, not deployment-time decisions.
+
+## 7.2 Sequencing recommendations
+
+There is no universally correct order for implementing the v1 controls, but some controls depend on others. The dependency graph constrains where to start.
+
+| Stage | Implement | Why this order |
 |---|---|---|
-| CTL-001 (Identity and authorization context propagation) | Existing IdP (Entra ID, Okta, Ping); existing OAuth / token-exchange infrastructure | The agent runtime acts as a downstream service in the token-exchange chain. The originating user's authorization context is carried forward as a delegated assertion (RFC 8693 token exchange or equivalent) rather than replaced with an agent service identity. The pattern that fails: the agent uses a service account with broad authorization and re-authorizes per call. The pattern that works: the agent inherits user context and the downstream tools enforce per-user authorization on retrieval. |
-| CTL-002 (Tool-output and context provenance) | Existing data classification and DLP infrastructure | Provenance metadata is attached to content at ingest into the agent runtime and persisted through the execution. The agent runtime is responsible for distinguishing instruction from content; downstream consumers (including the model itself in subsequent turns) read the provenance tags. The pattern that fails: provenance lives only in agent logs after the fact. The pattern that works: provenance is part of the in-flight context and structurally distinguishes content from instruction at every boundary. |
-| CTL-005 (End-to-end audit and accountability) | Existing SIEM (Splunk, Sentinel, Elastic); existing log retention infrastructure | Agent audit events flow into the existing SIEM as a new log source with a defined schema. The schema must include user attribution, tool invocation, retrieval scope, and decision provenance. The pattern that fails: agent logs as opaque blobs that the SOC cannot correlate with other security events. The pattern that works: agent logs as first-class structured events that the SOC can query alongside identity, network, and endpoint logs. |
+| 1 | CTL-001 (Identity and authorization context propagation) | Foundational. User-context propagation is a prerequisite for meaningful application of CTL-004 (output filtering can only filter to user authorization if user context is propagated) and CTL-005 (audit can only attribute to the originating user if user context flows through the agent runtime). |
+| 2 | CTL-005 (End-to-end audit and accountability) | Without audit, the other controls operate without visibility. Audit infrastructure also takes time to build (correlation, retention, access control on logs themselves), so starting early lets it mature alongside the other work. |
+| 3 | CTL-002 (Tool-output and context provenance) | Provenance is independently valuable for AGT-001 defense and is a building block for CTL-005 (context provenance dimension) and downstream detection. |
+| 4 | CTL-003 (Action verification at high-impact boundaries) | Builds on identity propagation (knowing who) and audit (knowing what happened). The hardest part of CTL-003 is defining the impact thresholds, which is policy work that should not block earlier technical work. |
+| 5 | CTL-004 (Authorization-aware output filtering) | Builds on user-context propagation and provenance metadata. Often the last control implemented because it depends on the others being in place. |
 
-The integration questions worth answering during design rather than discovering during operation:
+This sequence is for organizations starting from scratch. Organizations with existing programs based on NIST, ISO, or BSI will have partial coverage of CTL-001 and CTL-005 already and should sequence based on gap analysis against the existing program rather than starting from stage 1.
 
-| Question | Why it matters |
+### Pace expectations
+
+A reasonable pace for an enterprise with an existing security program is one v1 control quarter. Faster is possible with dedicated resources; slower is common when controls compete for attention with other security priorities. Trying to implement all five in a single quarter risks shallow implementation across all of them rather than meaningful deployment of any.
+
+## 7.3 Integration with existing security programs
+
+The v1 controls are agent-specific extensions to established control frameworks. They do not replace those frameworks. Organizations operating under NIST SP 800-53, ISO/IEC 27001, or BSI grundschutz already have foundational identity, audit, and access control programs. The v1 controls extend those programs to the agent context.
+
+### How to integrate
+
+For each v1 control, the existing standard mapping section identifies the closest equivalent in NIST, ISO, and BSI. Use that mapping as the integration point. If the organization already has a mature implementation of NIST AC-3 (access enforcement), CTL-001 is an extension that applies AC-3 to agent runtime. The organizational ownership, the audit cadence, the policy documentation, and the control assessment processes already exist; they need to be extended, not duplicated.
+
+If the organization does not yet have a mature implementation of the foundational control, address the foundation first. Implementing CTL-001 without solid identity propagation in the broader environment is building on sand.
+
+### Where the framework adds value
+
+The framework's specific contribution to existing programs is the agent-specific implementation pattern, the operational considerations, and the common failure modes documented for each control. These are the parts not present in NIST, ISO, or BSI catalogs because they were not designed with agents in mind. Practitioners can leverage existing program structure while adopting agent-specific guidance from the framework.
+
+### Where the framework defers
+
+Where existing controls adequately address an agent-specific concern, the framework defers rather than restating. Network segmentation, encryption at rest, key management, and similar foundational concerns are addressed by existing literature and not re-covered here. If an agent-specific concern reveals a gap in foundational security, address it with foundational controls.
+
+## 7.4 Measurement and assurance
+
+Measuring whether the v1 controls are operating as intended is harder than implementing them. Agent behavior is emergent. Configuration drift is silent. Detection signal is weak in current SIEM tooling.
+
+A few approaches help:
+
+| Approach | What it provides |
 |---|---|
-| Does the agent runtime have a service identity that the IdP can recognize as a delegated principal? | If not, CTL-001 cannot be implemented correctly; the agent will run with broad authorization and the deputy problem becomes structural |
-| Does the SIEM ingest schema accommodate the cardinality of agent audit events? | A single user request can produce dozens of agent audit events; the SIEM must handle the volume without dropping or downsampling |
-| Does the existing data classification taxonomy distinguish content origin? | If not, CTL-002 has no taxonomy to attach to; provenance becomes a parallel system rather than an extension of the existing one |
+| Periodic configuration audit | Verify CTL-001 scope, CTL-003 thresholds, CTL-004 filter rules, and CTL-005 retention policies match documented policy; surface drift |
+| Synthetic transaction testing | Generate agent interactions known to trigger high-impact actions, verify CTL-003 verification fires; generate interactions with sensitive content, verify CTL-004 filtering works |
+| Audit log review at sample frequency | Periodic human review of agent action audit; surfaces patterns that automated detection misses |
+| Red team or adversarial evaluation | Where feasible, controlled adversarial testing of agent deployments to surface gaps the controls did not anticipate |
+| Cross-system correlation drills | Test the audit infrastructure by reconstructing specific past agent actions end-to-end; identify correlation breakdowns |
 
-CTL-003 and CTL-004 integrate with workflow and content systems respectively; their integration considerations are covered in subsections 7.2 and 7.3.
+These are not novel measurement approaches; they are standard security practice applied to agent context. The framework does not specify metrics because metric design depends on what the organization needs to measure. The point is to plan for measurement explicitly rather than treating the controls as deploy-and-forget.
 
-## 7.2 Approval queue design for high-impact actions
+## 7.5 Anti-patterns
 
-CTL-003 places verification at high-impact action boundaries. The control specification does not prescribe the user experience; that is an operational decision with two failure modes.
+The following are recurring failure modes observed in enterprise agent deployments. Each is a way the framework can be applied incorrectly even when the controls are nominally implemented.
 
-The first failure mode is over-broad approval scope. If every agent action requires approval, operators ignore the queue. The agent provides no efficiency benefit and the organization has merely added a slow human step to a workflow that did not need automation. This is alert fatigue applied to approvals.
-
-The second failure mode is under-broad approval scope. If only the most consequential actions require approval (large fund transfers, account deletions), the agent operates autonomously across a large surface where authorization confusion (AGT-002), tool-chain abuse (AGT-003), and goal drift (AGT-009) can produce harm without verification. The threshold appears to be set conservatively but is in fact the lower bound below which technical controls must work alone.
-
-The patterns that hold up in practice:
-
-| Approach | When it works | When it does not |
-|---|---|---|
-| Threshold based on action type alone (e.g., all fund transfers above EUR 10,000) | Actions are individually meaningful and the threshold reflects organizational risk tolerance | Actions compose; no single action exceeds the threshold but the composite does |
-| Threshold based on cumulative effect (CTL-003's composition tracking) | Action composition is the dominant risk; AGT-003 is in scope | Operators cannot interpret cumulative thresholds; the queue surfaces opaque "cumulative limit reached" alerts |
-| Threshold based on confidence (the agent's stated certainty about the action) | The model is well-calibrated and produces honest confidence signals | Models tend to be overconfident; thresholds based on stated confidence underapprove |
-| Threshold based on user-context delta (the action affects users beyond the originating user) | AGT-002 (deputy problem) is the dominant risk | Single-user agents where the user always affects only themselves |
-
-The approval surface itself is a design problem distinct from the threshold. Three properties worth designing for:
-
-| Property | Why |
+| Anti-pattern | Why it fails |
 |---|---|
-| The operator can see what the agent intends to do without re-reading the full conversation | Approvals must be possible in seconds, not minutes; the action description is the unit of decision |
-| The operator can see the bridging context that makes the action high-impact | Why is this action surfacing for approval? Cumulative threshold? User-context delta? Without this, the operator cannot calibrate intuition over time |
-| The operator can deny the action without ending the agent session | Hard-stop denial is rarely the right answer; "deny this action, propose an alternative" is. The approval surface must support negotiation |
+| Deploying CTL-005 without CTL-001 | Audit logs record agent actions but cannot attribute to originating users; accountability is broken at the foundation. Audit volume looks impressive but provides no forensic value. |
+| Treating CTL-003 thresholds as a deployment-time decision | Thresholds set at deployment age quickly. Without periodic governance review, thresholds become rubber-stamping; reviewers process volumes too high to evaluate meaningfully. |
+| Implementing CTL-002 only at the input boundary | Provenance is enforced when tool output enters the agent but stripped when the agent transforms it. Downstream the content is treated as agent-generated rather than tool-retrieved. The provenance signal is lost where it matters most. |
+| Configuring CTL-004 to filter only direct quotation | The filter catches verbatim disclosure but misses paraphrase, summary, and composition. Inferential disclosure leaks at the rate the agent generates summaries, which is most of the time. |
+| Treating the framework as a checklist | Practitioners implement all five v1 controls, declare agent security achieved, and stop. The controls are necessary but not sufficient; threats not covered by v1 (memory poisoning, tool-chain abuse, goal subversion) remain. |
+| Skipping CTL-001 for legacy integrations | A pragmatic compromise becomes the new normal. Legacy paths retain broad authorization indefinitely. Risk acceptance is never revisited. |
+| Treating provenance as model-enforced | CTL-002 is implemented via system prompt instructions telling the model to treat tool output as data. Models comply most of the time but not adversarially. Runtime enforcement is the only reliable implementation. |
+| Confusing agent authorization with user authorization | Teams design the agent's service authorization carefully but never address user-context propagation. CTL-001 is partially implemented; CTL-002 through CTL-005 cannot function correctly. |
+| Audit infrastructure that becomes a privacy incident | CTL-005 logs are retained without access control proportionate to their content. The audit infrastructure itself becomes a high-value target requiring its own protection. |
+| Deploying agents to production before threshold policy exists | CTL-003 cannot meaningfully operate without thresholds. Deployments proceed with placeholder policies that do not match real risk tolerance. High-impact actions slip through. |
 
-Approval queue design is where the framework most acutely depends on factors outside its scope (operator training, organizational risk tolerance, audit retention policy). Subsection 4.7 of the crosswalk and Section 8 acknowledge that human factors are out of scope for v1; this subsection treats the approval surface as a technical artifact while flagging that the human side is the dominant determinant of effectiveness.
+These are the patterns to watch for in your own deployment and in deployments you advise. They are not exhaustive. They are the ones that recur often enough to be worth naming.
 
-## 7.3 Output filtering placement decisions
+## 7.6 Closing observation
 
-CTL-004 (authorization-aware output filtering) produces a structural choice: where in the request lifecycle does filtering apply?
+The v1 control library is implementable. None of the controls requires technology that does not exist. None requires capabilities that mature enterprises do not already have in some form. What it requires is deliberate sequencing, sustained governance attention, and honesty about what the controls can and cannot do.
 
-The two viable placements:
-
-| Placement | Mechanism | Tradeoffs |
-|---|---|---|
-| Pre-retrieval filtering | The agent's retrieval calls are scoped to the user's authorization at the data layer (database row-level security, vector store metadata filters, search index ACLs) | Strongest guarantee; the agent cannot retrieve what it cannot see. Requires the data layer to enforce per-user authorization, which is often the existing access control architecture. Works only when the agent's retrieval interface respects the authorization model |
-| Post-retrieval filtering | The agent retrieves with broad authorization and the output is filtered against the user's authorization before delivery | Weaker guarantee; the agent has temporarily seen content the user cannot see, creating residual risk through caching, logging, and side effects. Necessary when the data layer cannot enforce per-user authorization (e.g., document corpora with no per-user metadata) |
-
-The combination that works: pre-retrieval filtering as the primary mechanism, post-retrieval filtering as a defense-in-depth layer for content classes where pre-retrieval cannot be enforced. The combination that creates the deputy problem at scale: post-retrieval filtering only, with the agent operating against a corpus that includes content for many users.
-
-A practical signal that the placement is wrong: the audit trail (CTL-005) shows the agent retrieving content the user is not authorized for, even though the user never saw it. This is structurally equivalent to AGT-004 (data exfiltration via legitimate channels) at the model layer; the model has been exposed to the content and may surface it in subsequent turns through paraphrase or summarization that defeats post-retrieval filtering.
-
-## 7.4 Phased rollout patterns
-
-Agent deployments fail more often through scope expansion than through technical inadequacy. The pattern: a successful pilot with narrow tool authorization expands to broader tool authorization, broader user populations, or higher-stakes use cases without the corresponding investment in CTL-001 and CTL-003. The framework cannot prevent this organizationally, but the rollout phasing can make the expansion decision visible.
-
-The phasing that works in regulated environments:
-
-| Phase | Tool authorization | User population | Action surface | What gets validated |
-|---|---|---|---|---|
-| Pilot | Read-only against a single domain | Internal users with administrator visibility into agent behavior | Information retrieval; no consequential actions | CTL-001 propagation; CTL-005 audit completeness |
-| Expansion 1 | Read-only across multiple domains; structured write to a single domain | Broader internal users | Limited consequential actions, all under CTL-003 verification | CTL-002 provenance under cross-domain retrieval; CTL-003 threshold calibration |
-| Expansion 2 | Structured write across multiple domains | Internal users in operational roles | Consequential actions with selective CTL-003 verification based on calibrated thresholds | CTL-004 output filtering under broader authorization scopes; CTL-001 under multi-tenant or cross-organizational contexts |
-| Production | Full deployed scope | Production user population | Full action surface | Continuous monitoring against the audit baseline established in earlier phases |
-
-The decision criteria for moving between phases are organization-specific and not prescribed here. The decision criteria for not moving between phases are universal:
-
-| Signal | What it indicates |
-|---|---|
-| CTL-005 audit shows authorization context drift across the pilot phase | CTL-001 implementation is incomplete; expansion will compound the gap |
-| CTL-003 approval queue shows operator override patterns inconsistent with declared thresholds | Threshold calibration is wrong; expansion will produce alert fatigue |
-| CTL-002 provenance failures are present in the audit trail | The agent is treating content as instruction in some path; expansion increases AGT-001 exposure |
-| CTL-004 post-retrieval filtering is catching unauthorized content at non-trivial rate | Pre-retrieval filtering is not working; the data layer authorization model needs to be addressed before expansion |
-
-Rollback triggers are simpler. Any of the four signals above, observed at production scale, is a rollback trigger to the previous phase. Rolling back is not a failure; rolling forward through the signals is.
-
-## 7.5 Regulatory evidence collection
-
-The crosswalk in Section 4 maps regulatory requirements to v1 controls. This subsection addresses the operational counterpart: what evidence the controls produce, and how that evidence connects to specific regulatory obligations.
-
-Evidence is produced as a byproduct of correct operation, not as a separate compliance activity. If the controls are operating, the evidence exists. If the evidence does not exist, the controls are not operating. This is the structural relationship that makes the framework useful for compliance work; it is not a guarantee that the evidence is sufficient for any specific obligation, which depends on the regulator's interpretation and the deployer's broader compliance program.
-
-| Regulatory obligation | Evidence the v1 controls produce | Operational source |
-|---|---|---|
-| EU AI Act Article 12 (record-keeping) | Automatically generated logs over the system lifecycle, including user attribution, tool invocation, retrieval scope, and decision provenance | CTL-005 audit stream; CTL-001 user attribution; CTL-002 retrieval and reasoning provenance |
-| EU AI Act Article 14 (human oversight) | Approval queue records showing actions surfaced for human review, the operator decision (approve, deny, modify), and the timestamps for both | CTL-003 approval queue logs; CTL-005 audit of operator actions |
-| EU AI Act Article 15 (accuracy, robustness, cybersecurity) | Audit-derived metrics on agent behavior under varied inputs; provenance trail for incidents involving content manipulation | CTL-002 provenance; CTL-005 audit; CTL-003 verification outcomes |
-| NIS2 Article 21 (cybersecurity risk-management measures) | Evidence of access control enforcement (CTL-001), audit completeness (CTL-005), and operational monitoring derived from the audit stream | CTL-001 propagation logs; CTL-005 audit stream feeding the SIEM |
-| NIS2 Article 23 (incident reporting) | Audit data sufficient to reconstruct events for the 24-hour, 72-hour, and one-month reporting cycles | CTL-005 audit retention with structured event schema |
-| DORA Article 12 (major ICT-related incidents) | Audit data sufficient to reconstruct incident events; user and agent attribution for affected actions | CTL-005 with retention aligned to DORA reporting timelines |
-| DORA Articles 28 to 30 (ICT third-party risk) | Audit and provenance data covering sub-agent and third-party tool invocations | CTL-001 across third-party tool boundaries; CTL-002 provenance across sub-agent outputs; CTL-005 audit of delegation chains |
-| GDPR Article 5(2) (accountability) | End-to-end audit trail demonstrating compliance with processing principles | CTL-005 audit; CTL-002 provenance |
-| GDPR Article 22 (automated individual decision-making) | Approval queue records demonstrating that decisions are not "solely" automated where Article 22 applies; audit trail supporting data subject contestability rights | CTL-003 approval queue; CTL-005 audit |
-| GDPR Article 32 (security of processing) | Evidence of access control enforcement, output filtering, and incident audit consistent with appropriate technical measures | CTL-001, CTL-004, CTL-005 |
-
-The evidence-collection decisions worth making during design:
-
-| Decision | Why it matters |
-|---|---|
-| Audit retention period | Must accommodate the longest reporting cycle the organization is subject to (typically DORA's structured incident reporting or NIS2 Article 23's one-month final report). Under-retention forecloses compliance options |
-| Schema versioning for audit events | Regulatory requirements evolve; audit schemas must accommodate evolution without re-deriving evidence from the past. Schema-versioned events are queryable across schema generations |
-| Separation of audit data from operational data | Operational logs are often retained on a different cycle and with different access controls than compliance audit. Treating these as the same store creates retention conflicts and access-control conflicts |
-| Read-only access for compliance and audit functions | Compliance reviewers need access to the audit stream that does not require operational privileges. The access pattern that fails: compliance asks operations for a one-time data extract, which then ages and is not reproducible |
-
-For the cross-reference between specific articles and specific controls, see Section 4 (Common-control crosswalk). For known gaps in the v1 control library that affect what evidence can be produced, see Section 8 (Gaps and open problems).
+Most agent security failures will not come from the controls being technically inadequate. They will come from the controls being implemented partially, allowed to drift, or treated as a one-time deployment exercise rather than a sustained governance practice. The framework provides the structure. Sustained operational discipline provides the outcome.
