@@ -91,12 +91,12 @@ A vendor-neutral practitioner framework mapping EU AI Act, NIS2, and DORA securi
 | Section | Status |
 |---|---|
 | 1. Executive briefing | Drafted as CISO executive briefing (4-6 pages) with overview table, board talking points, priority ranking, cost framing; provenance paragraph references Section 5 |
-| 2. Scope and disclaimer | Drafted (section file and canonical document populated) |
-| 3. Regulatory landscape | Drafted (section file and canonical document populated; uses `docs/frameworks/regulatory-facts.md` as spine; one subsection per instrument with bridging "what this means for agent deployments" paragraphs) |
-| 4. Common-control crosswalk | Drafted (section file and canonical document populated; reconciled against `data/mappings.json`) |
+| 2. Scope and disclaimer | Rewritten (section file and canonical document populated with new four-criteria agent definition; ServiceNow recusal policy preserved) |
+| 3. Regulatory landscape | Rewritten (section file and canonical document populated; article-level treatment of EU AI Act, NIS2, DORA, GDPR; subsections on overlap and on sectoral/national variations) |
+| 4. Common-control crosswalk | Rewritten (section file and canonical document populated; direct view as regulation-to-control table; reasoned view with four worked chains; limitations and workflows documented) |
 | 5. Agent Threat Patterns and Exemplars (renamed per v2 reframe) | Drafted (framing rewritten with explicit provenance to ATLAS, OWASP Top 10 for LLM, Greshake 2023; placeholder note resolved). Merged section file contains all 10 threats: AGT-001 and AGT-002 in full, AGT-003 through AGT-010 as compressed entries |
 | 6. Recommended controls | Fully populated for v1 (CTL-001 through CTL-005 all inserted; v1 control library complete) |
-| 7. Implementation considerations | Drafted (section file and canonical document populated) |
+| 7. Implementation considerations | Rewritten (section file and canonical document populated; operational realities, sequencing recommendations, integration with existing programs, measurement and assurance, anti-patterns, closing observation) |
 | 8. Gaps and open problems | Drafted (section file and canonical document populated) |
 | 9. References | Drafted (section file and canonical document populated; consolidated from data/threats.json, data/controls.json, and docs/frameworks/regulatory-facts.md) |
 
