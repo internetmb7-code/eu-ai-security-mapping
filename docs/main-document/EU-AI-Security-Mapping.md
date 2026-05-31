@@ -136,70 +136,73 @@ A regulator or auditor evaluating an agent deployment against the framework shou
 
 <!-- Source: docs/sections/02-scope-disclaimer.md (1 page) -->
 
-### What this document covers
+### What this framework addresses
 
-This guide addresses the security of **enterprise AI agent deployments** under EU regulatory pressure. By "agent" I mean a specific class of system, not the broader marketing category.
+This framework addresses the security of enterprise AI agent deployments under EU regulation. It focuses on the intersection of four named regulations (the EU AI Act, NIS2, DORA, and GDPR) and the security-relevant operational concerns specific to agentic AI systems. Where these concerns overlap with general information security, the framework defers to established practice. The contribution is in the agent-specific layer that existing security frameworks do not cover.
 
-| Attribute | In scope |
+### What counts as an agent
+
+The framework's claims apply to systems meeting all four of the following criteria:
+
+| Criterion | Description |
 |---|---|
-| Reasoning core | LLM-based |
-| Capability | Tool-using (calls APIs, queries data sources, invokes other systems) |
-| Execution model | Multi-step (plans and executes sequences of actions) |
-| Autonomy | Operates autonomously between human approval points |
-| Deployment context | Enterprise environments subject to EU AI Act, NIS2, DORA, or GDPR Article 22 |
+| 1. Natural language instruction | The system accepts instructions in natural language as its primary control interface |
+| 2. Autonomous tool selection | The system decides which tools or actions to invoke without human approval at each step |
+| 3. Real-world effect | The system executes those actions against external systems with effect beyond the model's own context |
+| 4. Multi-step operation | The system operates over multiple steps within a single workflow |
 
-The threats and controls in this document assume all five attributes hold. Systems missing one or more attributes have different threat surfaces and different control needs.
+This definition is deliberately narrow. It distinguishes agents from related systems that share some characteristics but not all.
 
-### What this document does not cover
+#### In scope
 
-| Out of scope | Why excluded |
+| System type | Examples |
 |---|---|
-| Classical RPA without an LLM reasoning core | Different threat model; established control frameworks cover it |
-| Single-shot LLM calls (chatbots, summarization, classification) without tool use | No tool-chain attack surface; existing AI risk frameworks (NIST AI RMF, ISO 42001) cover them |
-| Fully supervised copilots where every action requires explicit human approval | Human approval is the dominant control; agent-specific threats are bounded |
-| Foundation model training, fine-tuning, and pre-deployment safety evaluation | Different lifecycle phase; covered by AI Act Articles 16 to 29 and AISI evaluation guidance |
-| Consumer-facing AI products and general-purpose AI assistants | Different regulatory regime, different audience |
-| Adversarial ML research (model extraction, membership inference, evasion) | Active research field with its own literature; orthogonal to operational deployment security |
-| Physical-world agents (robotics, autonomous vehicles, embedded systems) | Different regulatory frameworks (Machinery Regulation, type approval) |
+| Workflow automation agents | Agents creating, modifying, or routing enterprise records autonomously |
+| Customer-facing agents with action authority | Agents that issue refunds, file tickets, update accounts |
+| Developer copilots with execution access | Agents with shell or repository write access |
+| Multi-agent systems with delegation | Orchestrator agents that delegate to sub-agents across workflows |
+| Autonomous research and analysis agents | Agents that retrieve, summarize, and act on findings |
 
-The boundary that matters most: this document is about **operational security of agents already deployed in enterprise environments**, not the safety properties of the underlying models or agent architecture design from scratch.
+#### Out of scope
 
-### Regulatory scope
-
-The framework maps to four EU instruments:
-
-| Instrument | Relevance |
+| System type | Reason for exclusion |
 |---|---|
-| EU AI Act (Regulation 2024/1689) | High-risk AI system and GPAI obligations; high-risk enforcement from August 2026 |
-| NIS2 Directive (Directive 2022/2555) | Cybersecurity obligations for essential and important entities; in force since October 2024 |
-| DORA (Regulation 2022/2554) | ICT risk management for financial entities; in force since January 2025 |
-| GDPR Article 22 | Solely automated decisions with legal or similarly significant effects |
+| Single-shot LLM calls (chat without tools) | No autonomous action; covered by general content-security practice |
+| Retrieval-augmented generation without action capability | Read-only; covered by data-access controls |
+| Classifier or recommendation models | Adversarial ML literature and MITRE ATLAS apply directly |
+| Workflow automation with AI-assisted steps and human approval at each action | Human-in-the-loop addresses most agent-specific risks |
 
-Mappings to non-EU frameworks (NIST SP 800-53, ISO 27001 Annex A, BSI IT-Grundschutz) are translation aids. Verified citations and dates are maintained in [`../frameworks/regulatory-facts.md`](../frameworks/regulatory-facts.md), from which Section 3 draws.
+Organizations operating systems outside these criteria may still find the threat patterns useful, but the framework's specific claims about controls and regulatory mapping are calibrated to in-scope systems.
 
-### Threat catalog scope
+### Audience
 
-The 10 threats in Section 5 are **exemplars within an attack surface taxonomy**, not an exhaustive enumeration. Coverage of all 10 does not mean coverage of all agent threats. Section 5 documents the methodology for discovering threats specific to a deployment; the methodology is the durable contribution, not the catalog.
+The primary audience is CISOs and security program leads responsible for AI deployments in regulated enterprises, particularly in the DACH region. The framework assumes the reader operates within an established security program (typically based on NIST SP 800-53, ISO/IEC 27001, BSI grundschutz, or equivalent) and is integrating AI-specific concerns into that program.
 
-### Control library scope
+The secondary audience is enterprise security architects designing agent deployments, and compliance or regulatory leads navigating the intersection of AI security and EU regulation.
 
-The 5 controls in Section 6 are a **coarse-grained v1**. Detection and response (SIEM integration, behavioral anomaly detection), supply-chain controls (model provenance, prompt-template integrity), and human-factors controls (operator training, alert-fatigue management) are acknowledged gaps in Section 8 and are v2 priorities. Honest gap acknowledgment beats false comprehensiveness; the library will expand in v2 based on customer engagement feedback.
+Readers who are new to AI security generally, or who do not operate within an existing security program, will find the framework dense and presupposing. The framework does not teach foundational security concepts; it builds on them.
 
-### Disclaimer and author affiliation
+### Disclaimer
 
-I am a Senior Staff Information Security Analyst in the Office of the CISO at ServiceNow, based in Munich. This framework is independent practitioner work. It is vendor-neutral and product-agnostic.
+This framework is a guideline. It is not legal advice. It reflects the author's interpretation of public regulatory texts, the author's operational experience, and current public research on agent security. None of these are substitutes for qualified legal counsel, formal compliance assessment, or organizational risk management decisions.
 
-Specifically:
+Readers should treat the framework as a structured starting point for their own analysis, not as an authoritative determination of compliance or sufficiency. Where the framework cites specific regulatory articles, readers verifying compliance should consult the official consolidated texts on EUR-Lex and seek legal counsel where the answer matters.
 
-| Statement | Meaning |
-|---|---|
-| The framework names no vendor products in threat descriptions, control specifications, or mappings | The body of the work is product-agnostic by construction |
-| Vendor-specific mappings are accepted as community contributions through a defined schema and process (see Vendor Mapping Framework) | The author does not produce vendor mappings as part of the core framework |
-| The author recuses from reviewing ServiceNow submissions to the vendor mapping interface | A separate reviewer chain handles ServiceNow contributions to avoid conflict of interest |
-| Nothing in this document constitutes legal advice, certification of compliance, or regulatory interpretation binding on any authority | This is practitioner guidance; binding interpretation comes from regulators, courts, and qualified counsel |
-| Views expressed are the author's own and do not represent ServiceNow's official positions, product commitments, or regulatory interpretations | Standard separation between employer and independent practitioner work |
+The framework is offered without warranty. The author and contributors are not responsible for outcomes arising from its application.
 
-Readers using this framework in regulated contexts should validate findings with qualified counsel, their data protection officer, and the relevant supervisory authority before relying on it for compliance decisions.
+### Author affiliation and independence
+
+The author works at ServiceNow. The framework is independent practitioner work. No ServiceNow products, services, or proprietary information are referenced in the threat catalog or control library. No ServiceNow competitor is referenced either.
+
+The framework is designed to accept contributed vendor-specific control mappings under the contribution interface described in CONTRIBUTING.md. If a ServiceNow mapping is submitted, the author will recuse from its review. An independent reviewer will be arranged at submission time. The recusal policy applies specifically to ServiceNow content; the author retains responsibility for the framework's threat catalog, control library, and methodology.
+
+This separation is structural, not cosmetic. The framework's threat and control content exists independently of any vendor's product capabilities.
+
+### Vendor mapping disclaimer
+
+Vendor mappings, where they exist in `data/vendor-mappings/`, are contributor-attested representations of how specific vendor products implement framework controls. They are not framework-verified. Readers evaluating a specific vendor product against the framework should verify mapping claims against current vendor documentation and the vendor's own attestations.
+
+As of v1, no vendor mappings have been contributed.
 
 ## 3. Regulatory Landscape
 
