@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<!-- v3: Security hardening (CSP) - 2026-06-24 -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';">
+<title>How to Use This Application &mdash; EU AI Security Mapping Explorer</title>
+<style>
+  :root {
+    --bg-soft: #f8fafc;
+    --panel: #ffffff;
+    --panel-soft: #f1f5f9;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --text: #0f172a;
+    --text-soft: #334155;
+    --muted: #64748b;
+    --muted-2: #94a3b8;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --accent-text: #3730a3;
+    --red: #dc2626;
+    --blue: #2563eb;
+    --amber: #d97706;
+    --green: #059669;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+    --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06), 0 2px 4px -2px rgba(15,23,42,0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.08), 0 4px 6px -4px rgba(15,23,42,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg-soft);
+  }
+  header {
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
+      linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #312e81 100%);
+    color: #f8fafc;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #f8fafc;
+  }
+  header .sub {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  header a {
+    color: #93c5fd;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  header a:hover {
+    text-decoration: underline;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .card h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.5rem;
+  }
+  .card h3 {
+    margin: 1.5rem 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-soft);
+  }
+  .card p {
+    margin: 0.75rem 0;
+    color: var(--text-soft);
+  }
+  .card ul, .card ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    color: var(--text-soft);
+  }
+  .card li {
+    margin: 0.5rem 0;
+  }
+  .card code {
+    background: var(--panel-soft);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--accent-text);
+  }
+  .card pre {
+    background: var(--panel-soft);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  .card pre code {
+    background: none;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--panel-soft);
+    font-weight: 600;
+    color: var(--text);
+  }
+  td {
+    color: var(--text-soft);
+  }
+  .pill {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .pill-primary { background: #fef2f2; color: var(--red); }
+  .pill-secondary { background: #eff6ff; color: var(--blue); }
+  .pill-partial { background: #fffbeb; color: var(--amber); }
+  .nav-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--panel-soft);
+    border-radius: 8px;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  .nav-box {
+    background: var(--panel);
+    border: 2px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  .nav-box.highlight {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .nav-arrow {
+    color: var(--muted);
+    font-size: 1.5rem;
+  }
+  .tip {
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+  .tip strong {
+    color: var(--accent-text);
+  }
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>How to Use This Application</h1>
+    <div class="sub">EU AI Security Mapping Framework &mdash; Interactive Explorer Guide</div>
+  </div>
+  <div style="display: flex; gap: 16px;">
+    <a href="index.html">&larr; Back to Explorer</a>
+    <a href="wiki.html">Regulatory Wiki</a>
+  </div>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>What is This Framework?</h2>
+  <p>
+    The <strong>EU AI Security Mapping Framework</strong> is a vendor-neutral practitioner guide that maps
+    EU regulatory requirements to operational security controls for enterprise AI agent deployments.
+  </p>
+  <p>It addresses a specific problem: organizations deploying AI agents need to understand:</p>
+  <ul>
+    <li>What security threats are unique to AI agents (not covered by traditional controls)</li>
+    <li>What multiple EU regulations require for these systems</li>
+    <li>What controls actually mitigate those threats and satisfy those requirements</li>
+  </ul>
+
+  <h3>Key Components</h3>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>Count</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><strong>Threats</strong></td>
+      <td>10 (AGT-001 to AGT-010)</td>
+      <td>Agent-specific threat patterns not addressed by traditional security controls</td>
+    </tr>
+    <tr>
+      <td><strong>Controls</strong></td>
+      <td>5 (CTL-001 to CTL-005)</td>
+      <td>Recommended security controls designed specifically for AI agent deployments</td>
+    </tr>
+    <tr>
+      <td><strong>Regulations</strong></td>
+      <td>4</td>
+      <td>EU AI Act, NIS2, DORA, and GDPR mapped to threats and controls</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Why Four Regulations?</h2>
+  <p>
+    Organizations deploying AI agents in the EU don't just face the EU AI Act. They face
+    <strong>overlapping requirements</strong> from multiple regulations. This framework maps all of them
+    so you can implement controls once and satisfy multiple requirements.
+  </p>
+
+  <div class="tip">
+    <strong>Key insight:</strong> A single control like CTL-001 (Identity Propagation) can satisfy
+    requirements from EU AI Act Art. 14, GDPR Art. 32, NIS2 Art. 21, and DORA Art. 9 simultaneously.
+    This is the "common-control crosswalk" approach.
+  </div>
+
+  <table>
+    <tr>
+      <th>Regulation</th>
+      <th>Applies To</th>
+      <th>Why It Matters for AI Agents</th>
+    </tr>
+    <tr>
+      <td><strong>EU AI Act</strong></td>
+      <td>AI system providers and deployers</td>
+      <td>Core AI-specific requirements: risk management (Art. 9), human oversight (Art. 14), cybersecurity (Art. 15), record-keeping (Art. 12)</td>
+    </tr>
+    <tr>
+      <td><strong>GDPR</strong></td>
+      <td>Anyone processing personal data</td>
+      <td>Agents often process personal data; automated decision-making rights (Art. 22), security of processing (Art. 32), data minimization (Art. 5)</td>
+    </tr>
+    <tr>
+      <td><strong>NIS2</strong></td>
+      <td>Essential and important entities</td>
+      <td>Cybersecurity risk management for critical infrastructure (Art. 21); agents are attack vectors</td>
+    </tr>
+    <tr>
+      <td><strong>DORA</strong></td>
+      <td>Financial entities</td>
+      <td>ICT risk management, operational resilience (Art. 6-9); agents in financial services face stricter requirements</td>
+    </tr>
+  </table>
+
+  <h3>Not All Regulations Apply to Everyone</h3>
+  <p>Which regulations matter depends on your organization:</p>
+  <ul>
+    <li><strong>All organizations</strong> deploying AI agents: EU AI Act + GDPR (if processing personal data)</li>
+    <li><strong>Critical infrastructure</strong> (energy, transport, health, etc.): Add NIS2</li>
+    <li><strong>Financial services</strong> (banks, insurers, investment firms): Add DORA</li>
+  </ul>
+  <p>Use the "By Regulation" tab to focus on the regulations that apply to your organization.</p>
+</div>
+
+<div class="card">
+  <h2>How to Use the Explorer</h2>
+
+  <p>The explorer provides three navigation modes, each answering a different question:</p>
+
+  <h3>1. By Regulation</h3>
+  <p><em>"I need to comply with EU AI Act Article 15. What threats should I worry about and what controls do I need?"</em></p>
+  <div class="nav-diagram">
+    <div class="nav-box highlight">Regulation Article</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Related Threats</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Mitigating Controls</div>
+  </div>
+  <p>Start here if you have a compliance requirement and need to understand what to implement.</p>
+
+  <h3>2. By Control</h3>
+  <p><em>"What does CTL-001 (Identity Propagation) actually do? What threats does it address? What regulations require it?"</em></p>
+  <div class="nav-diagram">
+    <div class="nav-box highlight">Control</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Threats Addressed</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Regulatory Basis</div>
+  </div>
+  <p>Start here if you want to understand a specific control's purpose and implementation.</p>
+
+  <h3>3. By Threat</h3>
+  <p><em>"What is prompt injection (AGT-001)? How do I defend against it? What regulations care about it?"</em></p>
+  <div class="nav-diagram">
+    <div class="nav-box highlight">Threat Pattern</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Recommended Controls</div>
+    <div class="nav-arrow">&rarr;</div>
+    <div class="nav-box">Regulatory Hooks</div>
+  </div>
+  <p>Start here if you want to understand a specific threat and how to address it.</p>
+
+  <div class="tip">
+    <strong>Tip:</strong> Use the search box to filter items. Type "identity" to quickly find CTL-001,
+    or "injection" to find AGT-001.
+  </div>
+</div>
+
+<div class="card">
+  <h2>Understanding Relationship Types</h2>
+  <p>The framework uses relationship indicators to show how strongly a control addresses a threat:</p>
+  <table>
+    <tr>
+      <th>Indicator</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td><span class="pill pill-primary">primary</span></td>
+      <td>This control directly and fundamentally addresses the threat. It's a core defense.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-secondary">secondary</span></td>
+      <td>This control provides defense-in-depth. It helps but isn't the primary mitigation.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-partial">partial</span></td>
+      <td>This control partially addresses the threat but has known limitations.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>The Five Controls (Quick Reference)</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>One-Line Summary</th>
+    </tr>
+    <tr>
+      <td><code>CTL-001</code></td>
+      <td>Identity and Authorization Context Propagation</td>
+      <td>Agent acts with user's permissions, not its own broad service account</td>
+    </tr>
+    <tr>
+      <td><code>CTL-002</code></td>
+      <td>Tool-Output and Context Provenance</td>
+      <td>Content from tools is tagged as data, not instructions the agent should follow</td>
+    </tr>
+    <tr>
+      <td><code>CTL-003</code></td>
+      <td>Action Verification at High-Impact Boundaries</td>
+      <td>High-stakes actions require explicit verification before execution</td>
+    </tr>
+    <tr>
+      <td><code>CTL-004</code></td>
+      <td>Authorization-Aware Output Filtering</td>
+      <td>Agent outputs are filtered to only what the user is authorized to see</td>
+    </tr>
+    <tr>
+      <td><code>CTL-005</code></td>
+      <td>End-to-End Audit and Accountability</td>
+      <td>Every action is traceable to user, agent, context, and authorization basis</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>The Ten Threats (Quick Reference)</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Attack Surface</th>
+    </tr>
+    <tr>
+      <td><code>AGT-001</code></td>
+      <td>Prompt Injection via Tool Outputs</td>
+      <td>Input</td>
+    </tr>
+    <tr>
+      <td><code>AGT-002</code></td>
+      <td>Authorization Confusion (Deputy Problem)</td>
+      <td>Tool-use</td>
+    </tr>
+    <tr>
+      <td><code>AGT-003</code></td>
+      <td>Tool-Chain Abuse</td>
+      <td>Tool-use</td>
+    </tr>
+    <tr>
+      <td><code>AGT-004</code></td>
+      <td>Data Exfiltration via Legitimate Channels</td>
+      <td>Output</td>
+    </tr>
+    <tr>
+      <td><code>AGT-005</code></td>
+      <td>Audit and Provenance Failure</td>
+      <td>Audit</td>
+    </tr>
+    <tr>
+      <td><code>AGT-006</code></td>
+      <td>Memory and Persistence Poisoning</td>
+      <td>Memory</td>
+    </tr>
+    <tr>
+      <td><code>AGT-007</code></td>
+      <td>Inter-Agent Trust and Delegation Abuse</td>
+      <td>Tool-use</td>
+    </tr>
+    <tr>
+      <td><code>AGT-008</code></td>
+      <td>Output-Channel Injection</td>
+      <td>Output</td>
+    </tr>
+    <tr>
+      <td><code>AGT-009</code></td>
+      <td>Goal Subversion via Context Manipulation</td>
+      <td>Model</td>
+    </tr>
+    <tr>
+      <td><code>AGT-010</code></td>
+      <td>Resource Exhaustion via Agent Loops</td>
+      <td>Tool-use</td>
+    </tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Technical Details</h2>
+
+  <h3>Data Sources</h3>
+  <p>This explorer is built from three JSON data files:</p>
+  <ul>
+    <li><code>data/threats.json</code> &mdash; 10 threat definitions with attack scenarios, controls, and regulatory hooks</li>
+    <li><code>data/controls.json</code> &mdash; 5 control specifications with implementation patterns and failure modes</li>
+    <li><code>data/mappings.json</code> &mdash; Relationships between threats, controls, and regulatory requirements</li>
+  </ul>
+
+  <h3>Dependencies</h3>
+  <p>This application has <strong>zero external dependencies</strong>. It is a single HTML file with:</p>
+  <ul>
+    <li>Embedded CSS (no external stylesheets)</li>
+    <li>Embedded JavaScript (no frameworks or libraries)</li>
+    <li>Embedded data (no API calls or external data fetching)</li>
+  </ul>
+  <p>You can download the HTML file and open it locally in any modern browser. No server required.</p>
+
+  <h3>Rebuilding the Explorer</h3>
+  <p>If the source JSON files are updated, rebuild the explorer with:</p>
+  <pre><code># Generate explorer data from source files
+python3 scripts/build-explorer.py
+
+# Update the HTML with new data
+python3 scripts/update-explorer-html.py</code></pre>
+
+  <h3>Browser Compatibility</h3>
+  <p>Works in all modern browsers: Chrome, Firefox, Safari, Edge. No IE11 support.</p>
+</div>
+
+<div class="card">
+  <h2>About the Framework</h2>
+  <p>
+    The EU AI Security Mapping Framework is an independent practitioner project. It is:
+  </p>
+  <ul>
+    <li><strong>Vendor-neutral</strong> &mdash; No product recommendations or vendor names in the core framework</li>
+    <li><strong>Practitioner-focused</strong> &mdash; Written by and for security professionals implementing AI agents</li>
+    <li><strong>Regulation-grounded</strong> &mdash; Every control traces to specific regulatory articles</li>
+    <li><strong>Honest about gaps</strong> &mdash; Known limitations and control gaps are documented explicitly</li>
+  </ul>
+  <p>
+    The full practitioner guide is available as a markdown document with detailed implementation guidance,
+    regulatory analysis, and worked examples.
+  </p>
+</div>
+
+</main>
+
+<footer>
+  EU AI Security Mapping Framework &mdash; v1.0<br/>
+  <a href="index.html">Back to Explorer</a>
+</footer>
+
+</body>
+</html>

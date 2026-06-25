@@ -393,6 +393,132 @@
       "article_or_section": "Art. 21 (Risk management)",
       "rationale": "Availability and resilience",
       "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 9 (ICT risk management framework and protection)",
+      "rationale": "ICT risk management framework must address agent-specific risks including prompt injection; protection measures (Art. 9) require access controls and continuous monitoring of agent behavior",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 9 (ICT risk management framework and protection)",
+      "rationale": "ICT risk management and protection requirements include identity and access management; agents must enforce least privilege and not have broader access than the users they serve",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-003",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 9 (ICT risk management framework and protection)",
+      "rationale": "Operational resilience requires controls on agent action composition; ICT risk framework must document and manage tool-chain risks",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 9 (ICT risk management framework and protection)",
+      "rationale": "Protection and prevention measures must address confidentiality of information processed by ICT systems including agent outputs",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "DORA",
+      "article_or_section": "Art. 6 to 9 (ICT risk management framework and protection)",
+      "rationale": "ICT risk management framework requires documentation and identification of ICT assets; audit capabilities for agents must be documented and maintained",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 23 (Reporting obligations)",
+      "rationale": "Successful prompt injection leading to data exfiltration or unauthorized actions may constitute a significant incident requiring notification to competent authority within 24 hours (early warning) and 72 hours (full notification)",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 23 (Reporting obligations)",
+      "rationale": "Authorization confusion leading to cross-tenant data exposure or unauthorized actions affecting multiple users may trigger significant incident reporting requirements",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 23 (Reporting obligations)",
+      "rationale": "Data leakage through agent outputs causing material damage to natural or legal persons requires incident notification; audit logs must support reconstruction within the 24-72 hour reporting timeline",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 23 (Reporting obligations)",
+      "rationale": "Incident reporting requires detailed reconstruction of events including root cause; audit and provenance failure directly impedes compliance with the final report requirement (threat type, root cause, measures taken)",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "NIS2",
+      "article_or_section": "Art. 23 (Reporting obligations)",
+      "rationale": "Multi-agent delegation chain incidents may have cross-border impact requiring notification to CSIRTs in multiple Member States; traceability through agent boundaries is essential for incident assessment",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 30 (Records of processing activities)",
+      "rationale": "Processing activities involving agents must document categories of data subjects, purposes, and recipients; authorization confusion makes accurate documentation difficult when agent access exceeds user authorization",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 30 (Records of processing activities)",
+      "rationale": "RoPA must document categories of recipients including third-party services; data leakage to unauthorized recipients violates documented processing boundaries",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 30 (Records of processing activities)",
+      "rationale": "RoPA requires description of technical and organizational security measures; audit and provenance capabilities are core security measures that must be documented and demonstrable",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-007",
+      "regulation": "GDPR",
+      "article_or_section": "Art. 30 (Records of processing activities)",
+      "rationale": "Multi-agent architectures involving third-party sub-agents must document all processing relationships; transfers to third countries via model providers require explicit documentation",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-001",
+      "regulation": "DORA",
+      "article_or_section": "Art. 17 to 19 (ICT incident management and reporting)",
+      "rationale": "Prompt injection attacks exploiting agent vulnerabilities are ICT-related incidents requiring classification and potential reporting; major incidents require 4-hour initial notification",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-002",
+      "regulation": "DORA",
+      "article_or_section": "Art. 17 to 19 (ICT incident management and reporting)",
+      "rationale": "Authorization confusion leading to unauthorized data access or actions affecting clients may constitute major ICT incident based on number of affected parties and data losses",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-004",
+      "regulation": "DORA",
+      "article_or_section": "Art. 17 to 19 (ICT incident management and reporting)",
+      "rationale": "Data leakage through agent outputs affecting confidentiality of client data must be classified under Article 18 criteria and reported if major",
+      "requirement_status": "referenced_but_not_yet_defined"
+    },
+    {
+      "threat_id": "AGT-005",
+      "regulation": "DORA",
+      "article_or_section": "Art. 17 to 19 (ICT incident management and reporting)",
+      "rationale": "Final incident reports require detailed root cause analysis; audit failure prevents compliance with Article 19 reporting requirements",
+      "requirement_status": "referenced_but_not_yet_defined"
     }
   ],
   "control_mitigates_threat": [
@@ -593,6 +719,78 @@
       "threat_id": "AGT-010",
       "relationship": "secondary",
       "rationale": "Identity and authorization context propagation: limits which user contexts can cause uncontrolled loops"
+    },
+    {
+      "control_id": "CTL-006",
+      "threat_id": "AGT-006",
+      "relationship": "primary",
+      "rationale": "Prevents poisoned components from entering the system through supply chain verification"
+    },
+    {
+      "control_id": "CTL-006",
+      "threat_id": "AGT-007",
+      "relationship": "secondary",
+      "rationale": "Trust relationships are validated before delegation"
+    },
+    {
+      "control_id": "CTL-006",
+      "threat_id": "AGT-001",
+      "relationship": "secondary",
+      "rationale": "Compromised tools are a vector for indirect injection; supply chain controls reduce this risk"
+    },
+    {
+      "control_id": "CTL-007",
+      "threat_id": "AGT-004",
+      "relationship": "primary",
+      "rationale": "System prompts are sensitive data that must not leak to unauthorized parties"
+    },
+    {
+      "control_id": "CTL-007",
+      "threat_id": "AGT-001",
+      "relationship": "secondary",
+      "rationale": "Knowledge of system prompt enables more effective injection attacks"
+    },
+    {
+      "control_id": "CTL-007",
+      "threat_id": "AGT-009",
+      "relationship": "secondary",
+      "rationale": "Understanding system goals enables targeted goal subversion"
+    },
+    {
+      "control_id": "CTL-008",
+      "threat_id": "AGT-001",
+      "relationship": "primary",
+      "rationale": "Vector store is a primary path for indirect prompt injection via RAG"
+    },
+    {
+      "control_id": "CTL-008",
+      "threat_id": "AGT-006",
+      "relationship": "primary",
+      "rationale": "Embedding poisoning is a form of memory and context poisoning"
+    },
+    {
+      "control_id": "CTL-008",
+      "threat_id": "AGT-004",
+      "relationship": "secondary",
+      "rationale": "Embedding inversion attacks can leak document content"
+    },
+    {
+      "control_id": "CTL-009",
+      "threat_id": "AGT-009",
+      "relationship": "primary",
+      "rationale": "Detects when agent goals or outputs have been subverted to produce misinformation"
+    },
+    {
+      "control_id": "CTL-009",
+      "threat_id": "AGT-008",
+      "relationship": "secondary",
+      "rationale": "Output validation catches injected misinformation in output channels"
+    },
+    {
+      "control_id": "CTL-009",
+      "threat_id": "AGT-001",
+      "relationship": "secondary",
+      "rationale": "Fact-checking can detect injection-induced false outputs"
     }
   ],
   "threat_related_to_threat": [

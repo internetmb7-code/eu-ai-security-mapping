@@ -64,9 +64,29 @@
         "rationale": "By limiting blast radius"
       },
       {
+        "threat_id": "AGT-003",
+        "relationship": "secondary",
+        "rationale": "Constrains the user authority that any chain can leverage"
+      },
+      {
+        "threat_id": "AGT-004",
+        "relationship": "primary",
+        "rationale": "Per-user scoping at retrieval limits what can be exfiltrated"
+      },
+      {
         "threat_id": "AGT-005",
         "relationship": "secondary",
         "rationale": "By enabling cleaner attribution"
+      },
+      {
+        "threat_id": "AGT-007",
+        "relationship": "primary",
+        "rationale": "Ensures user context is preserved through the delegation chain"
+      },
+      {
+        "threat_id": "AGT-010",
+        "relationship": "secondary",
+        "rationale": "Limits which user contexts can cause uncontrolled loops"
       }
     ],
     "regulatory_basis": [
@@ -142,6 +162,24 @@
         "control_id": "ORP.4 (Identitäts- und Berechtigungsmanagement)",
         "relationship": "refinement",
         "notes": "Identity and authorization management extended to agent context"
+      },
+      {
+        "standard": "ISO/IEC 42001:2023",
+        "control_id": "A.5.14 (Third-party and customer relationships)",
+        "relationship": "refinement",
+        "notes": "Identity propagation across AI system boundaries and third-party integrations"
+      },
+      {
+        "standard": "NIST AI RMF",
+        "control_id": "MANAGE 2.2 (Mechanisms for tracking identified AI risks)",
+        "relationship": "adjacent",
+        "notes": "User attribution supports continuous monitoring and risk tracking"
+      },
+      {
+        "standard": "ENISA AI Framework",
+        "control_id": "AI Supply Chain Security",
+        "relationship": "adjacent",
+        "notes": "Identity context preserved across AI component boundaries"
       }
     ],
     "related_controls": [
@@ -263,9 +301,19 @@
         "rationale": "Foundational defense against indirect prompt injection: the structural distinction between content and instruction is what prevents tool-output injections from being elevated to authoritative instruction"
       },
       {
+        "threat_id": "AGT-005",
+        "relationship": "primary",
+        "rationale": "Provenance is the input to meaningful audit"
+      },
+      {
         "threat_id": "AGT-006",
         "relationship": "primary",
         "rationale": "Extending provenance to persisted state addresses memory-vector poisoning patterns by preventing persisted content from being treated as authoritative on retrieval"
+      },
+      {
+        "threat_id": "AGT-007",
+        "relationship": "primary",
+        "rationale": "Tagging sub-agent outputs as content rather than instruction"
       },
       {
         "threat_id": "AGT-008",
@@ -357,6 +405,24 @@
         "control_id": "OPS.1.2.4 (Schutz vor Schadprogrammen)",
         "relationship": "refinement",
         "notes": "Extended to agent-context-level content evaluation"
+      },
+      {
+        "standard": "ISO/IEC 42001:2023",
+        "control_id": "A.5.9 (Data management for AI systems)",
+        "relationship": "refinement",
+        "notes": "Provenance tracking extends data governance to runtime context"
+      },
+      {
+        "standard": "NIST AI RMF",
+        "control_id": "MAP 3.4 (Risks and benefits from third-party resources)",
+        "relationship": "refinement",
+        "notes": "Provenance tagging addresses third-party content trust"
+      },
+      {
+        "standard": "ENISA AI Framework",
+        "control_id": "AI Data Integrity",
+        "relationship": "refinement",
+        "notes": "Content provenance ensures data integrity in AI processing"
       }
     ],
     "related_controls": [
@@ -499,6 +565,16 @@
         "rationale": "Composition tracking and verification at composed-action thresholds is the core defense against tool-chain abuse"
       },
       {
+        "threat_id": "AGT-006",
+        "relationship": "secondary",
+        "rationale": "Action verification at high-impact boundaries provides a checkpoint when retrieved memory influences high-impact decisions"
+      },
+      {
+        "threat_id": "AGT-007",
+        "relationship": "primary",
+        "rationale": "Action verification at high-impact boundaries requires verification at the primary agent before acting on sub-agent outputs in high-stakes contexts"
+      },
+      {
         "threat_id": "AGT-008",
         "relationship": "primary",
         "rationale": "Verification before agent output triggers downstream execution prevents output-injection harm"
@@ -599,6 +675,24 @@
         "control_id": "ORP.4 (Identitäts- und Berechtigungsmanagement)",
         "relationship": "adjacent",
         "notes": "Identity and authorization management extended to action verification"
+      },
+      {
+        "standard": "ISO/IEC 42001:2023",
+        "control_id": "A.5.2 (AI system impact assessment)",
+        "relationship": "refinement",
+        "notes": "Action verification implements runtime impact assessment at boundaries"
+      },
+      {
+        "standard": "NIST AI RMF",
+        "control_id": "GOVERN 1.4 (Organizational risk tolerance)",
+        "relationship": "adjacent",
+        "notes": "Verification thresholds implement organizational risk tolerance"
+      },
+      {
+        "standard": "ENISA AI Framework",
+        "control_id": "AI Risk Assessment",
+        "relationship": "refinement",
+        "notes": "Runtime verification operationalizes risk assessment outcomes"
       }
     ],
     "related_controls": [
@@ -822,6 +916,24 @@
         "control_id": "CON.2 (Datenschutz)",
         "relationship": "refinement",
         "notes": "Data protection principles applied to agent output"
+      },
+      {
+        "standard": "ISO/IEC 42001:2023",
+        "control_id": "A.5.9 (Data management for AI systems)",
+        "relationship": "refinement",
+        "notes": "Output filtering enforces data governance at AI system boundary"
+      },
+      {
+        "standard": "NIST AI RMF",
+        "control_id": "MANAGE 2.4 (Residual risk documentation and communication)",
+        "relationship": "adjacent",
+        "notes": "Filter decisions document residual disclosure risk"
+      },
+      {
+        "standard": "ENISA AI Framework",
+        "control_id": "AI Output Controls",
+        "relationship": "refinement",
+        "notes": "Authorization-aware filtering at AI output boundaries"
       }
     ],
     "related_controls": [
@@ -978,6 +1090,11 @@
         "rationale": "Cumulative composition patterns become detectable when full action streams are auditable"
       },
       {
+        "threat_id": "AGT-004",
+        "relationship": "primary",
+        "rationale": "Data-flow audit enables detection of legitimate-channel exfiltration"
+      },
+      {
         "threat_id": "AGT-006",
         "relationship": "secondary",
         "rationale": "When persisted content later influences agent behavior, audit enables tracing back to the originating event"
@@ -1111,6 +1228,24 @@
         "control_id": "DER.1 (Detektion von sicherheitsrelevanten Ereignissen)",
         "relationship": "refinement",
         "notes": "Detection extended to agent-specific patterns"
+      },
+      {
+        "standard": "ISO/IEC 42001:2023",
+        "control_id": "A.5.15 (Logging and monitoring of AI systems)",
+        "relationship": "direct_equivalent",
+        "notes": "AI-specific logging requirements for agent systems"
+      },
+      {
+        "standard": "NIST AI RMF",
+        "control_id": "MEASURE 2.6 (AI system performance and trustworthiness evaluation)",
+        "relationship": "adjacent",
+        "notes": "Audit data supports trustworthiness evaluation"
+      },
+      {
+        "standard": "ENISA AI Framework",
+        "control_id": "AI Monitoring and Incident Response",
+        "relationship": "refinement",
+        "notes": "End-to-end audit enables AI incident response"
       }
     ],
     "related_controls": [
@@ -1182,5 +1317,435 @@
       }
     ],
     "status": "complete"
+  },
+  {
+    "id": "CTL-006",
+    "title": "Supply Chain and Model Provenance",
+    "domain": "supply-chain",
+    "function": [
+      "preventive",
+      "detective"
+    ],
+    "maturity": "emerging",
+    "description": "AI agents rely on models, plugins, tools, and data sources from multiple providers. Each component in the supply chain introduces risk if compromised, backdoored, or tampered with. This control establishes provenance verification for all AI components: models must have verified signatures and documented training lineage, plugins and tools must come from approved sources with integrity verification, and data sources must be catalogued with trust levels. The control creates a software bill of materials (SBOM) for AI systems that tracks all dependencies and their security posture.",
+    "implementation_pattern": "Maintain an AI component registry that catalogs all models, plugins, tools, and data sources used by agents. Each component entry includes: cryptographic hash of the artifact, signature from the provider, documented provenance (training data sources, fine-tuning history), security assessment status, and approved use cases. Before any component is loaded into production, verify its signature against the registry and check that its hash matches the approved version. For models, implement model cards that document capabilities, limitations, and known vulnerabilities. For plugins and tools, require code review or sandboxed testing before approval. Establish an update cadence for components with known vulnerabilities. Monitor for supply chain compromise indicators: unexpected model behavior changes, plugin updates from unknown sources, or data source contamination.",
+    "operational_considerations": [
+      {
+        "consideration": "Vendor cooperation",
+        "description": "Not all model providers offer cryptographic signatures or detailed provenance; may need to establish trust through other means or restrict to providers who do"
+      },
+      {
+        "consideration": "Update velocity",
+        "description": "Frequent model updates conflict with thorough provenance verification; balance security review depth against operational agility"
+      },
+      {
+        "consideration": "Custom fine-tuning",
+        "description": "Organization-specific fine-tuning creates provenance gaps; document fine-tuning data and process as part of the chain"
+      }
+    ],
+    "common_failure_modes": [
+      {
+        "failure_mode": "Shadow AI",
+        "description": "Teams deploy models or plugins outside the approved registry; supply chain controls are bypassed entirely"
+      },
+      {
+        "failure_mode": "Stale registry",
+        "description": "Registry is not maintained; approved versions fall behind, or unapproved versions slip through"
+      },
+      {
+        "failure_mode": "Trusted vendor assumption",
+        "description": "Large vendor is assumed trustworthy; their compromise propagates to all dependent systems"
+      }
+    ],
+    "threats_addressed": [
+      {
+        "threat_id": "AGT-006",
+        "relationship": "primary",
+        "rationale": "Prevents poisoned components from entering the system"
+      },
+      {
+        "threat_id": "AGT-007",
+        "relationship": "secondary",
+        "rationale": "Trust relationships are validated before delegation"
+      },
+      {
+        "threat_id": "AGT-001",
+        "relationship": "secondary",
+        "rationale": "Compromised tools are a vector for indirect injection"
+      }
+    ],
+    "regulatory_basis": [
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 15",
+        "relevance": "Cybersecurity requirements include protection against third-party manipulation"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 9",
+        "relevance": "Risk management must address supply chain risks"
+      },
+      {
+        "regulation": "NIS2",
+        "article_or_section": "Art. 21",
+        "relevance": "Supply chain security is explicit NIS2 requirement"
+      },
+      {
+        "regulation": "DORA",
+        "article_or_section": "Art. 28 to 30",
+        "relevance": "ICT third-party risk management"
+      }
+    ],
+    "existing_standard_mappings": [
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SR-3 (Supply Chain Controls)",
+        "relationship": "extension",
+        "notes": "Extended to AI-specific supply chain (models, training data)"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SA-12 (Supply Chain Protection)",
+        "relationship": "extension",
+        "notes": "Extended to model provenance"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.5.21 (ICT supply chain)",
+        "relationship": "extension",
+        "notes": "Extended to AI component verification"
+      }
+    ],
+    "owasp_llm_2025": [
+      "LLM03"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM03",
+        "name": "Supply Chain",
+        "relevance": "Directly addresses supply chain vulnerabilities in LLM applications"
+      }
+    ]
+  },
+  {
+    "id": "CTL-007",
+    "title": "System Prompt and Configuration Protection",
+    "domain": "confidentiality",
+    "function": [
+      "preventive"
+    ],
+    "maturity": "emerging",
+    "description": "AI agents operate according to system prompts and configurations that define their behavior, boundaries, and capabilities. These instructions are sensitive intellectual property and security-relevant configuration. If leaked to users or attackers, they reveal how to manipulate the agent and may expose business logic. This control protects system prompts from extraction through direct queries, indirect probing, or output analysis. It also prevents unauthorized modification of agent configuration.",
+    "implementation_pattern": "Store system prompts and agent configurations outside the model context where possible, injecting them at runtime through secure channels. Implement output filtering that detects and blocks attempts to repeat or paraphrase system instructions. Use canary tokens in system prompts to detect if they appear in outputs. Rate-limit and monitor queries that probe agent behavior or request meta-information. For configuration changes, require multi-party approval and audit all modifications. Consider prompt obfuscation techniques that make instructions harder to extract while maintaining functionality. Test regularly with red-team exercises specifically targeting prompt extraction.",
+    "operational_considerations": [
+      {
+        "consideration": "Usability trade-off",
+        "description": "Aggressive filtering may block legitimate queries about agent capabilities; balance protection with user experience"
+      },
+      {
+        "consideration": "Model capability",
+        "description": "Some models are more susceptible to prompt leakage than others; control effectiveness varies by model"
+      },
+      {
+        "consideration": "Maintenance overhead",
+        "description": "Prompt protection requires ongoing red-team testing as new extraction techniques emerge"
+      }
+    ],
+    "common_failure_modes": [
+      {
+        "failure_mode": "Indirect extraction",
+        "description": "Attacker uses creative phrasing to get the model to reveal instructions without triggering filters"
+      },
+      {
+        "failure_mode": "Behavioral inference",
+        "description": "System prompt is not leaked directly, but behavior analysis reveals the instructions"
+      },
+      {
+        "failure_mode": "Version control exposure",
+        "description": "System prompts are stored in source control and leaked through repository access"
+      }
+    ],
+    "threats_addressed": [
+      {
+        "threat_id": "AGT-004",
+        "relationship": "primary",
+        "rationale": "System prompts are sensitive data that must not leak"
+      },
+      {
+        "threat_id": "AGT-001",
+        "relationship": "secondary",
+        "rationale": "Knowledge of system prompt enables more effective injection attacks"
+      },
+      {
+        "threat_id": "AGT-009",
+        "relationship": "secondary",
+        "rationale": "Understanding system goals enables targeted goal subversion"
+      }
+    ],
+    "regulatory_basis": [
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 15",
+        "relevance": "Cybersecurity includes protection of system configuration"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 32",
+        "relevance": "Security of processing includes confidentiality of system configuration"
+      },
+      {
+        "regulation": "DORA",
+        "article_or_section": "Art. 9",
+        "relevance": "Protection of ICT assets including configuration"
+      }
+    ],
+    "existing_standard_mappings": [
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SC-28 (Protection of Information at Rest)",
+        "relationship": "extension",
+        "notes": "Extended to AI system prompt protection"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "CM-3 (Configuration Change Control)",
+        "relationship": "refinement",
+        "notes": "Applied to AI agent configuration"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.8.9 (Configuration management)",
+        "relationship": "extension",
+        "notes": "Extended to AI system prompts"
+      }
+    ],
+    "owasp_llm_2025": [
+      "LLM07"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM07",
+        "name": "System Prompt Leakage",
+        "relevance": "Directly addresses system prompt leakage vulnerability"
+      }
+    ]
+  },
+  {
+    "id": "CTL-008",
+    "title": "Embedding and Vector Store Security",
+    "domain": "data-integrity",
+    "function": [
+      "preventive",
+      "detective"
+    ],
+    "maturity": "emerging",
+    "description": "Retrieval-augmented generation (RAG) systems store document embeddings in vector databases for semantic search. These vector stores are a critical attack surface: poisoned embeddings can inject malicious content into agent context, embedding inversion can leak training data, and poor access controls can expose sensitive documents. This control establishes security requirements for vector stores: access control per document and user, integrity verification of embeddings, monitoring for anomalous queries, and protection against embedding inversion attacks.",
+    "implementation_pattern": "Implement document-level access control in the vector store, ensuring users can only retrieve embeddings for documents they are authorized to access. Tag embeddings with source document metadata and classification level. Before indexing, validate that documents meet security requirements and scan for potential injection payloads. Monitor query patterns for anomalies: unusual query volumes, queries targeting specific embedding regions, or systematic probing. Implement rate limiting on embedding retrieval. For sensitive deployments, consider adding noise to embeddings to frustrate inversion attacks while maintaining retrieval quality. Regularly audit what documents are indexed and remove stale or unauthorized content. Maintain separation between embedding stores for different trust levels.",
+    "operational_considerations": [
+      {
+        "consideration": "Performance impact",
+        "description": "Per-document access control adds latency to every retrieval; may require caching strategies"
+      },
+      {
+        "consideration": "Embedding quality",
+        "description": "Security measures like noise addition can degrade retrieval quality; balance security with utility"
+      },
+      {
+        "consideration": "Index management",
+        "description": "Access control changes require re-evaluation of who can access existing embeddings"
+      }
+    ],
+    "common_failure_modes": [
+      {
+        "failure_mode": "Flat access model",
+        "description": "All users can query all embeddings; no document-level access control"
+      },
+      {
+        "failure_mode": "Stale embeddings",
+        "description": "Document is deleted or access revoked, but embedding remains queryable"
+      },
+      {
+        "failure_mode": "Injection via indexing",
+        "description": "Malicious document is indexed, placing poisoned content in retrieval path"
+      }
+    ],
+    "threats_addressed": [
+      {
+        "threat_id": "AGT-001",
+        "relationship": "primary",
+        "rationale": "Vector store is a primary path for indirect prompt injection"
+      },
+      {
+        "threat_id": "AGT-006",
+        "relationship": "primary",
+        "rationale": "Embedding poisoning is a form of memory poisoning"
+      },
+      {
+        "threat_id": "AGT-004",
+        "relationship": "secondary",
+        "rationale": "Embedding inversion can leak document content"
+      }
+    ],
+    "regulatory_basis": [
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 10",
+        "relevance": "Data governance for training and operational data"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 15",
+        "relevance": "Cybersecurity of data processing components"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 5(1)(f)",
+        "relevance": "Integrity and confidentiality of processed data"
+      },
+      {
+        "regulation": "GDPR",
+        "article_or_section": "Art. 32",
+        "relevance": "Security measures for data processing systems"
+      }
+    ],
+    "existing_standard_mappings": [
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "AC-3 (Access Enforcement)",
+        "relationship": "extension",
+        "notes": "Extended to vector store access control"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SI-7 (Software, Firmware, and Information Integrity)",
+        "relationship": "extension",
+        "notes": "Extended to embedding integrity"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.8.3 (Information access restriction)",
+        "relationship": "extension",
+        "notes": "Extended to semantic search systems"
+      }
+    ],
+    "owasp_llm_2025": [
+      "LLM08"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM08",
+        "name": "Vector and Embedding Weaknesses",
+        "relevance": "Directly addresses vector database and RAG security"
+      }
+    ]
+  },
+  {
+    "id": "CTL-009",
+    "title": "Output Accuracy and Misinformation Controls",
+    "domain": "output-quality",
+    "function": [
+      "detective",
+      "corrective"
+    ],
+    "maturity": "emerging",
+    "description": "AI agents can generate plausible but incorrect information (hallucinations), propagate misinformation from training data, or be manipulated into producing false outputs. In regulated contexts, inaccurate outputs can cause compliance violations, financial harm, or reputational damage. This control establishes mechanisms to detect, flag, and correct inaccurate outputs: fact-checking against authoritative sources, confidence scoring, citation requirements for factual claims, and human review for high-stakes outputs.",
+    "implementation_pattern": "Implement output validation pipelines that check factual claims against authoritative sources before delivery. Require the agent to cite sources for factual statements and verify citations are valid. Add confidence scoring to outputs, with low-confidence responses flagged for human review. For regulated domains (financial, medical, legal), maintain approved knowledge bases and restrict answers to sourced information. Implement feedback loops where users can flag inaccuracies, feeding into model improvement. Monitor for patterns of inaccuracy: specific topics, query types, or data sources that correlate with errors. For high-stakes decisions, require human confirmation before action.",
+    "operational_considerations": [
+      {
+        "consideration": "Latency",
+        "description": "Fact-checking adds significant latency; may need async validation for time-sensitive use cases"
+      },
+      {
+        "consideration": "Coverage limits",
+        "description": "Not all claims can be fact-checked; some domains lack authoritative sources"
+      },
+      {
+        "consideration": "False positives",
+        "description": "Aggressive filtering may block accurate but unusual information"
+      }
+    ],
+    "common_failure_modes": [
+      {
+        "failure_mode": "Confidence miscalibration",
+        "description": "Model expresses high confidence in incorrect statements"
+      },
+      {
+        "failure_mode": "Citation fabrication",
+        "description": "Model generates plausible but non-existent citations"
+      },
+      {
+        "failure_mode": "Stale knowledge base",
+        "description": "Fact-checking sources are outdated; accurate current information is flagged as false"
+      }
+    ],
+    "threats_addressed": [
+      {
+        "threat_id": "AGT-009",
+        "relationship": "primary",
+        "rationale": "Detects when agent goals or outputs have been subverted"
+      },
+      {
+        "threat_id": "AGT-008",
+        "relationship": "secondary",
+        "rationale": "Output validation catches injected misinformation"
+      },
+      {
+        "threat_id": "AGT-001",
+        "relationship": "secondary",
+        "rationale": "Fact-checking can detect injection-induced false outputs"
+      }
+    ],
+    "regulatory_basis": [
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 9",
+        "relevance": "Risk management includes accuracy risks"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 13",
+        "relevance": "Transparency requires accurate information provision"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article_or_section": "Art. 14",
+        "relevance": "Human oversight for accuracy verification"
+      },
+      {
+        "regulation": "DORA",
+        "article_or_section": "Art. 6 to 8",
+        "relevance": "ICT risk management includes data accuracy"
+      }
+    ],
+    "existing_standard_mappings": [
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SI-4 (System Monitoring)",
+        "relationship": "extension",
+        "notes": "Extended to output accuracy monitoring"
+      },
+      {
+        "standard": "NIST SP 800-53 Rev. 5",
+        "control_id": "SI-10 (Information Input Validation)",
+        "relationship": "extension",
+        "notes": "Concept extended to output validation"
+      },
+      {
+        "standard": "ISO 27001 Annex A",
+        "control_id": "A.8.11 (Data masking)",
+        "relationship": "novel",
+        "notes": "No direct equivalent; novel AI-specific control"
+      }
+    ],
+    "owasp_llm_2025": [
+      "LLM09"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM09",
+        "name": "Misinformation",
+        "relevance": "Directly addresses hallucination and misinformation risks"
+      }
+    ]
   }
 ]

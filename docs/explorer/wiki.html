@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<!-- v3: Security hardening (CSP) - 2026-06-24 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';">
+  <title>Regulatory Wiki - EU AI Security Mapping</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --panel-soft: #f1f5f9;
+      --text: #0f172a;
+      --text-soft: #334155;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06), 0 2px 4px -2px rgba(15,23,42,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.08), 0 4px 6px -4px rgba(15,23,42,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #312e81 100%);
+      color: white;
+      padding: 24px 32px;
+    }
+    header h1 { font-size: 24px; font-weight: 700; }
+    header .sub { color: #94a3b8; font-size: 14px; margin-top: 4px; }
+    .nav-links {
+      margin-top: 12px;
+    }
+    .nav-links a {
+      color: #93c5fd;
+      text-decoration: none;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+    .nav-links a:hover { text-decoration: underline; }
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    .intro {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .intro h2 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
+    .intro p { color: var(--text-soft); }
+
+    .regulation {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .regulation:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .regulation-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .regulation-header:hover { background: var(--bg); }
+    .regulation-header h2 {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .regulation-header .tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .tag-ai { background: #dbeafe; color: #1e40af; }
+    .tag-cyber { background: #dcfce7; color: #166534; }
+    .tag-finance { background: #fef3c7; color: #92400e; }
+    .tag-privacy { background: #f3e8ff; color: #7c3aed; }
+
+    .regulation-content {
+      padding: 24px;
+    }
+    .regulation-content > p {
+      color: var(--text-soft);
+      margin-bottom: 20px;
+    }
+    .scope-box {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .scope-box strong { color: var(--accent); }
+
+    h3 {
+      font-size: 15px;
+      margin: 24px 0 12px 0;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .article {
+      margin-bottom: 16px;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius);
+    }
+    .article-id {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 14px;
+    }
+    .article-title {
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .article-desc {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+    .article-relevance {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text);
+      background: white;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #10b981;
+    }
+    .article-relevance strong {
+      color: #059669;
+    }
+
+    .links-section {
+      margin-top: 32px;
+      padding: 20px 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .links-section h3 { margin-top: 0; }
+    .links-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .links-section li {
+      margin-bottom: 8px;
+    }
+    .links-section a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .links-section a:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Regulatory Wiki</h1>
+  <div class="sub">Overview of EU regulations covered by the AI Security Mapping Framework</div>
+  <div class="nav-links">
+    <a href="index.html">Back to Explorer</a>
+    <a href="guide.html">How to Use</a>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <h2>About This Wiki</h2>
+    <p>This wiki provides an overview of the four EU regulations covered by the AI Security Mapping Framework. Each regulation section includes current implementation status, key timeline updates, and the specific articles relevant to AI agent security. Use this as a reference when exploring the interactive framework.</p>
+    <p style="margin-top: 12px; font-size: 13px; color: var(--text-soft);"><em>Last updated: June 2026. Implementation status reflects publicly available information and may change as regulations evolve.</em></p>
+  </div>
+
+  <!-- EU AI Act -->
+  <div class="regulation">
+    <div class="regulation-header">
+      <h2>
+        EU AI Act
+        <span class="tag tag-ai">AI Regulation</span>
+      </h2>
+    </div>
+    <div class="regulation-content">
+      <p>The EU Artificial Intelligence Act (Regulation 2024/1689) is the world's first comprehensive legal framework for AI. It establishes requirements for AI systems based on their risk level, with high-risk AI systems subject to the most stringent obligations.</p>
+
+      <div class="scope-box">
+        <strong>Applies to:</strong> Providers and deployers of AI systems in the EU market, including AI agents that make or influence decisions affecting individuals.
+      </div>
+
+      <h3>Implementation Status (as of June 2026)</h3>
+      <div class="article">
+        <span class="article-id">Timeline Update</span>
+        <span class="article-title">Digital Omnibus Agreement (May 2026)</span>
+        <div class="article-desc">
+          On 7 May 2026, EU negotiators reached a provisional agreement on the Digital Omnibus on AI, the first amendments to the AI Act since adoption. Key deadline changes:
+        </div>
+        <div class="article-relevance" style="border-left-color: #f59e0b;">
+          <strong style="color: #d97706;">Key Dates:</strong><br>
+          <strong>Already in effect:</strong> Prohibited AI practices and AI literacy (2 Feb 2025); GPAI model rules (2 Aug 2025)<br>
+          <strong>2 Aug 2026:</strong> Transparency rules (Article 50) and innovation support measures apply<br>
+          <strong>2 Dec 2026:</strong> New prohibition on AI-generated non-consensual intimate material takes effect<br>
+          <strong>2 Dec 2027:</strong> High-risk AI systems (Annex III, use-based) obligations now apply (postponed from Aug 2026)<br>
+          <strong>2 Aug 2028:</strong> High-risk AI systems (Annex I, product-regulated) obligations now apply (postponed from Aug 2027)
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">Context</span>
+        <span class="article-title">Why the Delay?</span>
+        <div class="article-desc">
+          The postponed timeframes reflect challenges operationalizing high-risk system provisions, particularly testing, documentation, and third-party assessment requirements. The delay provides EU standards bodies (CEN-CENELEC) additional time to prepare necessary standards and guidelines. National AI regulatory sandboxes are also postponed to August 2027.
+        </div>
+      </div>
+
+      <h3>Relevant Articles for AI Agent Security</h3>
+
+      <div class="article">
+        <span class="article-id">Article 9</span>
+        <span class="article-title">Risk Management System</span>
+        <div class="article-desc">
+          Requires providers of high-risk AI systems to establish, implement, document and maintain a risk management system throughout the AI system's lifecycle. The system must identify and analyze known and reasonably foreseeable risks, estimate and evaluate risks, and adopt appropriate risk management measures.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agents must have risk management for prompt injection, tool-chain abuse, and goal drift. Risk assessment must consider the agent's ability to take autonomous actions.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 10</span>
+        <span class="article-title">Data and Data Governance</span>
+        <div class="article-desc">
+          High-risk AI systems using techniques involving training with data shall be developed on the basis of training, validation and testing data sets that meet specific quality criteria. This includes requirements for data relevance, representativeness, and freedom from errors.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Applies to agents using retrieval-augmented generation (RAG) or fine-tuned models. Data provenance and quality controls are essential for trustworthy agent outputs.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 12</span>
+        <span class="article-title">Record-keeping</span>
+        <div class="article-desc">
+          High-risk AI systems must allow for automatic recording of events (logs) throughout the system's lifetime. Logging capabilities must ensure traceability of the AI system's functioning and enable monitoring.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent audit trails must capture user identity, actions taken, tools invoked, and reasoning steps. Essential for incident investigation and compliance demonstration.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 13</span>
+        <span class="article-title">Transparency</span>
+        <div class="article-desc">
+          High-risk AI systems shall be designed and developed to ensure their operation is sufficiently transparent to enable deployers to interpret the system's output and use it appropriately.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Users and operators must understand what the agent did and why. Particularly important when agents take multi-step actions or access sensitive data.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 14</span>
+        <span class="article-title">Human Oversight</span>
+        <div class="article-desc">
+          High-risk AI systems shall be designed to be effectively overseen by natural persons during the period of use. Human oversight measures shall aim to prevent or minimize risks to health, safety or fundamental rights.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Critical for agent security. Requires human-in-the-loop verification for high-impact actions, ability to interrupt agent operations, and override mechanisms.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 15</span>
+        <span class="article-title">Accuracy, Robustness and Cybersecurity</span>
+        <div class="article-desc">
+          High-risk AI systems shall be designed and developed to achieve an appropriate level of accuracy, robustness and cybersecurity, and perform consistently throughout their lifecycle.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agents must be resilient against prompt injection, adversarial inputs, and manipulation attempts. Security controls are explicitly required.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NIS2 -->
+  <div class="regulation">
+    <div class="regulation-header">
+      <h2>
+        NIS2 Directive
+        <span class="tag tag-cyber">Cybersecurity</span>
+      </h2>
+    </div>
+    <div class="regulation-content">
+      <p>The Network and Information Security Directive 2 (Directive 2022/2555) establishes cybersecurity requirements for essential and important entities across the EU. It requires organizations to implement appropriate security measures and report significant incidents.</p>
+
+      <div class="scope-box">
+        <strong>Applies to:</strong> Essential entities (energy, transport, banking, health, digital infrastructure) and important entities (postal services, chemicals, food, manufacturing, digital providers) operating in the EU.
+      </div>
+
+      <h3>Transposition Status (as of June 2026)</h3>
+      <div class="article">
+        <span class="article-id">EU-Wide</span>
+        <span class="article-title">Member State Implementation</span>
+        <div class="article-desc">
+          Member States had until 17 October 2024 to transpose NIS2 into national law. Only four Member States met the deadline. As of May 2026, 22 of 27 Member States have adopted transposing legislation.
+        </div>
+        <div class="article-relevance" style="border-left-color: #f59e0b;">
+          <strong style="color: #d97706;">Status by Country:</strong><br>
+          <strong>Fully transposed:</strong> Belgium, Germany, Italy, Hungary, Greece, Czech Republic, Slovakia, Slovenia, Latvia, Lithuania, Croatia, and others<br>
+          <strong>Still pending (mid-2026):</strong> France (Resilience Bill expected July 2026), Ireland (election delays), Spain (draft prepared, not enacted), Netherlands (bill under discussion, expected Q2 2026), Luxembourg
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">Enforcement</span>
+        <span class="article-title">Commission Actions</span>
+        <div class="article-desc">
+          November 2024: Formal notice letters sent to 23 Member States for failure to fully notify transposition. May 2025: Reasoned opinions sent to 19 Member States still non-compliant. Bulgaria has been referred to the CJEU. On 20 January 2026, the Commission proposed targeted amendments to simplify NIS2 compliance for approximately 28,700 companies.
+        </div>
+      </div>
+
+      <h3>Relevant Articles for AI Agent Security</h3>
+
+      <div class="article">
+        <span class="article-id">Article 21</span>
+        <span class="article-title">Cybersecurity Risk-Management Measures</span>
+        <div class="article-desc">
+          Requires essential and important entities to take appropriate and proportionate technical, operational and organizational measures to manage risks posed to the security of network and information systems. Measures must include policies on risk analysis, incident handling, business continuity, supply chain security, and security in acquisition and development of systems.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> AI agents are part of the organization's information systems and must be covered by risk management. Agent-specific risks (prompt injection, authorization confusion) must be addressed within the overall security program.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 23</span>
+        <span class="article-title">Reporting Obligations</span>
+        <div class="article-desc">
+          Requires entities to notify the competent authority or CSIRT of any significant incident without undue delay. Early warning within 24 hours, incident notification within 72 hours, and final report within one month.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent-related security incidents (successful prompt injection leading to data exfiltration, agent acting outside authorization) may constitute reportable incidents. Audit logs must support incident reconstruction within reporting timelines.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DORA -->
+  <div class="regulation">
+    <div class="regulation-header">
+      <h2>
+        DORA
+        <span class="tag tag-finance">Financial Services</span>
+      </h2>
+    </div>
+    <div class="regulation-content">
+      <p>The Digital Operational Resilience Act (Regulation 2022/2554) establishes uniform requirements for the security of network and information systems in the financial sector. It aims to ensure financial entities can withstand, respond to, and recover from ICT-related disruptions and threats.</p>
+
+      <div class="scope-box">
+        <strong>Applies to:</strong> Financial entities including credit institutions, investment firms, insurance undertakings, payment institutions, and their ICT third-party service providers. Article 2 covers 21 distinct entity categories.
+      </div>
+
+      <h3>Implementation Status (as of June 2026)</h3>
+      <div class="article">
+        <span class="article-id">In Force</span>
+        <span class="article-title">DORA is Now Fully Applicable</span>
+        <div class="article-desc">
+          DORA entered into application on 17 January 2025. All Regulatory Technical Standards (RTS) and Implementing Technical Standards (ITS) have been finalized, specifying detailed requirements for incident classification, reporting templates, and testing criteria.
+        </div>
+        <div class="article-relevance" style="border-left-color: #10b981;">
+          <strong>2026 Focus:</strong> Supervisors have shifted from initial implementation to continuous supervision and enforcement. Organizations must demonstrate ongoing compliance with ICT risk management, incident reporting, and third-party oversight requirements.
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">CTPP Oversight</span>
+        <span class="article-title">Critical Third-Party Providers Under Direct EU Supervision</span>
+        <div class="article-desc">
+          In November 2025, the ESAs published their first list of 19 designated Critical ICT Third-Party Providers (CTPPs), including Amazon Web Services, Google Cloud, Microsoft, Oracle, SAP, and Deutsche Telekom. These providers are now subject to direct EU oversight, including annual risk assessments, on-site inspections, and mandatory reporting.
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">Reporting</span>
+        <span class="article-title">Incident Notification Requirements</span>
+        <div class="article-desc">
+          Major incidents require a strict three-stage reporting cadence: Initial notification within 4 hours of classification (max 24 hours from detection), intermediate report within 72 hours, and final report within one month. Commission Delegated Regulation (EU) 2025/301 specifies the content and time limits.
+        </div>
+      </div>
+
+      <h3>Relevant Articles for AI Agent Security</h3>
+
+      <div class="article">
+        <span class="article-id">Article 5</span>
+        <span class="article-title">ICT Risk Management Governance</span>
+        <div class="article-desc">
+          The management body of the financial entity shall define, approve, oversee and be accountable for the implementation of the ICT risk management framework. This includes responsibility for setting policies, organizational structures, and ensuring adequate resources.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> AI agent deployments require board-level awareness and governance. Risk management for agents must be integrated into the overall ICT risk framework.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 6</span>
+        <span class="article-title">ICT Risk Management Framework</span>
+        <div class="article-desc">
+          Financial entities shall have a sound, comprehensive and well-documented ICT risk management framework as part of their overall risk management system. The framework shall include strategies, policies, procedures, ICT protocols and tools necessary to protect all information assets and ICT assets.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> AI agents must be included in the ICT risk management framework. Agent-specific risks (prompt injection, authorization confusion, goal drift) require documented policies and procedures.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 7</span>
+        <span class="article-title">ICT Systems, Protocols and Tools</span>
+        <div class="article-desc">
+          Financial entities shall use and maintain updated ICT systems, protocols and tools that are appropriate to support their operations. They shall implement ICT solutions and processes ensuring data integrity, availability and confidentiality.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent infrastructure (model APIs, tool integrations, memory systems) must meet the same resilience and security standards as other ICT systems. Regular updates and patching apply.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 8</span>
+        <span class="article-title">Identification</span>
+        <div class="article-desc">
+          Financial entities shall identify, classify and adequately document all ICT supported business functions, roles and responsibilities, information assets and ICT assets supporting those functions, and their roles and dependencies.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> All AI agents must be inventoried with their business functions, data access, tool permissions, and dependencies on external services (model providers, APIs) documented.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 9</span>
+        <span class="article-title">Protection and Prevention</span>
+        <div class="article-desc">
+          Financial entities shall continuously monitor and control the security and functioning of ICT systems, minimize the impact of ICT risk through resilient systems, and implement policies limiting access to ICT assets.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Access controls for agents must enforce least privilege. Agents should not have broader access than the users they serve. Continuous monitoring of agent behavior is required.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 10</span>
+        <span class="article-title">Detection</span>
+        <div class="article-desc">
+          Financial entities shall have mechanisms to promptly detect anomalous activities, including ICT network performance issues and ICT-related incidents.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Detection must include agent-specific anomalies: unusual action patterns, authorization boundary violations, potential prompt injection indicators, and goal drift signals.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 11</span>
+        <span class="article-title">Response and Recovery</span>
+        <div class="article-desc">
+          Financial entities shall put in place an ICT business continuity policy and ICT response and recovery plans to ensure continuity of critical functions.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Response plans must include agent-specific scenarios: how to contain a compromised agent, rollback agent actions where possible, and communicate about agent-related incidents.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 12</span>
+        <span class="article-title">Backup Policies and Recovery</span>
+        <div class="article-desc">
+          Financial entities shall maintain backup policies and procedures, determine recovery time and point objectives, and ensure the ability to restore systems from backups.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent state, configuration, and audit logs must be included in backup scope. Recovery procedures must address restoration of agent systems to known-good states.
+        </div>
+      </div>
+
+      <h3>ICT Incident Management (Articles 17-19)</h3>
+
+      <div class="article">
+        <span class="article-id">Article 17</span>
+        <span class="article-title">ICT-Related Incident Management Process</span>
+        <div class="article-desc">
+          Financial entities shall define, establish and implement an ICT-related incident management process to detect, manage and notify ICT-related incidents. They shall record all ICT-related incidents and significant cyber threats, establish procedures to ensure consistent monitoring, handling, and follow-up.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent-related incidents (prompt injection attacks, unauthorized actions, data leakage via agent outputs) must be captured by incident management processes. Incident categories should include agent-specific scenarios.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 18</span>
+        <span class="article-title">Classification of ICT-Related Incidents</span>
+        <div class="article-desc">
+          Financial entities shall classify ICT-related incidents based on criteria including: number of clients/counterparties affected, duration and service downtime, geographical spread, data losses (availability, integrity, confidentiality), criticality of services affected, and economic impact.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent incidents must be classified using these criteria. A compromised agent with broad data access or customer-facing functions may trigger "major incident" classification requiring regulatory notification.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 19</span>
+        <span class="article-title">Reporting of Major ICT-Related Incidents</span>
+        <div class="article-desc">
+          Financial entities shall report major ICT-related incidents to the relevant competent authority. Initial notification within 4 hours of classification (max 24 hours from detection), intermediate report within 72 hours, final report within one month. Voluntary notification of significant cyber threats is encouraged.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent security breaches affecting confidentiality, integrity, or availability may require regulatory reporting. Audit logs must support the detailed incident reconstruction needed for final reports.
+        </div>
+      </div>
+
+      <h3>ICT Third-Party Risk (Articles 28-30)</h3>
+
+      <div class="article">
+        <span class="article-id">Article 28</span>
+        <span class="article-title">General Principles for ICT Third-Party Risk</span>
+        <div class="article-desc">
+          Financial entities shall manage ICT third-party risk as an integral component of ICT risk within their ICT risk management framework. They remain fully responsible for compliance regardless of arrangements with third-party providers. A strategy on ICT third-party risk shall be adopted and regularly reviewed.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Model providers (OpenAI, Anthropic, etc.), embedding services, and external APIs used by agents are ICT third-party providers. Their risks must be assessed and managed within the framework.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 29</span>
+        <span class="article-title">Register of Information</span>
+        <div class="article-desc">
+          Financial entities shall maintain and update a register of information on all contractual arrangements with ICT third-party service providers. The register shall distinguish services supporting critical or important functions. Entities shall report at least yearly to competent authorities on new arrangements.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> All third-party services used by AI agents (model APIs, tool integrations, data sources) must be documented in the register with their criticality classification. Annual reporting includes new AI service providers.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 30</span>
+        <span class="article-title">Key Contractual Provisions</span>
+        <div class="article-desc">
+          Contracts with ICT third-party providers must include mandatory provisions covering: service level descriptions, data processing locations, provisions on availability/integrity/security, termination rights, audit rights, and incident notification obligations.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Contracts with AI model providers must address data handling, service availability SLAs, security commitments, and the right to audit. Termination and data portability provisions are critical for avoiding vendor lock-in.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GDPR -->
+  <div class="regulation">
+    <div class="regulation-header">
+      <h2>
+        GDPR
+        <span class="tag tag-privacy">Data Protection</span>
+      </h2>
+    </div>
+    <div class="regulation-content">
+      <p>The General Data Protection Regulation (Regulation 2016/679) establishes rules for the protection of personal data and the free movement of such data. It applies to any processing of personal data in the context of activities in the EU.</p>
+
+      <div class="scope-box">
+        <strong>Applies to:</strong> Any organization processing personal data of EU residents, regardless of where the organization is located.
+      </div>
+
+      <h3>AI-Specific Developments (2025-2026)</h3>
+      <div class="article">
+        <span class="article-id">Regulatory Intersection</span>
+        <span class="article-title">GDPR Meets the AI Act</span>
+        <div class="article-desc">
+          From 2 August 2026, AI compliance sits at the intersection of three frameworks: the EU AI Act (classifying AI tools by risk), GDPR's automated decision-making regime (Article 22), and emerging national implementations. Organizations deploying AI agents must address requirements from all applicable frameworks simultaneously.
+        </div>
+        <div class="article-relevance" style="border-left-color: #7c3aed;">
+          <strong style="color: #7c3aed;">Key AI Requirements:</strong> Protection by design (AI systems must include data protection features from the start), transparency and accountability (users must understand how their data is used), and legal grounds or consent for training AI models on personal data.
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">UK Divergence</span>
+        <span class="article-title">Data (Use and Access) Act 2025</span>
+        <div class="article-desc">
+          The UK's Data (Use and Access) Act became law on 19 June 2025. It creates a more permissive framework for automated decision-making compared to EU GDPR Article 22, while introducing new safeguards including clearer rights for human review and to contest automated decisions. Key provisions came into force 1 December 2025. The ICO is developing a statutory Code of Practice on AI and Automated Decision-Making.
+        </div>
+      </div>
+      <div class="article">
+        <span class="article-id">ICO Priorities</span>
+        <span class="article-title">UK Regulatory Focus Through 2026</span>
+        <div class="article-desc">
+          The ICO's strategy "Preventing harm, promoting trust" covers AI priorities through 2026: generative AI, foundation models, automated decision-making, agentic AI, AI and children, AI and online safety, police use of biometric technologies, and recommender systems.
+        </div>
+      </div>
+
+      <h3>Relevant Articles for AI Agent Security</h3>
+
+      <div class="article">
+        <span class="article-id">Article 5(1)(c)</span>
+        <span class="article-title">Data Minimization</span>
+        <div class="article-desc">
+          Personal data shall be adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agents should only access and process personal data necessary for the specific task. Output filtering must prevent unnecessary disclosure of personal data in agent responses.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 5(1)(d)</span>
+        <span class="article-title">Accuracy</span>
+        <div class="article-desc">
+          Personal data shall be accurate and, where necessary, kept up to date; every reasonable step must be taken to ensure that personal data that are inaccurate are erased or rectified without delay.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agents retrieving and presenting personal data must maintain accuracy. Provenance tracking helps identify when agent outputs may contain inaccurate personal data.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 5(1)(f)</span>
+        <span class="article-title">Integrity and Confidentiality</span>
+        <div class="article-desc">
+          Personal data shall be processed in a manner that ensures appropriate security, including protection against unauthorized or unlawful processing and against accidental loss, destruction or damage.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Core security requirement. Agents must protect personal data from unauthorized access through proper authorization controls, encryption, and access logging.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 22</span>
+        <span class="article-title">Automated Decision-Making</span>
+        <div class="article-desc">
+          Data subjects have the right not to be subject to a decision based solely on automated processing which produces legal effects or similarly significantly affects them. Exceptions require explicit consent, contractual necessity, or legal authorization with suitable safeguards.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Critical for agents making decisions affecting individuals. Human oversight controls (CTL-003) directly implement the safeguards required by this article.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 25</span>
+        <span class="article-title">Data Protection by Design and Default</span>
+        <div class="article-desc">
+          Controllers shall implement appropriate technical and organisational measures designed to implement data-protection principles effectively and integrate necessary safeguards into the processing.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent architecture must embed privacy controls from design. Authorization-aware output filtering, data minimization in prompts, and user-scoped access are design-level controls.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 30</span>
+        <span class="article-title">Records of Processing Activities</span>
+        <div class="article-desc">
+          Controllers and processors must maintain written records of processing activities including: purposes of processing, categories of data subjects and personal data, recipients, transfers to third countries, retention periods, and a general description of technical and organisational security measures. Records must be made available to the supervisory authority on request.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> AI agent processing activities must be documented in the RoPA. This includes: what personal data agents access, purposes of agent processing, categories of data subjects affected, any third-party services (model providers, APIs) receiving data, and security measures protecting agent operations. The RoPA is often the first document requested in regulatory investigations.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 32</span>
+        <span class="article-title">Security of Processing</span>
+        <div class="article-desc">
+          Controllers and processors shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk, including pseudonymisation, encryption, confidentiality, integrity, availability, and resilience of processing systems.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Foundational security requirement. All five v1 controls contribute to the security of processing when agents handle personal data.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 33</span>
+        <span class="article-title">Breach Notification to Authority</span>
+        <div class="article-desc">
+          In case of a personal data breach, the controller shall notify the supervisory authority within 72 hours of becoming aware, unless the breach is unlikely to result in a risk to rights and freedoms.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> Agent-related breaches (data exfiltration via prompt injection, unauthorized data access) may trigger notification requirements. Audit logs must support breach assessment and notification.
+        </div>
+      </div>
+
+      <div class="article">
+        <span class="article-id">Article 34</span>
+        <span class="article-title">Breach Notification to Data Subject</span>
+        <div class="article-desc">
+          When a personal data breach is likely to result in a high risk to the rights and freedoms of natural persons, the controller shall communicate the breach to the data subject without undue delay.
+        </div>
+        <div class="article-relevance">
+          <strong>AI Agent Relevance:</strong> If agent actions lead to high-risk data exposure, affected individuals must be notified. Audit trails must identify which individuals' data was affected.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-section">
+    <h3>Official Sources</h3>
+    <ul>
+      <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener noreferrer">EU AI Act - EUR-Lex (Regulation 2024/1689)</a></li>
+      <li><a href="https://eur-lex.europa.eu/eli/dir/2022/2555/oj" target="_blank" rel="noopener noreferrer">NIS2 Directive - EUR-Lex (Directive 2022/2555)</a></li>
+      <li><a href="https://eur-lex.europa.eu/eli/reg/2022/2554/oj" target="_blank" rel="noopener noreferrer">DORA - EUR-Lex (Regulation 2022/2554)</a></li>
+      <li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener noreferrer">GDPR - EUR-Lex (Regulation 2016/679)</a></li>
+    </ul>
+    <h3 style="margin-top: 24px;">Implementation Resources</h3>
+    <ul>
+      <li><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener noreferrer">EU AI Act - European Commission Digital Strategy</a></li>
+      <li><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act" target="_blank" rel="noopener noreferrer">AI Act Implementation Timeline - Service Desk</a></li>
+      <li><a href="https://artificialintelligenceact.eu/implementation-timeline/" target="_blank" rel="noopener noreferrer">AI Act Implementation Timeline (Community Resource)</a></li>
+      <li><a href="https://digital-strategy.ec.europa.eu/en/policies/nis-transposition" target="_blank" rel="noopener noreferrer">NIS2 Transposition Status - European Commission</a></li>
+      <li><a href="https://ecs-org.eu/policy/nis2-directive-transposition-tracker/" target="_blank" rel="noopener noreferrer">NIS2 Transposition Tracker - ECSO</a></li>
+      <li><a href="https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/digital-operational-resilience-regulation_en" target="_blank" rel="noopener noreferrer">DORA Technical Standards - European Commission</a></li>
+      <li><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener noreferrer">ICO AI Guidance (UK)</a></li>
+    </ul>
+    <p style="margin-top: 16px; font-size: 13px; color: var(--text-soft);">
+      <strong>Disclaimer:</strong> This wiki provides a practitioner summary for security professionals. It is not legal advice. Consult the official regulation texts and qualified legal counsel for compliance decisions.
+    </p>
+  </div>
+</main>
+
+<footer>
+  EU AI Security Mapping Framework - Regulatory Wiki<br>
+  <a href="index.html" style="color: var(--accent);">Return to Interactive Explorer</a>
+</footer>
+
+</body>
+</html>

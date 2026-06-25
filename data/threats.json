@@ -187,7 +187,17 @@
       }
     ],
     "exemplar_role": "Illustrates the input attack surface, specifically the pattern of adversarial content entering the agent's context indirectly through tool outputs. Exemplifies how content channels that are legitimate by design can carry adversarial instructions.",
-    "status": "complete"
+    "status": "complete",
+    "owasp_llm_2025": [
+      "LLM01"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM01",
+        "name": "Prompt Injection",
+        "relevance": "Direct mapping. AGT-001 describes indirect prompt injection via tool outputs, which is a specific variant of the broader prompt injection category."
+      }
+    ]
   },
   {
     "id": "AGT-002",
@@ -387,7 +397,17 @@
       }
     ],
     "exemplar_role": "Illustrates the tool-use attack surface, specifically the structural pattern of agent authorization being decoupled from user authorization. Exemplifies how harm can occur even when no traditional control is bypassed and all individual actions are within authorization scope.",
-    "status": "complete"
+    "status": "complete",
+    "owasp_llm_2025": [
+      "LLM06"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM06",
+        "name": "Excessive Agency",
+        "relevance": "Authorization confusion occurs when agents act with more authority than the invoking user intended, a core aspect of excessive agency."
+      }
+    ]
   },
   {
     "id": "AGT-003",
@@ -514,7 +534,17 @@
     ],
     "exemplar_role": "Illustrates the tool-use attack surface, specifically the pattern of harm emerging from composition of individually authorized tool invocations. Exemplifies how per-tool authorization controls fail to constrain emergent action authority across chains.",
     "control_gap_flag": "CTL-003 was designed for individual high-impact actions, not for composed actions. Applying it here requires extending the verification model to recognize composed effects. This is a gap that may justify either a refinement of CTL-003 or a new control around action composition governance.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM06"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM06",
+        "name": "Excessive Agency",
+        "relevance": "Tool-chain abuse exploits excessive permissions or capabilities granted to agents, enabling unintended action sequences."
+      }
+    ]
   },
   {
     "id": "AGT-004",
@@ -644,15 +674,25 @@
     ],
     "exemplar_role": "Illustrates the output attack surface, specifically the pattern of sensitive data crossing trust boundaries through legitimate channels. Exemplifies how channels that are legitimate by design can carry sensitive content the agent was not intended to expose.",
     "control_gap_flag": "CTL-004 addresses output filtering against retrieved data; it is less direct against tool-call parameters that exfiltrate to third-party services, and against persistence into vector stores accessible across users. A v2 refinement might split output controls into user-facing and machine-facing variants.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM02"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM02",
+        "name": "Sensitive Information Disclosure",
+        "relevance": "Data exfiltration via legitimate channels directly maps to sensitive information disclosure through model outputs."
+      }
+    ]
   },
   {
     "id": "AGT-005",
     "title": "Audit and Provenance Failure",
-    "primary_surface": "audit_provenance",
+    "primary_surface": "audit",
     "secondary_surfaces": [
       "tool-use",
-      "memory_persistence"
+      "memory"
     ],
     "description": "Agent actions cannot be reliably attributed to the originating user, the specific instructions that triggered them, the data that informed them, or the reasoning that selected them. Traditional audit captures events; agents require richer provenance because their actions are emergent products of context, retrieved data, instructions, and model reasoning. When this provenance is incomplete, organizations cannot answer fundamental accountability questions: who caused this, what data influenced it, was it authorized, and is it reproducible. Sub-patterns include user attribution loss (agent actions logged to the agent's identity rather than the originating user), context provenance loss (the data that influenced an agent decision is not preserved with the decision record), reasoning opacity (the model's selection of tools or content is not auditable), and persistence boundary loss (state changes to memory or vector stores are not linked to the user or context that caused them).",
     "attack_scenario": "A regulator investigating a customer complaint at a regulated DACH financial services enterprise asks the institution to produce, for a specific customer interaction six months ago: which user initiated the interaction, what data the agent retrieved, what was returned to the user, and why the agent took the specific actions it took. The institution can produce a log of the agent's tool calls but cannot link them to the originating user with confidence (CTL-001 was implemented inconsistently), cannot reconstruct the retrieved data context (the source documents have been updated since), and cannot explain why the model selected specific tools (no reasoning provenance was captured). The institution faces enforcement risk under GDPR Article 5(2) accountability and DORA Article 12 incident reporting obligations.",
@@ -782,12 +822,22 @@
     ],
     "exemplar_role": "Illustrates the audit and provenance attack surface, specifically the pattern of agent actions becoming inattributable to originating users, instructions, or reasoning. Exemplifies how traditional audit captures events without the richer provenance that agent accountability requires.",
     "control_gap_flag": "CTL-005 covers audit at a high level but the specific dimensions (user attribution, context provenance, reasoning provenance, persistence boundary) might benefit from being explicit in v2. For v1, the consolidation under CTL-005 is acceptable.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM05"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM05",
+        "name": "Improper Output Handling",
+        "relevance": "Audit failures enable improper output handling to go undetected; inadequate logging compounds output-related risks."
+      }
+    ]
   },
   {
     "id": "AGT-006",
     "title": "Memory and Persistence Poisoning",
-    "primary_surface": "memory_persistence",
+    "primary_surface": "memory",
     "secondary_surfaces": [
       "input",
       "model"
@@ -911,7 +961,17 @@
     ],
     "exemplar_role": "Illustrates the memory and persistence attack surface, specifically the pattern of persistent state contamination biasing the agent's future behavior. Exemplifies how persistence designed for legitimate use creates a long-lived adversarial influence channel.",
     "control_gap_flag": "CTL-002 was designed for tool-output provenance, not memory provenance. The principles are similar but the implementation differs. A v2 refinement might explicitly address memory and persistence as a distinct provenance domain. Memory expiration and refresh policies are not directly covered by any v1 control.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM04"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM04",
+        "name": "Data and Model Poisoning",
+        "relevance": "Memory and persistence poisoning is a runtime variant of data poisoning, corrupting the agent's operational context rather than training data."
+      }
+    ]
   },
   {
     "id": "AGT-007",
@@ -1035,7 +1095,23 @@
     ],
     "exemplar_role": "Illustrates the tool-use attack surface in the inter-agent dimension, specifically the pattern of trust amplification across delegation boundaries. Exemplifies how every threat in this catalog can recur at every agent boundary in a multi-agent system.",
     "control_gap_flag": "All four primary v1 controls apply, but the specific inter-agent dimension (trust calibration, output verification at receiving agents, delegation chain governance) is not explicit in any single control. v2 may benefit from a dedicated inter-agent trust control.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM06",
+      "LLM03"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM06",
+        "name": "Excessive Agency",
+        "relevance": "Inter-agent delegation can amplify agency beyond intended boundaries."
+      },
+      {
+        "id": "LLM03",
+        "name": "Supply Chain",
+        "relevance": "Trust relationships between agents create supply chain dependencies where a compromised agent affects others."
+      }
+    ]
   },
   {
     "id": "AGT-008",
@@ -1161,7 +1237,17 @@
     ],
     "exemplar_role": "Illustrates the output attack surface, specifically the pattern of agent outputs being interpreted as instruction by downstream systems. Exemplifies the inverse of input injection: content leaving the agent and exploiting consuming systems.",
     "control_gap_flag": "Output sanitization for syntactic exploits is not directly covered by v1 controls. CTL-004 addresses content authorization but not output structure. A v2 control around output sanitization and downstream-aware encoding may be warranted.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM05"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM05",
+        "name": "Improper Output Handling",
+        "relevance": "Output-channel injection directly exploits improper handling of model outputs in downstream systems."
+      }
+    ]
   },
   {
     "id": "AGT-009",
@@ -1281,7 +1367,17 @@
     ],
     "exemplar_role": "Illustrates the model attack surface, specifically the pattern of goal interpretation drifting from user intent without explicit injection. Exemplifies emergent misalignment that arises from legitimate inputs rather than adversarial corruption.",
     "control_gap_flag": "Goal subversion is genuinely hard to address with technical controls. The v1 controls provide partial coverage but the structural problem (agent reasoning may be opaque and emergent) is not solvable at the control level alone. v2 might include a dedicated control around task scoping and goal verification, but it would inherently be partly procedural.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM01"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM01",
+        "name": "Prompt Injection",
+        "relevance": "Goal subversion via context manipulation is a semantic variant of prompt injection targeting the agent's objective rather than immediate actions."
+      }
+    ]
   },
   {
     "id": "AGT-010",
@@ -1394,6 +1490,16 @@
     ],
     "exemplar_role": "Illustrates the tool-use attack surface in the resource dimension, specifically the pattern of agent loops consuming resources beyond intended operation. Exemplifies how agentic autonomy can produce operational harm without any individual action being malicious.",
     "control_gap_flag": "v1 controls partially address resource exhaustion but specific loop-prevention patterns (iteration limits, convergence checks, cost budgets per task, anomaly detection on agent action rates) are not explicit. A v2 control around agent runtime resource governance may be warranted.",
-    "status": "compressed_draft"
+    "status": "compressed_draft",
+    "owasp_llm_2025": [
+      "LLM10"
+    ],
+    "owasp_details": [
+      {
+        "id": "LLM10",
+        "name": "Unbounded Consumption",
+        "relevance": "Resource exhaustion via agent loops directly maps to unbounded consumption of compute, tokens, or API calls."
+      }
+    ]
   }
 ]
